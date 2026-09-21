@@ -13,4 +13,10 @@ if [ "$1" = 'frankenphp' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 	setfacl -dR -m u:www-data:rwX -m u:"$(whoami)":rwX var
 fi
 
+if [ "$1" = 'frankenphp' ]; then
+	# Create or update the indexes declared in the XML mapping. Idempotent, so
+	# it is safe on every start; MongoDB has no schema migrations beyond this.
+	bin/console doctrine:mongodb:schema:update --skip-search-indexes --no-interaction
+fi
+
 exec docker-php-entrypoint "$@"

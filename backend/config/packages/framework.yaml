@@ -11,6 +11,19 @@ framework:
     php_errors:
         log: true
 
+    # Business errors are expected outcomes, not incidents: log them quietly.
+    # The status codes also apply outside /api (the JSON contract lives in ApiProblemListener).
+    exceptions:
+        App\Domain\Shared\Exception\NotFoundException:
+            log_level: info
+            status_code: 404
+        App\Domain\Shared\Exception\ConflictException:
+            log_level: info
+            status_code: 409
+        App\Domain\Shared\Exception\InvariantViolationException:
+            log_level: info
+            status_code: 422
+
 when@test:
     framework:
         test: true

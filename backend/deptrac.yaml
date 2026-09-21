@@ -1,0 +1,48 @@
+# Enforces the hexagonal dependency rule:
+#
+#   UI ──► Application ──► Domain ◄── Infrastructure
+#
+# The domain depends on nothing, use cases depend only on the domain, and
+# frameworks (Symfony, Doctrine, MongoDB) stay at the edges.
+deptrac:
+    paths:
+        - ./src
+    layers:
+        - name: Domain
+          collectors:
+              - type: directory
+                value: src/Domain/.*
+        - name: Application
+          collectors:
+              - type: directory
+                value: src/Application/.*
+        - name: Infrastructure
+          collectors:
+              - type: directory
+                value: src/Infrastructure/.*
+        - name: UI
+          collectors:
+              - type: directory
+                value: src/UI/.*
+        - name: Framework
+          collectors:
+              - type: classNameRegex
+                value: '#^(Symfony|Nelmio|Lexik|Psr)\\#'
+        - name: Persistence
+          collectors:
+              - type: classNameRegex
+                value: '#^(Doctrine|MongoDB)\\#'
+    ruleset:
+        Domain: ~
+        Application:
+            - Domain
+        Infrastructure:
+            - Domain
+            - Application
+            - Framework
+            - Persistence
+        # The HTTP layer talks to use cases, never to the database directly.
+        UI:
+            - Domain
+            - Application
+            - Framework
