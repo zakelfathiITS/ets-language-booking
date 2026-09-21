@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useEffect } from "react";
 
 import { LoadingScreen } from "@/components/molecules/LoadingScreen";
@@ -11,6 +12,7 @@ import { useAuth } from "@/features/auth/useAuth";
 export default function HomePage() {
   const { status } = useAuth();
   const router = useRouter();
+  const t = useTranslations("common");
 
   useEffect(() => {
     if (status !== "unknown") {
@@ -18,5 +20,5 @@ export default function HomePage() {
     }
   }, [status, router]);
 
-  return <LoadingScreen label="Loading…" />;
+  return <LoadingScreen label={t("loading")} />;
 }

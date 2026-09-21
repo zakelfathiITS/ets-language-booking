@@ -1,14 +1,14 @@
+import { useTranslations } from "next-intl";
+
 import { ButtonLink } from "@/components/atoms/ButtonLink";
 import { EmptyState } from "@/components/molecules/EmptyState";
 
 export default function NotFound() {
+  const t = useTranslations("notFound");
+
   return (
     <main className="mx-auto flex w-full max-w-xl flex-1 flex-col justify-center px-4 py-16">
-      <EmptyState
-        title="Page not found"
-        description="The page you are looking for does not exist or has moved."
-        action={<ButtonLink href="/">Go to the home page</ButtonLink>}
-      />
+      <EmptyState title={t("title")} description={t("description")} action={<ButtonLink href="/">{t("home")}</ButtonLink>} />
     </main>
   );
 }

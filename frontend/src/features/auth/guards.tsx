@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { type ReactNode, useEffect } from "react";
 
 import { ButtonLink } from "@/components/atoms/ButtonLink";
@@ -21,6 +22,7 @@ export function RequireAuth({ children }: { children: ReactNode }) {
   const { status, sessionEnd } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
+  const t = useTranslations("common");
 
   useEffect(() => {
     if (status !== "anonymous") {
@@ -32,7 +34,7 @@ export function RequireAuth({ children }: { children: ReactNode }) {
   }, [status, sessionEnd, router, pathname]);
 
   if (status !== "authenticated") {
-    return <LoadingScreen label="Checking your session…" />;
+    return <LoadingScreen label={t("checkingSession")} />;
   }
 
   return children;
@@ -41,13 +43,14 @@ export function RequireAuth({ children }: { children: ReactNode }) {
 /** Must be nested in <RequireAuth>. The API enforces the same rule. */
 export function RequireAdmin({ children }: { children: ReactNode }) {
   const { isAdmin } = useAuth();
+  const t = useTranslations("guards");
 
   if (!isAdmin) {
     return (
       <EmptyState
-        title="Administrators only"
-        description="This area is reserved to administrators of the test catalogue."
-        action={<ButtonLink href="/sessions">Browse sessions</ButtonLink>}
+        title={t("adminOnlyTitle")}
+        description={t("adminOnlyDescription")}
+        action={<ButtonLink href="/sessions">{t("browseSessions")}</ButtonLink>}
       />
     );
   }
@@ -63,6 +66,7 @@ export function RedirectIfAuthenticated({ children }: { children: ReactNode }) {
   const { status } = useAuth();
   const router = useRouter();
   const next = useSearchParams().get("next");
+  const t = useTranslations("common");
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -71,7 +75,7 @@ export function RedirectIfAuthenticated({ children }: { children: ReactNode }) {
   }, [status, router, next]);
 
   if (status !== "anonymous") {
-    return <LoadingScreen label="Loading…" />;
+    return <LoadingScreen label={t("loading")} />;
   }
 
   return children;

@@ -1,4 +1,7 @@
+import { useLocale, useTranslations } from "next-intl";
+
 import { formatLongDate } from "@/lib/format";
+import type { Locale } from "@/lib/i18n/locales";
 import type { Reservation } from "@/types/api";
 
 import { Badge } from "../atoms/Badge";
@@ -13,6 +16,8 @@ export interface ReservationCardProps {
 }
 
 export function ReservationCard({ reservation, onCancel, isPending = false }: ReservationCardProps) {
+  const t = useTranslations("reservations");
+  const locale = useLocale() as Locale;
   const { session } = reservation;
   const headingId = `reservation-${reservation.id}`;
 
@@ -26,14 +31,14 @@ export function ReservationCard({ reservation, onCancel, isPending = false }: Re
           <Heading level={3}>
             <span id={headingId}>{session.language}</span>
           </Heading>
-          {session.hasStarted ? <Badge>Past</Badge> : <Badge tone="success">Confirmed</Badge>}
+          {session.hasStarted ? <Badge>{t("pastBadge")}</Badge> : <Badge tone="success">{t("confirmed")}</Badge>}
         </div>
         <SessionDetails date={session.date} time={session.time} location={session.location} />
-        <p className="text-xs text-neutral-500">Booked on {formatLongDate(reservation.reservedAt)}</p>
+        <p className="text-xs text-neutral-500">{t("bookedOn", { date: formatLongDate(reservation.reservedAt, locale) })}</p>
       </div>
       {reservation.canBeCancelled && (
         <Button variant="secondary" isLoading={isPending} onClick={() => onCancel(reservation)} className="sm:self-center">
-          Cancel
+          {t("cancel")}
         </Button>
       )}
     </article>

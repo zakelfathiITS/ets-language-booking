@@ -70,6 +70,8 @@ describe("AccountScreen", () => {
     await user.type(screen.getByLabelText("Email"), "taken@example.com");
     await user.click(screen.getByRole("button", { name: "Save changes" }));
 
-    await waitFor(() => expect(screen.getByLabelText("Email")).toHaveAccessibleDescription("This email is already used."));
+    await waitFor(() =>
+      expect(screen.getByLabelText("Email")).toHaveAccessibleDescription("This email is already used by another account."),
+    );
   });
 });

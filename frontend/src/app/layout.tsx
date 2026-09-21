@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getTranslations } from "next-intl/server";
 
 import { StoreProvider } from "@/store/StoreProvider";
 
@@ -15,19 +17,24 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: {
-    default: "ETS Language Test Booking",
-    template: "%s · ETS Language Test Booking",
-  },
-  description: "Book, follow and cancel your language test sessions.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("meta");
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+  return {
+    title: { default: t("title"), template: `%s · ${t("title")}` },
+    description: t("description"),
+  };
+}
+
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const locale = await getLocale();
+
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full`}>
+    <html lang={locale} className={`${geistSans.variable} ${geistMono.variable} h-full`}>
       <body className="flex min-h-full flex-col">
-        <StoreProvider>{children}</StoreProvider>
+        <NextIntlClientProvider>
+          <StoreProvider>{children}</StoreProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

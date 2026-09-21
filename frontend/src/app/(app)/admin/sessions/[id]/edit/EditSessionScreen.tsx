@@ -1,6 +1,7 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useMemo } from "react";
 
 import { ButtonLink } from "@/components/atoms/ButtonLink";
@@ -10,17 +11,20 @@ import { PageHeader } from "@/components/organisms/PageHeader";
 import { SessionForm } from "@/components/organisms/SessionForm";
 import { useGetSessionQuery, useUpdateSessionMutation } from "@/features/admin/adminSessionsApi";
 import { useFlash } from "@/features/flash/useFlash";
-import { toServerFormErrors } from "@/features/forms/toServerFormErrors";
-import { formatSessionDate } from "@/lib/format";
+import { useApiErrors } from "@/features/i18n/useApiErrors";
+import { useSessionLabel } from "@/features/sessions/useSessionLabel";
 import type { SessionValues } from "@/lib/validation/sessionSchema";
 
 export function EditSessionScreen() {
+  const t = useTranslations();
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
+  const describe = useSessionLabel();
   const { show } = useFlash();
+  const { formErrorsOf } = useApiErrors();
   const { data: session, isLoading, isError } = useGetSessionQuery(id);
   const [updateSession, update] = useUpdateSessionMutation();
-  const serverErrors = useMemo(() => (update.error ? toServerFormErrors(update.error) : null), [update.error]);
+  const serverErrors = useMemo(() => (update.error ? formErrorsOf(update.error) : null), [update.error, formErrorsOf]);
 
   const initialValues = useMemo<SessionValues | undefined>(
     () =>
@@ -37,22 +41,21 @@ export function EditSessionScreen() {
   async function onSubmit(values: SessionValues) {
     const result = await updateSession({ id, ...values });
     if (result.data) {
-      const updated = result.data;
-      show({ tone: "success", message: `Session updated: ${updated.language}, ${formatSessionDate(updated.date)} at ${updated.time}.` });
+      show({ tone: "success", message: t("admin.updated", { session: describe(result.data) }) });
       router.push("/admin/sessions");
     }
   }
 
   if (isLoading) {
-    return <LoadingScreen label="Loading the session…" />;
+    return <LoadingScreen label={t("admin.form.loading")} />;
   }
 
   if (isError || !session || !initialValues) {
     return (
       <EmptyState
-        title="Session not found"
-        description="It may have been deleted in the meantime."
-        action={<ButtonLink href="/admin/sessions">Back to the sessions</ButtonLink>}
+        title={t("admin.form.notFoundTitle")}
+        description={t("admin.form.notFoundDescription")}
+        action={<ButtonLink href="/admin/sessions">{t("admin.form.backToList")}</ButtonLink>}
       />
     );
   }
@@ -60,13 +63,13 @@ export function EditSessionScreen() {
   return (
     <>
       <PageHeader
-        title="Edit session"
-        description={`${session.seatsTaken} of ${session.capacity} seats are booked: the capacity cannot go below the seats already booked.`}
+        title={t("admin.form.editTitle")}
+        description={t("admin.form.editDescription", { taken: session.seatsTaken, capacity: session.capacity })}
       />
       <div className="max-w-2xl rounded-lg border border-neutral-200 bg-white p-6 shadow-sm">
         <SessionForm
           initialValues={initialValues}
-          submitLabel="Save changes"
+          submitLabel={t("common.saveChanges")}
           cancelHref="/admin/sessions"
           timezone={session.timezone}
           onSubmit={onSubmit}

@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
 import { EditSessionScreen } from "./EditSessionScreen";
 
-export const metadata: Metadata = { title: "Edit session" };
+export async function generateMetadata(): Promise<Metadata> {
+  return { title: (await getTranslations("meta"))("editSession") };
+}
 
 export default function EditSessionPage() {
   return <EditSessionScreen />;

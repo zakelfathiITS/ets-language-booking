@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { Button } from "@/components/atoms/Button";
@@ -11,11 +12,12 @@ import { ConfirmDialog } from "@/components/organisms/ConfirmDialog";
 import { PageHeader } from "@/components/organisms/PageHeader";
 import { SessionCard } from "@/components/organisms/SessionCard";
 import { SessionFilters } from "@/components/organisms/SessionFilters";
-import { bookingErrorMessage } from "@/features/reservations/bookingMessages";
+import { useApiErrors } from "@/features/i18n/useApiErrors";
 import { useBookSessionMutation, useCancelReservationMutation } from "@/features/reservations/reservationsApi";
 import { useListLanguagesQuery, useListSessionsQuery } from "@/features/sessions/sessionsApi";
 import { useSessionFilters } from "@/features/sessions/useSessionFilters";
-import { formatSessionDate, timezoneCity } from "@/lib/format";
+import { useSessionLabel } from "@/features/sessions/useSessionLabel";
+import { timezoneCity } from "@/lib/format";
 import type { TestSession } from "@/types/api";
 
 interface Notice {
@@ -23,11 +25,11 @@ interface Notice {
   message: string;
 }
 
-function describe(session: TestSession): string {
-  return `${session.language}, ${formatSessionDate(session.date)} at ${session.time}`;
-}
-
 export function SessionsScreen() {
+  const t = useTranslations("sessions");
+  const tc = useTranslations("common");
+  const describe = useSessionLabel();
+  const { messageOf } = useApiErrors();
   const { filters, setPage, setFilters } = useSessionFilters();
   const sessions = useListSessionsQuery({
     page: filters.page,
@@ -50,8 +52,8 @@ export function SessionsScreen() {
 
     setNotice(
       result.error
-        ? { tone: "error", message: bookingErrorMessage(result.error) }
-        : { tone: "success", message: `Your seat is booked: ${describe(session)}.` },
+        ? { tone: "error", message: messageOf(result.error) }
+        : { tone: "success", message: t("booked", { session: describe(session) }) },
     );
   }
 
@@ -67,8 +69,8 @@ export function SessionsScreen() {
 
     setNotice(
       result.error
-        ? { tone: "error", message: bookingErrorMessage(result.error) }
-        : { tone: "success", message: `Your booking for ${describe(session)} has been cancelled.` },
+        ? { tone: "error", message: messageOf(result.error) }
+        : { tone: "success", message: t("cancelled", { session: describe(session) }) },
     );
   }
 
@@ -79,8 +81,8 @@ export function SessionsScreen() {
   return (
     <>
       <PageHeader
-        title="Test sessions"
-        description={`Browse upcoming sessions and book your seat.${timezone ? ` Times are in ${timezoneCity(timezone)} time.` : ""}`}
+        title={t("title")}
+        description={`${t("description")}${timezone ? ` ${t("timezoneNote", { city: timezoneCity(timezone) })}` : ""}`}
       />
 
       <div className="space-y-6">
@@ -100,33 +102,33 @@ export function SessionsScreen() {
         {sessions.isLoading ? (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <p role="status" className="sr-only">
-              Loading sessions…
+              {t("loading")}
             </p>
             {Array.from({ length: 6 }, (_, index) => (
               <CardSkeleton key={index} />
             ))}
           </div>
         ) : sessions.isError || !data ? (
-          <Alert tone="error" title="The sessions could not be loaded.">
+          <Alert tone="error" title={t("loadError")}>
             <Button variant="secondary" size="sm" className="mt-2" onClick={() => void sessions.refetch()}>
-              Try again
+              {tc("tryAgain")}
             </Button>
           </Alert>
         ) : data.items.length === 0 ? (
           filters.page > 1 ? (
             <EmptyState
-              title="This page is empty"
-              description="The catalogue has changed since this page was opened."
-              action={<Button onClick={() => setPage(1)}>Back to the first page</Button>}
+              title={t("empty.pageTitle")}
+              description={t("empty.pageDescription")}
+              action={<Button onClick={() => setPage(1)}>{t("empty.firstPage")}</Button>}
             />
           ) : (
             <EmptyState
-              title={hasFilters ? "No session matches your filters" : "No upcoming session"}
-              description={hasFilters ? "Try another language or include full sessions." : "New sessions are published regularly."}
+              title={hasFilters ? t("empty.filteredTitle") : t("empty.title")}
+              description={hasFilters ? t("empty.filteredDescription") : t("empty.description")}
               action={
                 hasFilters && (
                   <Button variant="secondary" onClick={() => setFilters({ language: null, availableOnly: false })}>
-                    Clear filters
+                    {t("empty.clearFilters")}
                   </Button>
                 )
               }
@@ -157,9 +159,9 @@ export function SessionsScreen() {
 
       <ConfirmDialog
         open={sessionToCancel !== null}
-        title="Cancel this booking?"
-        description={sessionToCancel && `Your seat for ${describe(sessionToCancel)} will be released.`}
-        confirmLabel="Cancel my booking"
+        title={t("cancelDialog.title")}
+        description={sessionToCancel && t("cancelDialog.description", { session: describe(sessionToCancel) })}
+        confirmLabel={t("cancelDialog.confirm")}
         isConfirming={cancellation.isLoading}
         onConfirm={() => void confirmCancellation()}
         onCancel={() => setSessionToCancel(null)}

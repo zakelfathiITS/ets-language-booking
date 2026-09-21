@@ -1,7 +1,8 @@
-import { render, screen, within } from "@testing-library/react";
+import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { Navbar } from "@/components/organisms/Navbar";
+import { renderWithIntl } from "@tests/renderWithProviders";
 
 const links = [
   { href: "/sessions", label: "Test sessions" },
@@ -10,7 +11,7 @@ const links = [
 
 describe("Navbar", () => {
   it("highlights the current section", () => {
-    render(<Navbar links={links} currentPath="/reservations" userName="Camille" onLogout={jest.fn()} />);
+    renderWithIntl(<Navbar links={links} currentPath="/reservations" userName="Camille" onLogout={jest.fn()} />);
 
     const nav = screen.getByRole("navigation", { name: "Main" });
     expect(within(nav).getByRole("link", { name: "My reservations" })).toHaveAttribute("aria-current", "page");
@@ -19,7 +20,7 @@ describe("Navbar", () => {
 
   it("signs out", async () => {
     const onLogout = jest.fn();
-    render(<Navbar links={links} currentPath="/sessions" userName="Camille" onLogout={onLogout} />);
+    renderWithIntl(<Navbar links={links} currentPath="/sessions" userName="Camille" onLogout={onLogout} />);
 
     await userEvent.click(screen.getAllByRole("button", { name: "Sign out" })[0]);
 
@@ -27,7 +28,7 @@ describe("Navbar", () => {
   });
 
   it("opens and closes the mobile menu", async () => {
-    render(<Navbar links={links} currentPath="/sessions" userName="Camille" onLogout={jest.fn()} />);
+    renderWithIntl(<Navbar links={links} currentPath="/sessions" userName="Camille" onLogout={jest.fn()} />);
     const toggle = screen.getByRole("button", { name: "Menu" });
 
     await userEvent.click(toggle);

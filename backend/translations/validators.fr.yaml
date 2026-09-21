@@ -1,0 +1,4 @@
+# French versions of the application's own constraint messages (Symfony ships
+# translations for its built-in constraints).
+'The date must be a valid date in the YYYY-MM-DD format.': 'La date doit être une date valide au format AAAA-MM-JJ.'
+'The time must follow the 24-hour HH:MM format.': "L'heure doit respecter le format 24 heures HH:MM."

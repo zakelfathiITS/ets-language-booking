@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 
 import { CAPACITY_MAX, CAPACITY_MIN, sessionSchema, type SessionValues } from "@/lib/validation/sessionSchema";
@@ -11,6 +12,7 @@ import { ButtonLink } from "../atoms/ButtonLink";
 import { Alert } from "../molecules/Alert";
 import { FormField } from "../molecules/FormField";
 
+import { useFieldErrorText } from "./useFieldErrorText";
 import { useServerFieldErrors } from "./useServerFieldErrors";
 
 const FIELDS = ["language", "date", "time", "location", "capacity"] as const;
@@ -36,6 +38,8 @@ export function SessionForm({
   isSubmitting,
   serverErrors,
 }: SessionFormProps) {
+  const t = useTranslations();
+  const errorText = useFieldErrorText();
   const {
     register,
     handleSubmit,
@@ -48,35 +52,40 @@ export function SessionForm({
   return (
     <form noValidate onSubmit={handleSubmit(onSubmit)} className="space-y-5">
       {serverErrors?.message && <Alert tone="error">{serverErrors.message}</Alert>}
-      <FormField label="Language" placeholder="English" error={errors.language?.message} {...register("language")} />
+      <FormField
+        label={t("admin.form.language")}
+        placeholder={t("admin.form.languagePlaceholder")}
+        error={errorText(errors.language)}
+        {...register("language")}
+      />
       <div className="grid gap-5 sm:grid-cols-2">
-        <FormField label="Date" type="date" error={errors.date?.message} {...register("date")} />
+        <FormField label={t("admin.form.date")} type="date" error={errorText(errors.date)} {...register("date")} />
         <FormField
-          label="Time"
+          label={t("admin.form.time")}
           type="time"
-          hint={`Local time (${timezone}).`}
-          error={errors.time?.message}
+          hint={t("admin.form.timeHint", { timezone })}
+          error={errorText(errors.time)}
           {...register("time")}
         />
       </div>
       <FormField
-        label="Location"
-        placeholder="Paris – Test Center La Défense"
-        error={errors.location?.message}
+        label={t("admin.form.location")}
+        placeholder={t("admin.form.locationPlaceholder")}
+        error={errorText(errors.location)}
         {...register("location")}
       />
       <FormField
-        label="Number of seats"
+        label={t("admin.form.capacity")}
         type="number"
         inputMode="numeric"
         min={CAPACITY_MIN}
         max={CAPACITY_MAX}
-        error={errors.capacity?.message}
+        error={errorText(errors.capacity)}
         {...register("capacity", { valueAsNumber: true })}
       />
       <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
         <ButtonLink href={cancelHref} variant="secondary">
-          Cancel
+          {t("common.cancel")}
         </ButtonLink>
         <Button type="submit" isLoading={isSubmitting}>
           {submitLabel}

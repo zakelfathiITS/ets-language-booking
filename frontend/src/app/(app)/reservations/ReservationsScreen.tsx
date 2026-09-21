@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { Button } from "@/components/atoms/Button";
@@ -11,9 +12,9 @@ import { EmptyState } from "@/components/molecules/EmptyState";
 import { ConfirmDialog } from "@/components/organisms/ConfirmDialog";
 import { PageHeader } from "@/components/organisms/PageHeader";
 import { ReservationCard } from "@/components/organisms/ReservationCard";
-import { bookingErrorMessage } from "@/features/reservations/bookingMessages";
+import { useApiErrors } from "@/features/i18n/useApiErrors";
 import { useCancelReservationMutation, useListReservationsQuery } from "@/features/reservations/reservationsApi";
-import { formatSessionDate } from "@/lib/format";
+import { useSessionLabel } from "@/features/sessions/useSessionLabel";
 import type { Reservation } from "@/types/api";
 
 interface Notice {
@@ -21,29 +22,29 @@ interface Notice {
   message: string;
 }
 
-function describe({ session }: Reservation): string {
-  return `${session.language}, ${formatSessionDate(session.date)} at ${session.time}`;
-}
-
 export function ReservationsScreen() {
+  const t = useTranslations("reservations");
+  const tc = useTranslations("common");
+  const describe = useSessionLabel();
+  const { messageOf } = useApiErrors();
   const reservations = useListReservationsQuery();
   const [cancelReservation, cancellation] = useCancelReservationMutation();
   const [reservationToCancel, setReservationToCancel] = useState<Reservation | null>(null);
   const [notice, setNotice] = useState<Notice | null>(null);
 
   async function confirmCancellation() {
-    if (!reservationToCancel) {
+    const reservation = reservationToCancel;
+    if (!reservation) {
       return;
     }
 
-    const reservation = reservationToCancel;
     const result = await cancelReservation({ reservationId: reservation.id, sessionId: reservation.session.id });
     setReservationToCancel(null);
 
     setNotice(
       result.error
-        ? { tone: "error", message: bookingErrorMessage(result.error) }
-        : { tone: "success", message: `Your reservation for ${describe(reservation)} has been cancelled.` },
+        ? { tone: "error", message: messageOf(result.error) }
+        : { tone: "success", message: t("cancelled", { session: describe(reservation.session) }) },
     );
   }
 
@@ -67,9 +68,9 @@ export function ReservationsScreen() {
   return (
     <>
       <PageHeader
-        title="My reservations"
-        description="Your booked language test sessions."
-        actions={<ButtonLink href="/sessions">Book a session</ButtonLink>}
+        title={t("title")}
+        description={t("description")}
+        actions={<ButtonLink href="/sessions">{t("bookSession")}</ButtonLink>}
       />
 
       <div className="space-y-6">
@@ -82,39 +83,35 @@ export function ReservationsScreen() {
         {reservations.isLoading ? (
           <div className="space-y-3">
             <p role="status" className="sr-only">
-              Loading your reservations…
+              {t("loading")}
             </p>
             <CardSkeleton />
             <CardSkeleton />
           </div>
         ) : reservations.isError ? (
-          <Alert tone="error" title="Your reservations could not be loaded.">
+          <Alert tone="error" title={t("loadError")}>
             <Button variant="secondary" size="sm" className="mt-2" onClick={() => void reservations.refetch()}>
-              Try again
+              {tc("tryAgain")}
             </Button>
           </Alert>
         ) : items.length === 0 ? (
           <EmptyState
-            title="No reservation yet"
-            description="Book a seat in one of the upcoming language test sessions."
-            action={<ButtonLink href="/sessions">Browse sessions</ButtonLink>}
+            title={t("emptyTitle")}
+            description={t("emptyDescription")}
+            action={<ButtonLink href="/sessions">{t("browseSessions")}</ButtonLink>}
           />
         ) : (
           <>
             <section aria-labelledby="upcoming-reservations" className="space-y-3">
               <Heading level={2}>
-                <span id="upcoming-reservations">Upcoming ({upcoming.length})</span>
+                <span id="upcoming-reservations">{t("upcoming", { count: upcoming.length })}</span>
               </Heading>
-              {upcoming.length > 0 ? (
-                renderList(upcoming)
-              ) : (
-                <p className="text-sm text-neutral-600">No upcoming session.</p>
-              )}
+              {upcoming.length > 0 ? renderList(upcoming) : <p className="text-sm text-neutral-600">{t("noUpcoming")}</p>}
             </section>
             {past.length > 0 && (
               <section aria-labelledby="past-reservations" className="space-y-3">
                 <Heading level={2}>
-                  <span id="past-reservations">Past ({past.length})</span>
+                  <span id="past-reservations">{t("past", { count: past.length })}</span>
                 </Heading>
                 {renderList(past)}
               </section>
@@ -125,9 +122,9 @@ export function ReservationsScreen() {
 
       <ConfirmDialog
         open={reservationToCancel !== null}
-        title="Cancel this reservation?"
-        description={reservationToCancel && `Your seat for ${describe(reservationToCancel)} will be released.`}
-        confirmLabel="Cancel my reservation"
+        title={t("cancelDialog.title")}
+        description={reservationToCancel && t("cancelDialog.description", { session: describe(reservationToCancel.session) })}
+        confirmLabel={t("cancelDialog.confirm")}
         isConfirming={cancellation.isLoading}
         onConfirm={() => void confirmCancellation()}
         onCancel={() => setReservationToCancel(null)}

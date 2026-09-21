@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 
 import { PASSWORD_MIN_LENGTH, type RegisterValues, registerSchema } from "@/lib/validation/authSchemas";
@@ -10,6 +11,7 @@ import { Button } from "../atoms/Button";
 import { Alert } from "../molecules/Alert";
 import { FormField } from "../molecules/FormField";
 
+import { useFieldErrorText } from "./useFieldErrorText";
 import { useServerFieldErrors } from "./useServerFieldErrors";
 
 const FIELDS = ["name", "email", "password"] as const;
@@ -21,6 +23,8 @@ export interface RegisterFormProps {
 }
 
 export function RegisterForm({ onSubmit, isSubmitting, serverErrors }: RegisterFormProps) {
+  const t = useTranslations("auth");
+  const errorText = useFieldErrorText();
   const {
     register,
     handleSubmit,
@@ -36,25 +40,25 @@ export function RegisterForm({ onSubmit, isSubmitting, serverErrors }: RegisterF
   return (
     <form noValidate onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       {serverErrors?.message && <Alert tone="error">{serverErrors.message}</Alert>}
-      <FormField label="Full name" autoComplete="name" error={errors.name?.message} {...register("name")} />
-      <FormField label="Email" type="email" autoComplete="email" error={errors.email?.message} {...register("email")} />
+      <FormField label={t("fullName")} autoComplete="name" error={errorText(errors.name)} {...register("name")} />
+      <FormField label={t("email")} type="email" autoComplete="email" error={errorText(errors.email)} {...register("email")} />
       <FormField
-        label="Password"
+        label={t("password")}
         type="password"
         autoComplete="new-password"
-        hint={`At least ${PASSWORD_MIN_LENGTH} characters.`}
-        error={errors.password?.message}
+        hint={t("passwordHint", { min: PASSWORD_MIN_LENGTH })}
+        error={errorText(errors.password)}
         {...register("password")}
       />
       <FormField
-        label="Confirm password"
+        label={t("confirmPassword")}
         type="password"
         autoComplete="new-password"
-        error={errors.confirmPassword?.message}
+        error={errorText(errors.confirmPassword)}
         {...register("confirmPassword")}
       />
       <Button type="submit" fullWidth isLoading={isSubmitting}>
-        Create my account
+        {t("register.submit")}
       </Button>
     </form>
   );

@@ -1,3 +1,5 @@
+import { useTranslations } from "next-intl";
+
 import type { TestSession } from "@/types/api";
 
 import { Badge } from "../atoms/Badge";
@@ -20,6 +22,7 @@ export interface SessionCardProps {
  * one's booking, or nothing when the session is full or has started.
  */
 export function SessionCard({ session, onBook, onCancel, isPending = false }: SessionCardProps) {
+  const t = useTranslations("sessions");
   const headingId = `session-${session.id}`;
   const isBooked = session.myReservationId !== null;
 
@@ -33,13 +36,13 @@ export function SessionCard({ session, onBook, onCancel, isPending = false }: Se
           <span id={headingId}>{session.language}</span>
         </Heading>
         {session.hasStarted ? (
-          <Badge>Started</Badge>
+          <Badge>{t("badge.started")}</Badge>
         ) : isBooked ? (
-          <Badge tone="success">Booked</Badge>
+          <Badge tone="success">{t("badge.booked")}</Badge>
         ) : session.isFull ? (
-          <Badge tone="danger">Full</Badge>
+          <Badge tone="danger">{t("badge.full")}</Badge>
         ) : (
-          session.seatsAvailable <= FEW_SEATS && <Badge tone="warning">Few seats left</Badge>
+          session.seatsAvailable <= FEW_SEATS && <Badge tone="warning">{t("badge.fewSeats")}</Badge>
         )}
       </div>
 
@@ -49,19 +52,19 @@ export function SessionCard({ session, onBook, onCancel, isPending = false }: Se
       <div className="mt-auto">
         {session.hasStarted ? (
           <Button variant="secondary" fullWidth disabled>
-            Booking closed
+            {t("action.closed")}
           </Button>
         ) : isBooked ? (
           <Button variant="secondary" fullWidth isLoading={isPending} onClick={() => onCancel(session)}>
-            Cancel my booking
+            {t("action.cancel")}
           </Button>
         ) : session.isFull ? (
           <Button variant="secondary" fullWidth disabled>
-            Full
+            {t("action.full")}
           </Button>
         ) : (
           <Button fullWidth isLoading={isPending} onClick={() => onBook(session)}>
-            Book a seat
+            {t("action.book")}
           </Button>
         )}
       </div>
