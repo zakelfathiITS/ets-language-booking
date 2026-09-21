@@ -1,10 +1,10 @@
 import { screen, waitFor } from "@testing-library/react";
 import { http, HttpResponse } from "msw";
 
-import { anonymous, candidate } from "../../../../../test/fixtures";
-import { api, problem } from "../../../../../test/msw/handlers";
-import { server } from "../../../../../test/msw/server";
-import { renderWithProviders } from "../../../../../test/renderWithProviders";
+import { anonymous, candidate } from "@tests/fixtures";
+import { api, problem } from "@tests/msw/handlers";
+import { server } from "@tests/msw/server";
+import { renderWithProviders } from "@tests/renderWithProviders";
 import { RegisterScreen } from "../RegisterScreen";
 
 async function fillForm(user: ReturnType<typeof renderWithProviders>["user"], confirmation = "S3cure-passw0rd") {

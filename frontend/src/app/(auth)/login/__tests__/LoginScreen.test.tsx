@@ -1,10 +1,10 @@
 import { screen, waitFor } from "@testing-library/react";
 import { http, HttpResponse } from "msw";
 
-import { admin, anonymous, makeToken } from "../../../../../test/fixtures";
-import { api, problem } from "../../../../../test/msw/handlers";
-import { server } from "../../../../../test/msw/server";
-import { renderWithProviders } from "../../../../../test/renderWithProviders";
+import { admin, anonymous, makeToken } from "@tests/fixtures";
+import { api, problem } from "@tests/msw/handlers";
+import { server } from "@tests/msw/server";
+import { renderWithProviders } from "@tests/renderWithProviders";
 import { LoginScreen } from "../LoginScreen";
 
 describe("LoginScreen", () => {

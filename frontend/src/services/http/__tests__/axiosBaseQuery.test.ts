@@ -4,9 +4,9 @@ import { authApi } from "@/features/auth/authApi";
 import { AUTH_STORAGE_KEY } from "@/features/auth/authPersistence";
 import { makeStore } from "@/store/store";
 
-import { anonymous, candidate, signedIn } from "../../../../test/fixtures";
-import { api, problem } from "../../../../test/msw/handlers";
-import { server } from "../../../../test/msw/server";
+import { anonymous, candidate, signedIn } from "@tests/fixtures";
+import { api, problem } from "@tests/msw/handlers";
+import { server } from "@tests/msw/server";
 
 describe("axiosBaseQuery", () => {
   it("sends the access token as a Bearer header", async () => {

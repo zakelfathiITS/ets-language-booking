@@ -2,9 +2,9 @@ import { screen, waitFor } from "@testing-library/react";
 
 import { RedirectIfAuthenticated, RequireAdmin, RequireAuth } from "@/features/auth/guards";
 
-import { admin, anonymous, candidate, signedIn } from "../../../../test/fixtures";
-import { navigation, router } from "../../../../test/mocks/nextNavigation";
-import { renderWithProviders } from "../../../../test/renderWithProviders";
+import { admin, anonymous, candidate, signedIn } from "@tests/fixtures";
+import { navigation, router } from "@tests/mocks/nextNavigation";
+import { renderWithProviders } from "@tests/renderWithProviders";
 
 describe("RequireAuth", () => {
   it("waits while the session is being restored", () => {

@@ -12,9 +12,9 @@ const config = {
   // jsdom with the fetch/stream globals MSW needs.
   testEnvironment: "jest-fixed-jsdom",
   testEnvironmentOptions: { customExportConditions: [""] },
-  setupFilesAfterEnv: ["<rootDir>/test/setup.ts"],
-  moduleNameMapper: { "^@/(.*)$": "<rootDir>/src/$1" },
-  testMatch: ["<rootDir>/src/**/*.test.{ts,tsx}", "<rootDir>/test/**/*.test.{ts,tsx}"],
+  setupFilesAfterEnv: ["<rootDir>/tests/setup.ts"],
+  moduleNameMapper: { "^@/(.*)$": "<rootDir>/src/$1", "^@tests/(.*)$": "<rootDir>/tests/$1" },
+  testMatch: ["<rootDir>/src/**/*.test.{ts,tsx}", "<rootDir>/tests/**/*.test.{ts,tsx}"],
   // Each jsdom worker is memory-hungry: two workers keep the suite fast without
   // exhausting small machines (the dev servers run alongside).
   maxWorkers: 2,

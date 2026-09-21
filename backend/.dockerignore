@@ -16,4 +16,3 @@ phpstan.dist.neon
 phpunit.dist.xml
 deptrac.yaml
 .deptrac.cache
-bin/phpunit

@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { ConfirmDialog } from "@/components/organisms/ConfirmDialog";
 import { SessionCard } from "@/components/organisms/SessionCard";
 
-import { aSession } from "../../../test/fixtures";
+import { aSession } from "@tests/fixtures";
 
 function renderCard(overrides: Parameters<typeof aSession>[0] = {}) {
   const onBook = jest.fn();

@@ -1,3 +1,4 @@
+# Twig only renders the interactive API documentation (Swagger UI at /api/doc).
 twig:
     file_name_pattern: '*.twig'
 

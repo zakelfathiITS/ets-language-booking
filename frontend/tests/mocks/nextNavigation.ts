@@ -24,7 +24,13 @@ export function resetNavigation(): void {
   navigation.params = {};
 }
 
+// The hooks below are consumed through jest.mock("next/navigation") in setup.ts.
+
+/** @public */
 export const useRouter = () => router;
+/** @public */
 export const usePathname = () => navigation.pathname;
+/** @public */
 export const useSearchParams = () => navigation.searchParams;
+/** @public */
 export const useParams = () => navigation.params;

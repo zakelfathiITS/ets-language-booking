@@ -4,7 +4,7 @@ import { profileUpdated, selectIsAdmin, signedOut } from "@/features/auth/authSl
 import { sessionExpired } from "@/services/http/sessionEvents";
 import { makeStore } from "@/store/store";
 
-import { admin, anonymous, candidate, makeToken, signedIn } from "../../../../test/fixtures";
+import { admin, anonymous, candidate, makeToken, signedIn } from "@tests/fixtures";
 
 function persisted(): unknown {
   const raw = localStorage.getItem(AUTH_STORAGE_KEY);

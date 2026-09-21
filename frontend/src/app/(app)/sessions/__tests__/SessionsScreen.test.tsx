@@ -1,11 +1,11 @@
 import { screen, waitFor, within } from "@testing-library/react";
 import { http, HttpResponse } from "msw";
 
-import { aPage, aReservation, aSession, signedIn } from "../../../../../test/fixtures";
-import { navigation, router } from "../../../../../test/mocks/nextNavigation";
-import { api, problem } from "../../../../../test/msw/handlers";
-import { server } from "../../../../../test/msw/server";
-import { renderWithProviders } from "../../../../../test/renderWithProviders";
+import { aPage, aReservation, aSession, signedIn } from "@tests/fixtures";
+import { navigation, router } from "@tests/mocks/nextNavigation";
+import { api, problem } from "@tests/msw/handlers";
+import { server } from "@tests/msw/server";
+import { renderWithProviders } from "@tests/renderWithProviders";
 import { SessionsScreen } from "../SessionsScreen";
 
 /** A tiny stateful backend: booking really changes what the next fetch returns. */

@@ -38,12 +38,13 @@ console: ## Run a Symfony console command, e.g. make console c="debug:router"
 
 qa: qa-backend qa-frontend ## Run every quality gate of both applications (dev stack)
 
-qa-backend: ## Backend: code style, static analysis, architecture rules, tests
+qa-backend: ## Backend: code style, static analysis (incl. dead code), architecture rules, tests
 	$(BACKEND) composer qa
 
-qa-frontend: ## Frontend: lint (incl. architecture boundaries), type check, tests
+qa-frontend: ## Frontend: lint (incl. architecture boundaries), type check, unused code, tests
 	$(FRONTEND) npm run lint
 	$(FRONTEND) npm run typecheck
+	$(FRONTEND) npm run knip
 	$(FRONTEND) npm test
 
 test: test-backend test-frontend ## Run the test suites of both applications (dev stack)

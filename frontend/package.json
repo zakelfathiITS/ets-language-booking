@@ -13,7 +13,8 @@
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest",
-    "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage"
+    "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
+    "knip": "knip"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",
@@ -42,6 +43,7 @@
     "jest": "^30.5.2",
     "jest-environment-jsdom": "^30.5.2",
     "jest-fixed-jsdom": "^0.0.11",
+    "knip": "^6.37.0",
     "msw": "^2.15.0",
     "tailwindcss": "^4",
     "typescript": "^5"

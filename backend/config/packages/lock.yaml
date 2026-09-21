@@ -1,2 +1,3 @@
+# Locks guard the login throttling counters; "flock" suits a single instance.
 framework:
     lock: '%env(LOCK_DSN)%'

@@ -46,6 +46,9 @@ jobs:
       - name: Type check
         run: npm run typecheck
 
+      - name: Unused code and dependencies
+        run: npm run knip
+
       - name: Tests
         run: npm run test:coverage -- --coverageReporters=text-summary
 

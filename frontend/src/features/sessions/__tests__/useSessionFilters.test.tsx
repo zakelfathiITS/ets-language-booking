@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 
 import { useSessionFilters } from "@/features/sessions/useSessionFilters";
 
-import { navigation, router } from "../../../../test/mocks/nextNavigation";
+import { navigation, router } from "@tests/mocks/nextNavigation";
 
 function Probe() {
   const { filters, setPage, setFilters } = useSessionFilters();
