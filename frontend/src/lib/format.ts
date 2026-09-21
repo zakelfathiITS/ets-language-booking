@@ -43,6 +43,19 @@ export function formatSessionDate(localDate: string, locale: Locale): string {
   return `${parts.weekday} ${parts.day} ${parts.month} ${parts.year}`;
 }
 
+const shortMonths = new Map<Locale, Intl.DateTimeFormat>();
+
+/** "2026-09-23" → { day: "23", month: "Sep" } / { day: "23", month: "sept." }, for calendar tiles. */
+export function sessionDateParts(localDate: string, locale: Locale): { day: string; month: string } {
+  const format = formatter(shortMonths, locale, { day: "numeric", month: "short", timeZone: "UTC" });
+  const parts: Partial<Record<Intl.DateTimeFormatPartTypes, string>> = {};
+  for (const part of format.formatToParts(new Date(`${localDate}T00:00:00Z`))) {
+    parts[part.type] = part.value;
+  }
+
+  return { day: parts.day ?? "", month: (parts.month ?? "").replace(/\.$/, "") };
+}
+
 /** "Europe/Paris" → "Paris". */
 export function timezoneCity(timezone: string): string {
   return timezone.split("/").pop()?.replace(/_/g, " ") ?? timezone;

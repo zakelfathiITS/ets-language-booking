@@ -57,6 +57,11 @@ by default; the switcher in the header remembers an explicit choice. API validat
 are localised from the `Accept-Language` header, and business errors carry a stable `code`
 that the client translates.
 
+### Interface
+
+Light and dark themes follow the operating system setting, animations are turned off when
+the system asks for reduced motion, and colours meet WCAG AA contrast in both themes.
+
 ### Development mode
 
 ```bash
@@ -157,6 +162,12 @@ L'application est disponible en **anglais** et en **français**. Elle suit la la
 navigateur par défaut ; le sélecteur de l'en-tête mémorise un choix explicite. Les messages
 de validation de l'API sont localisés selon l'en-tête `Accept-Language`, et les erreurs
 métier portent un `code` stable que le client traduit.
+
+### Interface
+
+Les thèmes clair et sombre suivent le réglage du système, les animations sont désactivées
+lorsque le système demande de réduire les animations, et les couleurs respectent le niveau
+de contraste WCAG AA dans les deux thèmes.
 
 ### Mode développement
 

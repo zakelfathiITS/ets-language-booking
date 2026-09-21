@@ -1,7 +1,10 @@
 "use client";
 
+import { CircleHelp, TriangleAlert } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { type ReactNode, useEffect, useId, useRef } from "react";
+
+import { cn } from "@/lib/cn";
 
 import { Button } from "../atoms/Button";
 import { Heading } from "../atoms/Heading";
@@ -37,6 +40,7 @@ export function ConfirmDialog({
   const titleId = useId();
   const descriptionId = useId();
   const cancelRef = useRef<HTMLButtonElement>(null);
+  const Icon = tone === "danger" ? TriangleAlert : CircleHelp;
 
   useEffect(() => {
     if (!open) {
@@ -65,19 +69,33 @@ export function ConfirmDialog({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-neutral-900/40 p-4 sm:items-center">
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-slate-950/50 p-4 backdrop-blur-sm motion-safe:animate-fade sm:items-center">
       <div
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
         aria-describedby={descriptionId}
-        className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl"
+        className="w-full max-w-md rounded-2xl border border-line bg-surface p-6 shadow-raised motion-safe:animate-pop"
       >
-        <Heading level={2}>
-          <span id={titleId}>{title}</span>
-        </Heading>
-        <div id={descriptionId} className="mt-2 text-sm text-neutral-600">
-          {description}
+        <div className="flex gap-4">
+          <span
+            className={cn(
+              "flex h-10 w-10 shrink-0 items-center justify-center rounded-full",
+              tone === "danger"
+                ? "bg-red-50 text-red-600 dark:bg-red-500/15 dark:text-red-400"
+                : "bg-brand-50 text-brand-600 dark:bg-brand-500/15 dark:text-brand-300",
+            )}
+          >
+            <Icon aria-hidden="true" className="h-5 w-5" />
+          </span>
+          <div className="min-w-0">
+            <Heading level={2}>
+              <span id={titleId}>{title}</span>
+            </Heading>
+            <div id={descriptionId} className="mt-1.5 text-sm text-ink-muted">
+              {description}
+            </div>
+          </div>
         </div>
         <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
           <Button ref={cancelRef} variant="secondary" onClick={onCancel} disabled={isConfirming}>

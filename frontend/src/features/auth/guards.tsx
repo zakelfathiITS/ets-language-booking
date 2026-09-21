@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { type ReactNode, useEffect } from "react";
+import { type ReactNode, useEffect, useSyncExternalStore } from "react";
 
 import { ButtonLink } from "@/components/atoms/ButtonLink";
 import { EmptyState } from "@/components/molecules/EmptyState";
@@ -14,6 +14,22 @@ import { useAuth } from "./useAuth";
 export const HOME_PATH = "/reservations";
 export const LOGIN_PATH = "/login";
 
+const subscribeToNothing = () => () => {};
+
+/**
+ * False while server HTML is being hydrated. The session is restored from
+ * localStorage right after the first commit, and a page inside a Suspense
+ * boundary may hydrate later: until then, guards must render what the server
+ * rendered (the loading screen), whatever the status already is.
+ */
+function useHydrated(): boolean {
+  return useSyncExternalStore(
+    subscribeToNothing,
+    () => true,
+    () => false,
+  );
+}
+
 /**
  * Renders its children for signed-in users only; others are sent to the login
  * page, which brings them back here afterwards.
@@ -23,6 +39,7 @@ export function RequireAuth({ children }: { children: ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const t = useTranslations("common");
+  const hydrated = useHydrated();
 
   useEffect(() => {
     if (status !== "anonymous") {
@@ -33,7 +50,7 @@ export function RequireAuth({ children }: { children: ReactNode }) {
     router.replace(sessionEnd === "user" ? LOGIN_PATH : `${LOGIN_PATH}?next=${encodeURIComponent(pathname)}`);
   }, [status, sessionEnd, router, pathname]);
 
-  if (status !== "authenticated") {
+  if (!hydrated || status !== "authenticated") {
     return <LoadingScreen label={t("checkingSession")} />;
   }
 
@@ -67,6 +84,7 @@ export function RedirectIfAuthenticated({ children }: { children: ReactNode }) {
   const router = useRouter();
   const next = useSearchParams().get("next");
   const t = useTranslations("common");
+  const hydrated = useHydrated();
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -74,7 +92,7 @@ export function RedirectIfAuthenticated({ children }: { children: ReactNode }) {
     }
   }, [status, router, next]);
 
-  if (status !== "anonymous") {
+  if (!hydrated || status !== "anonymous") {
     return <LoadingScreen label={t("loading")} />;
   }
 

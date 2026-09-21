@@ -9,14 +9,14 @@ export function Checkbox({ label, id, ...props }: CheckboxProps) {
   const inputId = id ?? generatedId;
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2.5">
       <input
         id={inputId}
         type="checkbox"
-        className="h-4 w-4 rounded border-neutral-300 text-brand-600 focus:ring-2 focus:ring-brand-200"
+        className="h-4 w-4 cursor-pointer rounded border-line-strong accent-brand-600 focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/20"
         {...props}
       />
-      <label htmlFor={inputId} className="text-sm text-neutral-800">
+      <label htmlFor={inputId} className="cursor-pointer text-sm text-ink">
         {label}
       </label>
     </div>

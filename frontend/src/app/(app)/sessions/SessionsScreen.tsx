@@ -1,5 +1,6 @@
 "use client";
 
+import { CalendarClock, Compass, SearchX } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
@@ -100,7 +101,7 @@ export function SessionsScreen() {
         )}
 
         {sessions.isLoading ? (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             <p role="status" className="sr-only">
               {t("loading")}
             </p>
@@ -117,12 +118,14 @@ export function SessionsScreen() {
         ) : data.items.length === 0 ? (
           filters.page > 1 ? (
             <EmptyState
+              icon={Compass}
               title={t("empty.pageTitle")}
               description={t("empty.pageDescription")}
               action={<Button onClick={() => setPage(1)}>{t("empty.firstPage")}</Button>}
             />
           ) : (
             <EmptyState
+              icon={hasFilters ? SearchX : CalendarClock}
               title={hasFilters ? t("empty.filteredTitle") : t("empty.title")}
               description={hasFilters ? t("empty.filteredDescription") : t("empty.description")}
               action={
@@ -136,7 +139,7 @@ export function SessionsScreen() {
           )
         ) : (
           <>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" aria-busy={sessions.isFetching}>
+            <div className="grid gap-5 *:motion-safe:animate-rise sm:grid-cols-2 lg:grid-cols-3" aria-busy={sessions.isFetching}>
               {data.items.map((session) => (
                 <SessionCard
                   key={session.id}

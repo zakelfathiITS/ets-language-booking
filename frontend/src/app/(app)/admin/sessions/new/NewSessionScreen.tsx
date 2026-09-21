@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useMemo } from "react";
 
+import { Card } from "@/components/atoms/Card";
 import { PageHeader } from "@/components/organisms/PageHeader";
 import { SessionForm } from "@/components/organisms/SessionForm";
 import { useCreateSessionMutation } from "@/features/admin/adminSessionsApi";
@@ -36,7 +37,7 @@ export function NewSessionScreen() {
   return (
     <>
       <PageHeader title={t("form.newTitle")} description={t("form.newDescription")} />
-      <div className="max-w-2xl rounded-lg border border-neutral-200 bg-white p-6 shadow-sm">
+      <Card className="max-w-2xl motion-safe:animate-rise">
         <SessionForm
           submitLabel={t("form.create")}
           cancelHref="/admin/sessions"
@@ -45,7 +46,7 @@ export function NewSessionScreen() {
           isSubmitting={isLoading}
           serverErrors={serverErrors}
         />
-      </div>
+      </Card>
     </>
   );
 }
