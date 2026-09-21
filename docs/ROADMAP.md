@@ -46,10 +46,10 @@ pull request and squash-merged, so `main` holds exactly one commit per ticket.
 - [x] Unit and functional tests
 
 ### ETS-04 · Catalog: test sessions CRUD & pagination
-- [ ] `TestSession` aggregate (language, date, time, location, capacity, seats taken) and invariants
-- [ ] Use cases: create, update, delete, get, paginated list with filters
-- [ ] Admin-only write operations; idempotent `app:seed` demo data
-- [ ] Unit and functional tests
+- [x] `TestSession` aggregate (language, date, time, location, capacity, seats taken) and invariants
+- [x] Use cases: create, update, delete, get, paginated list with filters
+- [x] Admin-only write operations; idempotent `app:seed` demo data
+- [x] Unit and functional tests
 
 ### ETS-05 · Booking: reservations, business rules & concurrency
 - [ ] `Reservation` aggregate (`session_id`, `user_id`, reservation date) with a unique `(session_id, user_id)` index

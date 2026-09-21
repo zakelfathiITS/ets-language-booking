@@ -38,6 +38,17 @@ docker compose up -d --build
 
 Default settings work out of the box; copy `.env.example` to `.env` to change ports or credentials.
 
+### Demo accounts
+
+Loaded automatically on first start, together with 30 upcoming test sessions:
+
+| Role | Email | Password |
+|---|---|---|
+| Administrator | `admin@ets.test` | `Admin123!` |
+| Candidate | `candidate@ets.test` | `Candidate123!` |
+
+Set `APP_SEED_DEMO_DATA=0` in `.env` to start with an empty database.
+
 ### Development mode
 
 ```bash
@@ -98,6 +109,17 @@ docker compose up -d --build
 | Sonde de santé | http://localhost:8000/api/health |
 
 La configuration par défaut fonctionne telle quelle ; copiez `.env.example` en `.env` pour modifier les ports ou les identifiants.
+
+### Comptes de démonstration
+
+Créés automatiquement au premier démarrage, avec 30 sessions de test à venir :
+
+| Rôle | Email | Mot de passe |
+|---|---|---|
+| Administrateur | `admin@ets.test` | `Admin123!` |
+| Candidat | `candidate@ets.test` | `Candidate123!` |
+
+Définissez `APP_SEED_DEMO_DATA=0` dans `.env` pour démarrer avec une base vide.
 
 ### Mode développement
 
