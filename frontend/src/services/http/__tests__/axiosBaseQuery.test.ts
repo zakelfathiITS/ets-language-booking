@@ -35,7 +35,7 @@ describe("axiosBaseQuery", () => {
     // resulting session state matters here.
     await store.dispatch(authApi.endpoints.getMe.initiate());
 
-    expect(store.getState().auth).toEqual(anonymous.auth);
+    expect(store.getState().auth).toEqual({ ...anonymous.auth, endedBy: "expiry" });
     expect(localStorage.getItem(AUTH_STORAGE_KEY)).toBeNull();
   });
 

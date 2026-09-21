@@ -1,12 +1,9 @@
-import { EmptyState } from "@/components/molecules/EmptyState";
-import { PageHeader } from "@/components/organisms/PageHeader";
+import type { Metadata } from "next";
 
-// Placeholder: this screen is delivered with the upcoming frontend tickets.
-export default function Page() {
-  return (
-    <>
-      <PageHeader title="My account" description="Manage your name and email address." />
-      <EmptyState title="Coming next" description="This screen is part of the next delivery." />
-    </>
-  );
+import { AccountScreen } from "./AccountScreen";
+
+export const metadata: Metadata = { title: "My account" };
+
+export default function AccountPage() {
+  return <AccountScreen />;
 }

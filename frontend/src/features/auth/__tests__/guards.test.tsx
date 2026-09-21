@@ -24,6 +24,16 @@ describe("RequireAuth", () => {
     expect(screen.queryByText("secret")).not.toBeInTheDocument();
   });
 
+  it("sends users who signed out on purpose to a clean login page", async () => {
+    navigation.pathname = "/account";
+
+    renderWithProviders(<RequireAuth>secret</RequireAuth>, {
+      preloadedState: { auth: { ...anonymous.auth, endedBy: "user" } },
+    });
+
+    await waitFor(() => expect(router.replace).toHaveBeenCalledWith("/login"));
+  });
+
   it("shows the page to signed-in users", () => {
     renderWithProviders(<RequireAuth>secret</RequireAuth>, { preloadedState: signedIn() });
 

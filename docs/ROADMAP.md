@@ -65,10 +65,10 @@ pull request and squash-merged, so `main` holds exactly one commit per ticket.
 - [x] Jest + React Testing Library + MSW; GitHub Actions frontend pipeline
 
 ### ETS-07 · Frontend: authentication & account management
-- [ ] Login and registration forms with schema validation and API error mapping
-- [ ] Redirect to the reservations page after login; logout
-- [ ] Account page: view and update name and email
-- [ ] Tests
+- [x] Login and registration forms with schema validation and API error mapping
+- [x] Redirect to the reservations page after login; logout
+- [x] Account page: view and update name and email
+- [x] Tests
 
 ### ETS-08 · Frontend: session booking & reservation management
 - [ ] Paginated session list (language, date, time, location, seats) with URL-synced page and filters

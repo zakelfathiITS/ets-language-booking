@@ -1,10 +1,9 @@
-import { AuthTemplate } from "@/components/templates/AuthTemplate";
+import type { Metadata } from "next";
 
-// Placeholder: the sign-in form is delivered with ETS-07.
+import { LoginScreen } from "./LoginScreen";
+
+export const metadata: Metadata = { title: "Sign in" };
+
 export default function LoginPage() {
-  return (
-    <AuthTemplate title="Sign in" subtitle="Access your language test reservations.">
-      <p className="text-center text-sm text-neutral-500">The sign-in form is coming next.</p>
-    </AuthTemplate>
-  );
+  return <LoginScreen />;
 }
