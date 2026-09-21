@@ -4,7 +4,7 @@ BACKEND      = $(COMPOSE_DEV) exec backend
 FRONTEND     = $(COMPOSE_DEV) exec frontend
 
 .DEFAULT_GOAL := help
-.PHONY: help up down dev dev-down logs ps sh-backend sh-frontend console clean
+.PHONY: help up down dev dev-down logs ps sh-backend sh-frontend console qa test cs-fix clean
 
 help: ## List available commands
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-14s\033[0m %s\n", $$1, $$2}'
@@ -35,6 +35,15 @@ sh-frontend: ## Open a shell in the frontend container (dev stack)
 
 console: ## Run a Symfony console command, e.g. make console c="debug:router"
 	$(BACKEND) bin/console $(c)
+
+qa: ## Run all backend quality gates: code style, static analysis, architecture, tests (dev stack)
+	$(BACKEND) composer qa
+
+test: ## Run the backend test suites (dev stack)
+	$(BACKEND) composer test
+
+cs-fix: ## Fix backend coding standards (dev stack)
+	$(BACKEND) composer cs:fix
 
 clean: ## Stop everything and delete volumes (database included)
 	$(COMPOSE_DEV) down -v --remove-orphans

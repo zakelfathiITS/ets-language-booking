@@ -31,12 +31,12 @@ pull request and squash-merged, so `main` holds exactly one commit per ticket.
 - [x] Bilingual README skeleton (FR/EN) and this roadmap
 
 ### ETS-02 · Backend hexagonal foundations & quality gates
-- [ ] Layered source tree and Deptrac ruleset
-- [ ] Doctrine ODM wired to the XML mapping directory; index creation on startup
-- [ ] Shared kernel: domain exception hierarchy, `Clock` port, pagination primitives
-- [ ] Uniform JSON error contract (`422` with violations, `401`, `403`, `404`, `409`, `500`)
-- [ ] PHPStan (level 8), PHP-CS-Fixer (`@Symfony`), PHPUnit with an isolated test database
-- [ ] GitHub Actions backend pipeline
+- [x] Layered source tree and Deptrac ruleset
+- [x] Doctrine ODM wired to the XML mapping directory; index creation on startup
+- [x] Shared kernel: domain exception hierarchy, `Clock` port, pagination primitives
+- [x] Uniform JSON error contract following RFC 9457 Problem Details (`422` with violations, `401`, `403`, `404`, `409`, `500`)
+- [x] PHPStan (level 8), PHP-CS-Fixer (`@Symfony`), PHPUnit with an isolated test database
+- [x] GitHub Actions backend pipeline
 
 ### ETS-03 · Identity: registration, JWT authentication & account API
 - [ ] `User` aggregate, `Email` value object, repository port + MongoDB adapter, unique email index

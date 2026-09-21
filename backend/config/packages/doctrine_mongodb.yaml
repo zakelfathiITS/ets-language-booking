@@ -8,7 +8,25 @@ doctrine_mongodb:
     default_database: '%env(MONGODB_DB)%'
     document_managers:
         default:
-            auto_mapping: true
+            auto_mapping: false
+            # Domain classes carry no persistence metadata: their mapping lives in
+            # XML files inside the infrastructure layer, one directory per bounded context.
+            mappings:
+                Identity:
+                    type: xml
+                    is_bundle: false
+                    dir: '%kernel.project_dir%/src/Infrastructure/Persistence/MongoDB/Mapping/Identity'
+                    prefix: 'App\Domain\Identity'
+                Catalog:
+                    type: xml
+                    is_bundle: false
+                    dir: '%kernel.project_dir%/src/Infrastructure/Persistence/MongoDB/Mapping/Catalog'
+                    prefix: 'App\Domain\Catalog'
+                Booking:
+                    type: xml
+                    is_bundle: false
+                    dir: '%kernel.project_dir%/src/Infrastructure/Persistence/MongoDB/Mapping/Booking'
+                    prefix: 'App\Domain\Booking'
 
 when@prod:
     doctrine_mongodb:

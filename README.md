@@ -45,6 +45,15 @@ make dev        # bind-mounted sources, hot reload, debug mode
 make help       # all available commands
 ```
 
+### Quality checks
+
+```bash
+make qa         # coding standards, static analysis (PHPStan level 8), architecture rules (Deptrac), tests
+make test       # test suites only
+```
+
+The same checks run in GitHub Actions on every pull request.
+
 ### Repository layout
 
 ```
@@ -96,6 +105,15 @@ La configuration par défaut fonctionne telle quelle ; copiez `.env.example` en 
 make dev        # sources montées, rechargement à chaud, mode debug
 make help       # liste des commandes disponibles
 ```
+
+### Contrôles qualité
+
+```bash
+make qa         # style de code, analyse statique (PHPStan niveau 8), règles d'architecture (Deptrac), tests
+make test       # suites de tests uniquement
+```
+
+Les mêmes contrôles s'exécutent dans GitHub Actions à chaque pull request.
 
 ### Organisation du dépôt
 
