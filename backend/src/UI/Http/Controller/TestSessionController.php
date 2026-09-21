@@ -115,7 +115,7 @@ final readonly class TestSessionController
     #[ErrorResponse(422, ErrorResponse::VALIDATION_FAILED)]
     #[IsGranted('ROLE_ADMIN')]
     public function create(
-        #[MapRequestPayload]
+        #[MapRequestPayload(acceptFormat: 'json')]
         TestSessionRequest $request,
         CreateTestSessionHandler $createSession,
         UrlGeneratorInterface $urlGenerator,
@@ -144,7 +144,7 @@ final readonly class TestSessionController
     #[IsGranted('ROLE_ADMIN')]
     public function update(
         string $id,
-        #[MapRequestPayload]
+        #[MapRequestPayload(acceptFormat: 'json')]
         TestSessionRequest $request,
         UpdateTestSessionHandler $updateSession,
     ): JsonResponse {

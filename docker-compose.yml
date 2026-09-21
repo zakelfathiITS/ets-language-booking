@@ -30,8 +30,10 @@ services:
       APP_SECRET: ${APP_SECRET:-local_only_change_me_in_production}
       MONGODB_URI: mongodb://${MONGO_ROOT_USERNAME:-ets}:${MONGO_ROOT_PASSWORD:-ets_local_password}@mongodb:27017/?authSource=admin&serverSelectionTimeoutMS=3000
       MONGODB_DB: ${MONGODB_DB:-ets_booking}
-      CORS_ALLOW_ORIGIN: ${CORS_ALLOW_ORIGIN:-^https?://(localhost|127\.0\.0\.1)(:[0-9]+)?$}
       JWT_PASSPHRASE: ${JWT_PASSPHRASE:-local_only_jwt_passphrase_change_me}
+      # This local stack is served over plain HTTP: the token cookie cannot require HTTPS.
+      AUTH_COOKIE_SECURE: ${AUTH_COOKIE_SECURE:-0}
+      API_PROXY_SECRET: ${API_PROXY_SECRET:-local_only_proxy_secret_change_me}
       APP_TIMEZONE: ${APP_TIMEZONE:-Europe/Paris}
       # Loads demo accounts and sessions on first start (idempotent).
       APP_SEED_DEMO_DATA: ${APP_SEED_DEMO_DATA:-1}
@@ -46,11 +48,14 @@ services:
       context: ./frontend
       target: runner
       args:
-        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000}
         NEXT_PUBLIC_SHOW_DEMO_ACCOUNTS: ${NEXT_PUBLIC_SHOW_DEMO_ACCOUNTS:-true}
         # Same timezone as the API (display hint of the back-office form).
         NEXT_PUBLIC_APP_TIMEZONE: ${APP_TIMEZONE:-Europe/Paris}
     restart: unless-stopped
+    environment:
+      # The browser only talks to this origin: /api/* is forwarded to the API.
+      API_INTERNAL_URL: http://backend
+      API_PROXY_SECRET: ${API_PROXY_SECRET:-local_only_proxy_secret_change_me}
     depends_on:
       backend:
         condition: service_healthy

@@ -233,7 +233,7 @@
     "emailInvalid": "Enter a valid email address.",
     "nameLength": "Name must contain between 2 and 100 characters.",
     "passwordRequired": "Password is required.",
-    "passwordTooShort": "Password must contain at least 8 characters.",
+    "passwordTooShort": "Password must contain at least 12 characters.",
     "passwordTooLong": "Password is too long.",
     "confirmPasswordRequired": "Please confirm your password.",
     "passwordMismatch": "Passwords do not match.",
@@ -249,7 +249,7 @@
     "generic": "Something went wrong. Please try again.",
     "network_error": "The server cannot be reached. Check your connection and try again.",
     "invalid_credentials": "Invalid email or password.",
-    "too_many_login_attempts": "Too many failed attempts. Please try again in a minute.",
+    "too_many_login_attempts": "Too many failed attempts. Please try again in a few minutes.",
     "validation_failed": "Some fields are invalid.",
     "email_already_in_use": "This email is already used by another account.",
     "session_full": "Sorry, this session has just filled up. Seats have been refreshed.",
@@ -259,6 +259,8 @@
     "reservation_not_found": "This reservation no longer exists.",
     "session_has_reservations": "This session has bookings, so it cannot be deleted.",
     "session_in_past": "A session must be scheduled in the future.",
-    "capacity_below_reserved_seats": "The capacity cannot be lower than the seats already booked."
+    "capacity_below_reserved_seats": "The capacity cannot be lower than the seats already booked.",
+    "too_many_requests": "Too many requests. Please wait a moment and try again.",
+    "api_unavailable": "The service is temporarily unavailable. Please try again in a moment."
   }
 }

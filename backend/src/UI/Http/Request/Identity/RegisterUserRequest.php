@@ -18,7 +18,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[OA\Schema(required: ['name', 'email', 'password'])]
 final readonly class RegisterUserRequest
 {
-    public const PASSWORD_MIN_LENGTH = 8;
+    /** OWASP ASVS 2.1.1: length matters more than composition rules. */
+    public const PASSWORD_MIN_LENGTH = 12;
 
     public function __construct(
         #[Assert\NotBlank(normalizer: 'trim')]
@@ -30,6 +31,10 @@ final readonly class RegisterUserRequest
         public string $email = '',
         #[Assert\NotBlank]
         #[Assert\Length(min: self::PASSWORD_MIN_LENGTH, max: 4096)]
+        // Rejects passwords found in known data breaches (Have I Been Pwned,
+        // k-anonymity: only 5 characters of the SHA-1 hash leave the server).
+        // Registration still works if the service cannot be reached.
+        #[Assert\NotCompromisedPassword(skipOnError: true)]
         public string $password = '',
     ) {
     }

@@ -21,11 +21,14 @@ export const authApi = baseApi.injectEndpoints({
       async onQueryStarted(_credentials, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          dispatch(signedIn(data));
+          dispatch(signedIn(data.user));
         } catch {
           // The error is exposed to the form through the mutation result.
         }
       },
+    }),
+    logout: build.mutation<void, void>({
+      query: () => ({ url: "/api/auth/logout", method: "POST" }),
     }),
     register: build.mutation<UserProfile, RegistrationPayload>({
       query: (payload) => ({ url: "/api/auth/register", method: "POST", data: payload }),
@@ -52,7 +55,7 @@ export const authApi = baseApi.injectEndpoints({
           const { data } = await queryFulfilled;
           dispatch(profileUpdated(data));
         } catch {
-          // Token problems are handled globally (session expired).
+          // Session problems are handled globally (session expired).
         }
       },
     }),

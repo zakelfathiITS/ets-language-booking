@@ -6,3 +6,26 @@ lexik_jwt_authentication:
     token_ttl: '%env(int:JWT_TTL)%'
     # Standard "sub" claim, holding the user id (see SecurityUser).
     user_id_claim: sub
+
+    # Browsers receive the token in an httpOnly cookie that scripts cannot read
+    # (the web client reaches the API through its own origin, see frontend/src/app/api).
+    # Other clients may still send it as "Authorization: Bearer <token>".
+    token_extractors:
+        authorization_header:
+            enabled: true
+        cookie:
+            enabled: true
+            name: ets_token
+    set_cookies:
+        ets_token:
+            samesite: strict
+            # Only sent with API calls, never with page requests.
+            path: /api
+            httpOnly: true
+            # Disabled only for local stacks served over plain HTTP.
+            secure: '%env(bool:AUTH_COOKIE_SECURE)%'
+    remove_token_from_body_when_cookies_used: true
+
+    # Signing out revokes the token (tokens get a "jti" claim); see MongoBlockedTokenManager.
+    blocklist_token:
+        enabled: true

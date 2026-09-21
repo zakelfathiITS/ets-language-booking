@@ -23,11 +23,14 @@ final class AuthenticationProblemListener
     #[AsEventListener(event: Events::AUTHENTICATION_FAILURE)]
     public function onLoginFailure(AuthenticationFailureEvent $event): void
     {
-        if ($event->getException() instanceof TooManyLoginAttemptsAuthenticationException) {
+        $exception = $event->getException();
+        if ($exception instanceof TooManyLoginAttemptsAuthenticationException) {
+            $minutes = max(1, (int) ($exception->getMessageData()['%minutes%'] ?? 1));
             $event->setResponse(new ProblemResponse(
                 Response::HTTP_TOO_MANY_REQUESTS,
                 'too_many_login_attempts',
-                'Too many failed login attempts. Please try again in a minute.',
+                sprintf('Too many failed login attempts. Please try again in %d minute(s).', $minutes),
+                headers: ['Retry-After' => (string) ($minutes * 60)],
             ));
 
             return;

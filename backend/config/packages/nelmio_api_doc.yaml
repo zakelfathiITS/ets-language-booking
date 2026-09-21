@@ -8,8 +8,10 @@ nelmio_api_doc:
             description: |
                 Book seats in language test sessions.
 
-                **Authentication**: call `POST /api/auth/login`, then send the returned token
-                as `Authorization: Bearer <token>` (use the "Authorize" button above).
+                **Authentication**: call `POST /api/auth/login`. The token comes back in the
+                httpOnly `ets_token` cookie, which this page then sends automatically;
+                other clients may send the same token as `Authorization: Bearer <token>`.
+                `POST /api/auth/logout` revokes it.
                 Demo accounts: `admin@ets.test` / `Admin123!` and `candidate@ets.test` / `Candidate123!`.
 
                 **Errors** follow RFC 9457 (`application/problem+json`) with a stable `code`
@@ -17,6 +19,10 @@ nelmio_api_doc:
             version: 1.0.0
         components:
             securitySchemes:
+                Cookie:
+                    type: apiKey
+                    in: cookie
+                    name: ets_token
                 Bearer:
                     type: http
                     scheme: bearer
@@ -86,5 +92,7 @@ nelmio_api_doc:
                         reservedAt: { type: string, format: date-time }
                         canBeCancelled: { type: boolean, example: true }
                         session: { $ref: '#/components/schemas/TestSession' }
+        # Either one.
         security:
+            - Cookie: []
             - Bearer: []

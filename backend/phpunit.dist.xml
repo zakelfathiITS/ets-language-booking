@@ -20,6 +20,11 @@
         <!-- Tests never touch the development database, whatever the container defines. -->
         <server name="MONGODB_DB" value="ets_booking_test" force="true" />
         <env name="MONGODB_DB" value="ets_booking_test" force="true" />
+        <!-- Security settings under test, whatever the container defines. -->
+        <server name="AUTH_COOKIE_SECURE" value="1" force="true" />
+        <env name="AUTH_COOKIE_SECURE" value="1" force="true" />
+        <server name="API_PROXY_SECRET" value="test_only_proxy_secret" force="true" />
+        <env name="API_PROXY_SECRET" value="test_only_proxy_secret" force="true" />
     </php>
 
     <testsuites>

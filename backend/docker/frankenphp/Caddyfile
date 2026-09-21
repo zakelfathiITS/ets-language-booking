@@ -22,6 +22,10 @@
 	root * /app/public
 	encode zstd br gzip
 
+	# Do not advertise the server software.
+	header -Server
+	header -X-Powered-By
+
 	{$CADDY_SERVER_EXTRA_DIRECTIVES}
 
 	php_server

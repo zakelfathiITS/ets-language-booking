@@ -27,6 +27,12 @@ doctrine_mongodb:
                     is_bundle: false
                     dir: '%kernel.project_dir%/src/Infrastructure/Persistence/MongoDB/Mapping/Booking'
                     prefix: 'App\Domain\Booking'
+                # Infrastructure-only document: revoked JWTs.
+                Security:
+                    type: xml
+                    is_bundle: false
+                    dir: '%kernel.project_dir%/src/Infrastructure/Persistence/MongoDB/Mapping/Security'
+                    prefix: 'App\Infrastructure\Security'
 
 when@prod:
     doctrine_mongodb:

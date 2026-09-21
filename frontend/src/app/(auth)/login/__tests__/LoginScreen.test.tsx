@@ -1,7 +1,7 @@
 import { screen, waitFor } from "@testing-library/react";
 import { http, HttpResponse } from "msw";
 
-import { admin, anonymous, makeToken } from "@tests/fixtures";
+import { admin, anonymous } from "@tests/fixtures";
 import { api, problem } from "@tests/msw/handlers";
 import { server } from "@tests/msw/server";
 import { renderWithProviders } from "@tests/renderWithProviders";
@@ -23,7 +23,7 @@ describe("LoginScreen", () => {
       http.post(api("/api/auth/login"), async ({ request }) => {
         credentials = await request.json();
 
-        return HttpResponse.json({ token: makeToken(), user: admin });
+        return HttpResponse.json({ user: admin });
       }),
     );
     const { user, store } = renderWithProviders(<LoginScreen />, { preloadedState: anonymous });
@@ -54,7 +54,7 @@ describe("LoginScreen", () => {
       http.post(api("/api/auth/login"), async ({ request }) => {
         credentials = await request.json();
 
-        return HttpResponse.json({ token: makeToken(), user: admin });
+        return HttpResponse.json({ user: admin });
       }),
     );
     const { user, store } = renderWithProviders(<LoginScreen />, { preloadedState: anonymous });

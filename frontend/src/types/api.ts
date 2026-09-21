@@ -62,8 +62,8 @@ export interface Credentials {
   password: string;
 }
 
+/** The token itself is set in an httpOnly cookie. */
 export interface LoginResponse {
-  token: string;
   user: UserProfile;
 }
 

@@ -62,6 +62,21 @@ that the client translates.
 Light and dark themes follow the operating system setting, animations are turned off when
 the system asks for reduced motion, and colours meet WCAG AA contrast in both themes.
 
+### Security
+
+- **Session:** the JWT lives in an `httpOnly`, `SameSite=Strict` cookie that scripts cannot read.
+  The browser only talks to the web client's origin, which relays `/api/*` to the API: the
+  cookie stays first-party and the API needs no CORS. Signing out revokes the token.
+- **Abuse:** failed logins are limited per client, per account and per both; registration,
+  booking and profile updates are rate-limited too. Unknown emails and wrong passwords get
+  the same answer, in the same time.
+- **Browser hardening:** a nonce-based Content Security Policy and the usual security headers
+  on both applications.
+- **Passwords:** at least 12 characters, and not found in known data breaches.
+- **Supply chain:** dependency audits and secret scanning run on every change and weekly.
+
+Details, trade-offs and known limitations: [docs/SECURITY.md](docs/SECURITY.md).
+
 ### Development mode
 
 ```bash
@@ -76,7 +91,8 @@ make qa         # both apps: code style, static analysis, architecture rules, te
 make test       # test suites only (make test-backend / make test-frontend)
 ```
 
-The same checks run in GitHub Actions on every pull request.
+The same checks run in GitHub Actions on every pull request, along with dependency audits
+and secret scanning.
 
 ### Project structure
 
@@ -169,6 +185,23 @@ Les thèmes clair et sombre suivent le réglage du système, les animations sont
 lorsque le système demande de réduire les animations, et les couleurs respectent le niveau
 de contraste WCAG AA dans les deux thèmes.
 
+### Sécurité
+
+- **Session :** le JWT est conservé dans un cookie `httpOnly`, `SameSite=Strict`, illisible par
+  les scripts. Le navigateur ne s'adresse qu'à l'origine du client web, qui relaie `/api/*` vers
+  l'API : le cookie reste interne au site et l'API n'a pas besoin de CORS. La déconnexion
+  révoque le jeton.
+- **Abus :** les échecs de connexion sont limités par client, par compte et par les deux ;
+  l'inscription, la réservation et la modification du profil sont aussi limitées. Un e-mail
+  inconnu et un mauvais mot de passe reçoivent la même réponse, dans le même délai.
+- **Navigateur :** une Content Security Policy à nonce et les en-têtes de sécurité usuels sur
+  les deux applications.
+- **Mots de passe :** au moins 12 caractères, absents des fuites de données connues.
+- **Dépendances et secrets :** audits de dépendances et détection de secrets à chaque
+  modification et chaque semaine.
+
+Détails, compromis et limites connues (en anglais) : [docs/SECURITY.md](docs/SECURITY.md).
+
 ### Mode développement
 
 ```bash
@@ -183,7 +216,8 @@ make qa         # les deux applications : style, analyse statique, règles d'arc
 make test       # suites de tests uniquement (make test-backend / make test-frontend)
 ```
 
-Les mêmes contrôles s'exécutent dans GitHub Actions à chaque pull request.
+Les mêmes contrôles s'exécutent dans GitHub Actions à chaque pull request, avec les audits
+de dépendances et la détection de secrets.
 
 ### Organisation du code
 

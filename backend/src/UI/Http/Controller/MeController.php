@@ -9,6 +9,7 @@ use App\Application\Identity\GetProfile\GetProfileQuery;
 use App\Application\Identity\UpdateProfile\UpdateProfileCommand;
 use App\Application\Identity\UpdateProfile\UpdateProfileHandler;
 use App\UI\Http\OpenApi\ErrorResponse;
+use App\UI\Http\RateLimit\RateLimit;
 use App\UI\Http\Request\Identity\UpdateProfileRequest;
 use App\UI\Http\Response\Identity\UserProfileResource;
 use OpenApi\Attributes as OA;
@@ -49,10 +50,12 @@ final readonly class MeController
     #[OA\Response(response: 200, description: 'The updated account.', content: new OA\JsonContent(ref: '#/components/schemas/UserProfile'))]
     #[ErrorResponse(409, 'Conflicts with the current state (see `code`).')]
     #[ErrorResponse(422, ErrorResponse::VALIDATION_FAILED)]
+    #[ErrorResponse(429, ErrorResponse::TOO_MANY_REQUESTS)]
+    #[RateLimit('profile_update')]
     public function update(
         #[CurrentUser]
         UserInterface $user,
-        #[MapRequestPayload]
+        #[MapRequestPayload(acceptFormat: 'json')]
         UpdateProfileRequest $request,
     ): JsonResponse {
         $profile = ($this->updateProfile)(

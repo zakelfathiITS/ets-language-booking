@@ -5,8 +5,8 @@ each ticket is tracked as a GitHub issue, delivered through a pull request and
 squash-merged, so `main` holds exactly one commit per ticket.
 
 Delivery order: ETS-01 → ETS-09, then ETS-12 (cleanup), ETS-13 (i18n) and ETS-14
-(UI refresh), added along the way, then ETS-10 (security review and release) and
-ETS-11 (deployment).
+(UI refresh), added along the way, then ETS-10 (security), ETS-15 (release candidate,
+split from ETS-10) and ETS-11 (deployment).
 
 ## Architecture decisions
 
@@ -104,16 +104,20 @@ ETS-11 (deployment).
 - [x] Micro-interactions respecting `prefers-reduced-motion`; dark mode
 - [x] Brand icon and metadata; WCAG AA contrast in both themes
 
-### ETS-10 · Security review, hardening, documentation & release candidate
-- [ ] Security review: token storage and lifetime, sign-out and revocation, secrets in logs
-- [ ] Security headers and Content Security Policy, CORS allowlist, rate limiting beyond login
-- [ ] Password policy, account enumeration, error disclosure; dependency audits and secret scanning
+### ETS-10 · Security review & hardening
+- [x] Token in an httpOnly `SameSite=Strict` cookie behind a same-origin `/api` relay (no CORS); revocation on sign-out
+- [x] Rate limiting: failed logins per client, per account and per both; registration, booking, profile updates
+- [x] Trusted visitor address from the relay (shared secret), security headers on both apps, nonce-based CSP
+- [x] Password policy (12+ characters, breached passwords refused), same answer and timing for unknown accounts
+- [x] Dependency audits and secret scanning in CI (and weekly); `docs/SECURITY.md`
+
+### ETS-15 · Release candidate
 - [ ] Index usage review, production build tuning
 - [ ] Complete bilingual README: architecture, setup, tests, API, demo accounts, trade-offs
 - [ ] Coverage reports, CI badges, clean-clone verification, `v1.0.0` tag
 
 ### ETS-11 · Deployment readiness
-- [ ] Environment-driven production configuration (Atlas URI, JWT keys, CORS origin)
+- [ ] Environment-driven production configuration (Atlas URI, JWT keys, proxy secret)
 - [ ] Backend deployment descriptors (Render blueprint, Alwaysdata guide) — target to be confirmed
 - [ ] Vercel configuration, Atlas setup, demo data seeding
 - [ ] API wake-up screen for sleeping free-tier instances

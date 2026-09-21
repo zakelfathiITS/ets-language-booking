@@ -26,9 +26,21 @@ security:
                 password_path: password
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
+            # Failed attempts are limited per client, per account and per both
+            # (see LoginRateLimiter and config/packages/rate_limiter.yaml).
             login_throttling:
-                max_attempts: 5
-                interval: '1 minute'
+                limiter: App\Infrastructure\Security\LoginRateLimiter
+
+        # POST /api/auth/logout revokes the token and clears its cookie. No
+        # authenticator here: signing out works even with an expired token.
+        logout:
+            pattern: ^/api/auth/logout$
+            stateless: true
+            logout:
+                path: api_auth_logout
+                invalidate_session: false
+                delete_cookies:
+                    ets_token: { path: /api }
 
         # Every other API route authenticates with "Authorization: Bearer <token>".
         api:
@@ -40,7 +52,7 @@ security:
     access_control:
         - { path: ^/api/health$, roles: PUBLIC_ACCESS }
         - { path: ^/api/doc(\.json)?$, roles: PUBLIC_ACCESS }
-        - { path: ^/api/auth/(register|login)$, roles: PUBLIC_ACCESS }
+        - { path: ^/api/auth/(register|login|logout)$, roles: PUBLIC_ACCESS }
         # The catalogue is managed by administrators only (also enforced with #[IsGranted]).
         - { path: ^/api/sessions, methods: [POST, PUT, PATCH, DELETE], roles: ROLE_ADMIN }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }

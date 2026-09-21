@@ -25,14 +25,13 @@ EXPOSE 3000
 CMD ["npm", "run", "dev", "--", "--hostname", "0.0.0.0"]
 
 #------------------------------------------------------------------------------
-# Build: NEXT_PUBLIC_* variables are inlined at build time
+# Build: NEXT_PUBLIC_* variables are inlined at build time; the API address
+# (API_INTERNAL_URL) and API_PROXY_SECRET are read at run time.
 #------------------------------------------------------------------------------
 FROM deps AS builder
-ARG NEXT_PUBLIC_API_URL=http://localhost:8000
 ARG NEXT_PUBLIC_SHOW_DEMO_ACCOUNTS=true
 ARG NEXT_PUBLIC_APP_TIMEZONE=Europe/Paris
-ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL} \
-    NEXT_PUBLIC_SHOW_DEMO_ACCOUNTS=${NEXT_PUBLIC_SHOW_DEMO_ACCOUNTS} \
+ENV NEXT_PUBLIC_SHOW_DEMO_ACCOUNTS=${NEXT_PUBLIC_SHOW_DEMO_ACCOUNTS} \
     NEXT_PUBLIC_APP_TIMEZONE=${NEXT_PUBLIC_APP_TIMEZONE}
 COPY . .
 RUN npm run build

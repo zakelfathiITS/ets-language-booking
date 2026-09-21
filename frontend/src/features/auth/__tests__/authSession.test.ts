@@ -1,69 +1,92 @@
+import { http, HttpResponse } from "msw";
+
 import { authApi } from "@/features/auth/authApi";
-import { AUTH_STORAGE_KEY, restoreSession } from "@/features/auth/authPersistence";
-import { profileUpdated, selectIsAdmin, signedOut } from "@/features/auth/authSlice";
+import { restoreSession, SESSION_HINT_KEY, signOut } from "@/features/auth/authSession";
+import { profileUpdated, selectIsAdmin } from "@/features/auth/authSlice";
 import { sessionExpired } from "@/services/http/sessionEvents";
 import { makeStore } from "@/store/store";
 
-import { admin, anonymous, candidate, makeToken, signedIn } from "@tests/fixtures";
+import { admin, anonymous, candidate, signedIn } from "@tests/fixtures";
+import { api, problem } from "@tests/msw/handlers";
+import { server } from "@tests/msw/server";
 
-function persisted(): unknown {
-  const raw = localStorage.getItem(AUTH_STORAGE_KEY);
-
-  return raw ? JSON.parse(raw) : null;
-}
+const hint = () => localStorage.getItem(SESSION_HINT_KEY);
 
 describe("auth session", () => {
-  it("signs in through the API and persists the session", async () => {
+  it("signs in through the API, keeping only a hint in the browser", async () => {
     const store = makeStore(anonymous);
 
     await store.dispatch(authApi.endpoints.login.initiate({ email: candidate.email, password: "secret" }));
 
-    expect(store.getState().auth).toMatchObject({ status: "authenticated", user: candidate });
-    expect(persisted()).toMatchObject({ user: candidate });
+    expect(store.getState().auth).toEqual({ status: "authenticated", user: candidate, endedBy: null });
+    expect(hint()).toBe("true");
+    expect(JSON.stringify(localStorage)).not.toContain(candidate.email);
   });
 
-  it("restores a persisted session whose token is still valid", () => {
-    const token = makeToken(600);
-    localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify({ token, user: admin }));
+  it("restores the session of a returning visitor from the API", async () => {
+    localStorage.setItem(SESSION_HINT_KEY, "true");
+    server.use(http.get(api("/api/me"), () => HttpResponse.json(admin)));
     const store = makeStore();
 
-    store.dispatch(restoreSession());
+    await store.dispatch(restoreSession());
 
-    expect(store.getState().auth).toEqual({ status: "authenticated", token, user: admin, endedBy: null });
+    expect(store.getState().auth).toEqual({ status: "authenticated", user: admin, endedBy: null });
     expect(selectIsAdmin(store.getState())).toBe(true);
   });
 
-  it("drops a persisted session whose token has expired", () => {
-    localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify({ token: makeToken(-1), user: candidate }));
+  it("starts anonymous when the token cookie is gone or no longer valid", async () => {
+    localStorage.setItem(SESSION_HINT_KEY, "true");
+    server.use(http.get(api("/api/me"), () => problem(401, "token_missing")));
     const store = makeStore();
 
-    store.dispatch(restoreSession());
+    await store.dispatch(restoreSession());
 
-    expect(store.getState().auth.status).toBe("anonymous");
-    expect(persisted()).toBeNull();
+    expect(store.getState().auth).toEqual(anonymous.auth);
+    expect(hint()).toBeNull();
   });
 
-  it("starts anonymous when nothing is persisted", () => {
+  it("does not call the API for a visitor who never signed in", async () => {
+    const onMe = jest.fn();
+    server.use(http.get(api("/api/me"), onMe));
     const store = makeStore();
     expect(store.getState().auth.status).toBe("unknown");
 
-    store.dispatch(restoreSession());
+    await store.dispatch(restoreSession());
 
     expect(store.getState().auth.status).toBe("anonymous");
+    expect(onMe).not.toHaveBeenCalled();
   });
 
-  it.each([
-    ["signing out", signedOut(), "user"],
-    ["an expired session", sessionExpired(), "expiry"],
-  ] as const)("forgets everything on %s", (_label, action, endedBy) => {
+  it("revokes the token when signing out", async () => {
+    const onLogout = jest.fn(() => new HttpResponse(null, { status: 204 }));
+    server.use(http.post(api("/api/auth/logout"), onLogout));
+    localStorage.setItem(SESSION_HINT_KEY, "true");
     const store = makeStore(signedIn());
-    store.dispatch(profileUpdated(candidate));
-    expect(persisted()).not.toBeNull();
 
-    store.dispatch(action);
+    await store.dispatch(signOut());
 
-    expect(store.getState().auth).toEqual({ ...anonymous.auth, endedBy });
-    expect(persisted()).toBeNull();
+    expect(onLogout).toHaveBeenCalledTimes(1);
+    expect(store.getState().auth).toEqual({ ...anonymous.auth, endedBy: "user" });
+    expect(hint()).toBeNull();
+  });
+
+  it("signs out locally even if the API cannot be reached", async () => {
+    server.use(http.post(api("/api/auth/logout"), () => HttpResponse.error()));
+    const store = makeStore(signedIn());
+
+    await store.dispatch(signOut());
+
+    expect(store.getState().auth).toEqual({ ...anonymous.auth, endedBy: "user" });
+  });
+
+  it("forgets everything when the session expires", () => {
+    localStorage.setItem(SESSION_HINT_KEY, "true");
+    const store = makeStore(signedIn());
+
+    store.dispatch(sessionExpired());
+
+    expect(store.getState().auth).toEqual({ ...anonymous.auth, endedBy: "expiry" });
+    expect(hint()).toBeNull();
   });
 
   it("keeps the profile up to date", () => {

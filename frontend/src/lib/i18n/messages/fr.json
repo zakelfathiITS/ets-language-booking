@@ -233,7 +233,7 @@
     "emailInvalid": "Saisissez une adresse e-mail valide.",
     "nameLength": "Le nom doit contenir entre 2 et 100 caractères.",
     "passwordRequired": "Le mot de passe est obligatoire.",
-    "passwordTooShort": "Le mot de passe doit contenir au moins 8 caractères.",
+    "passwordTooShort": "Le mot de passe doit contenir au moins 12 caractères.",
     "passwordTooLong": "Le mot de passe est trop long.",
     "confirmPasswordRequired": "Veuillez confirmer votre mot de passe.",
     "passwordMismatch": "Les mots de passe ne correspondent pas.",
@@ -249,7 +249,7 @@
     "generic": "Une erreur est survenue. Veuillez réessayer.",
     "network_error": "Le serveur est injoignable. Vérifiez votre connexion et réessayez.",
     "invalid_credentials": "Adresse e-mail ou mot de passe incorrect.",
-    "too_many_login_attempts": "Trop de tentatives échouées. Réessayez dans une minute.",
+    "too_many_login_attempts": "Trop de tentatives échouées. Veuillez réessayer dans quelques minutes.",
     "validation_failed": "Certains champs sont invalides.",
     "email_already_in_use": "Cette adresse e-mail est déjà utilisée par un autre compte.",
     "session_full": "Désolé, cette session vient d'être complète. Les places ont été actualisées.",
@@ -259,6 +259,8 @@
     "reservation_not_found": "Cette réservation n'existe plus.",
     "session_has_reservations": "Cette session comporte des réservations : elle ne peut pas être supprimée.",
     "session_in_past": "Une session doit être programmée dans le futur.",
-    "capacity_below_reserved_seats": "La capacité ne peut pas être inférieure aux places déjà réservées."
+    "capacity_below_reserved_seats": "La capacité ne peut pas être inférieure aux places déjà réservées.",
+    "too_many_requests": "Trop de requêtes. Veuillez patienter un instant avant de réessayer.",
+    "api_unavailable": "Le service est momentanément indisponible. Veuillez réessayer dans un instant."
   }
 }

@@ -4,8 +4,11 @@ import { sessionExpired } from "@/services/http/sessionEvents";
 import type { UserProfile } from "@/types/api";
 
 /**
- * "unknown" until the persisted session has been read on the client, so that
- * guards never flash protected content nor redirect too early.
+ * "unknown" until the session has been checked with the API, so that guards
+ * never flash protected content nor redirect too early.
+ *
+ * The token itself never reaches this state: it lives in an httpOnly cookie
+ * that scripts cannot read.
  */
 export type AuthStatus = "unknown" | "authenticated" | "anonymous";
 
@@ -14,21 +17,20 @@ export type SessionEnd = "user" | "expiry" | null;
 
 export interface AuthState {
   status: AuthStatus;
-  token: string | null;
   user: UserProfile | null;
   endedBy: SessionEnd;
 }
 
-export interface Session {
-  token: string;
-  user: UserProfile;
-}
+const initialState: AuthState = { status: "unknown", user: null, endedBy: null };
 
-const initialState: AuthState = { status: "unknown", token: null, user: null, endedBy: null };
+function signIn(state: AuthState, user: UserProfile): void {
+  state.status = "authenticated";
+  state.user = user;
+  state.endedBy = null;
+}
 
 function signOut(state: AuthState, endedBy: SessionEnd): void {
   state.status = "anonymous";
-  state.token = null;
   state.user = null;
   state.endedBy = endedBy;
 }
@@ -37,18 +39,8 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    signedIn(state, action: PayloadAction<Session>) {
-      state.status = "authenticated";
-      state.token = action.payload.token;
-      state.user = action.payload.user;
-      state.endedBy = null;
-    },
-    sessionRestored(state, action: PayloadAction<Session>) {
-      state.status = "authenticated";
-      state.token = action.payload.token;
-      state.user = action.payload.user;
-      state.endedBy = null;
-    },
+    signedIn: (state, action: PayloadAction<UserProfile>) => signIn(state, action.payload),
+    sessionRestored: (state, action: PayloadAction<UserProfile>) => signIn(state, action.payload),
     noSessionToRestore: (state) => signOut(state, null),
     signedOut: (state) => signOut(state, "user"),
     profileUpdated(state, action: PayloadAction<UserProfile>) {

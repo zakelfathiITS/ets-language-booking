@@ -13,18 +13,17 @@ export interface ApiRequest {
 }
 
 /** The part of the state this layer reads, kept minimal on purpose. */
-interface StateWithToken {
-  auth: { token: string | null };
+interface StateWithSession {
+  auth: { status: string };
 }
 
 /**
- * RTK Query base query backed by Axios: adds the Bearer token and the page
- * language, normalises errors, and signals an expired session when the API
- * rejects the token.
+ * RTK Query base query backed by Axios: sends the page language, normalises
+ * errors, and signals an expired session when the API rejects the token of a
+ * signed-in user. The token travels by itself, in its httpOnly cookie.
  */
 export function axiosBaseQuery(): BaseQueryFn<ApiRequest, unknown, ApiError> {
   return async ({ url, method = "GET", data, params }, api) => {
-    const { token } = (api.getState() as StateWithToken).auth;
     // The API localises its validation messages: send the language of the page.
     const language = globalThis.document?.documentElement.lang || "en";
 
@@ -35,14 +34,15 @@ export function axiosBaseQuery(): BaseQueryFn<ApiRequest, unknown, ApiError> {
         data,
         params,
         signal: api.signal,
-        headers: { "Accept-Language": language, ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+        headers: { "Accept-Language": language },
       });
 
       return { data: response.data };
     } catch (error) {
       const apiError = toApiError(error);
 
-      if (token && apiError.status === 401 && TOKEN_ERROR_CODES.has(apiError.code)) {
+      const { status } = (api.getState() as StateWithSession).auth;
+      if (status === "authenticated" && apiError.status === 401 && TOKEN_ERROR_CODES.has(apiError.code)) {
         api.dispatch(sessionExpired());
       }
 

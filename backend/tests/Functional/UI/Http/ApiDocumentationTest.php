@@ -28,6 +28,7 @@ final class ApiDocumentationTest extends WebTestCase
             '/api/health',
             '/api/auth/register',
             '/api/auth/login',
+            '/api/auth/logout',
             '/api/me',
             '/api/sessions',
             '/api/sessions/languages',
