@@ -40,6 +40,8 @@ security:
     access_control:
         - { path: ^/api/health$, roles: PUBLIC_ACCESS }
         - { path: ^/api/auth/(register|login)$, roles: PUBLIC_ACCESS }
+        # The catalogue is managed by administrators only (also enforced with #[IsGranted]).
+        - { path: ^/api/sessions, methods: [POST, PUT, PATCH, DELETE], roles: ROLE_ADMIN }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
 
 when@test:

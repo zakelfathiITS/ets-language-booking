@@ -20,6 +20,11 @@ if [ "$1" = 'frankenphp' ]; then
 	# Create or update the indexes declared in the XML mapping. Idempotent, so
 	# it is safe on every start; MongoDB has no schema migrations beyond this.
 	bin/console doctrine:mongodb:schema:update --skip-search-indexes --no-interaction
+
+	# Demo accounts and sessions for reviewers (skipped when data already exists).
+	if [ "${APP_SEED_DEMO_DATA:-0}" = '1' ]; then
+		bin/console app:seed --no-interaction
+	fi
 fi
 
 exec docker-php-entrypoint "$@"

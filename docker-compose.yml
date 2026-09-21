@@ -32,6 +32,9 @@ services:
       MONGODB_DB: ${MONGODB_DB:-ets_booking}
       CORS_ALLOW_ORIGIN: ${CORS_ALLOW_ORIGIN:-^https?://(localhost|127\.0\.0\.1)(:[0-9]+)?$}
       JWT_PASSPHRASE: ${JWT_PASSPHRASE:-local_only_jwt_passphrase_change_me}
+      APP_TIMEZONE: ${APP_TIMEZONE:-Europe/Paris}
+      # Loads demo accounts and sessions on first start (idempotent).
+      APP_SEED_DEMO_DATA: ${APP_SEED_DEMO_DATA:-1}
     volumes:
       # Keeps the JWT key pair across restarts, so issued tokens stay valid.
       - jwt_keys:/app/config/jwt
