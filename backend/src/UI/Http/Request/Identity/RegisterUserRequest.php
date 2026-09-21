@@ -1,0 +1,34 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\UI\Http\Request\Identity;
+
+use App\Domain\Identity\Email;
+use App\Domain\Identity\User;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * Body of POST /api/auth/register.
+ *
+ * Defaults turn a missing field into a readable 422 violation instead of a
+ * deserialization error.
+ */
+final readonly class RegisterUserRequest
+{
+    public const PASSWORD_MIN_LENGTH = 8;
+
+    public function __construct(
+        #[Assert\NotBlank(normalizer: 'trim')]
+        #[Assert\Length(min: User::NAME_MIN_LENGTH, max: User::NAME_MAX_LENGTH, normalizer: 'trim')]
+        public string $name = '',
+        #[Assert\NotBlank(normalizer: 'trim')]
+        #[Assert\Email]
+        #[Assert\Length(max: Email::MAX_LENGTH)]
+        public string $email = '',
+        #[Assert\NotBlank]
+        #[Assert\Length(min: self::PASSWORD_MIN_LENGTH, max: 4096)]
+        public string $password = '',
+    ) {
+    }
+}

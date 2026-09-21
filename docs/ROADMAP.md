@@ -39,11 +39,11 @@ pull request and squash-merged, so `main` holds exactly one commit per ticket.
 - [x] GitHub Actions backend pipeline
 
 ### ETS-03 · Identity: registration, JWT authentication & account API
-- [ ] `User` aggregate, `Email` value object, repository port + MongoDB adapter, unique email index
-- [ ] Use cases: `RegisterUser`, `GetProfile`, `UpdateProfile`
-- [ ] Security adapters (password hasher, security user, user provider), LexikJWT RS256, login throttling
-- [ ] `POST /api/auth/register`, `POST /api/auth/login`, `GET|PUT /api/me` with validated request DTOs
-- [ ] Unit and functional tests
+- [x] `User` aggregate, `Email` value object, repository port + MongoDB adapter, unique email index
+- [x] Use cases: `RegisterUser`, `GetProfile`, `UpdateProfile`
+- [x] Security adapters (password hasher, security user, user provider), LexikJWT RS256, login throttling
+- [x] `POST /api/auth/register`, `POST /api/auth/login`, `GET|PUT /api/me` with validated request DTOs
+- [x] Unit and functional tests
 
 ### ETS-04 · Catalog: test sessions CRUD & pagination
 - [ ] `TestSession` aggregate (language, date, time, location, capacity, seats taken) and invariants

@@ -1,0 +1,8 @@
+lexik_jwt_authentication:
+    # RS256 key pair: generated on first container start, never committed.
+    secret_key: '%env(resolve:JWT_SECRET_KEY)%'
+    public_key: '%env(resolve:JWT_PUBLIC_KEY)%'
+    pass_phrase: '%env(JWT_PASSPHRASE)%'
+    token_ttl: '%env(int:JWT_TTL)%'
+    # Standard "sub" claim, holding the user id (see SecurityUser).
+    user_id_claim: sub

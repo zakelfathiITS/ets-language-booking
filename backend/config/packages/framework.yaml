@@ -12,17 +12,15 @@ framework:
         log: true
 
     # Business errors are expected outcomes, not incidents: log them quietly.
-    # The status codes also apply outside /api (the JSON contract lives in ApiProblemListener).
+    # Status codes are chosen by ApiProblemListener (setting "status_code" here
+    # would wrap the exception and hide its specific error code).
     exceptions:
         App\Domain\Shared\Exception\NotFoundException:
             log_level: info
-            status_code: 404
         App\Domain\Shared\Exception\ConflictException:
             log_level: info
-            status_code: 409
         App\Domain\Shared\Exception\InvariantViolationException:
             log_level: info
-            status_code: 422
 
 when@test:
     framework:

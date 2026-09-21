@@ -31,6 +31,10 @@ services:
       MONGODB_URI: mongodb://${MONGO_ROOT_USERNAME:-ets}:${MONGO_ROOT_PASSWORD:-ets_local_password}@mongodb:27017/?authSource=admin&serverSelectionTimeoutMS=3000
       MONGODB_DB: ${MONGODB_DB:-ets_booking}
       CORS_ALLOW_ORIGIN: ${CORS_ALLOW_ORIGIN:-^https?://(localhost|127\.0\.0\.1)(:[0-9]+)?$}
+      JWT_PASSPHRASE: ${JWT_PASSPHRASE:-local_only_jwt_passphrase_change_me}
+    volumes:
+      # Keeps the JWT key pair across restarts, so issued tokens stay valid.
+      - jwt_keys:/app/config/jwt
     ports:
       - "${BACKEND_PORT:-8000}:80"
 
@@ -49,3 +53,4 @@ services:
 
 volumes:
   mongo_data:
+  jwt_keys:

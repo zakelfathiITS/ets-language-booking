@@ -51,6 +51,9 @@ jobs:
         with:
           working-directory: backend
 
+      - name: Generate JWT key pair
+        run: bin/console lexik:jwt:generate-keypair --skip-if-exists
+
       - name: Coding standards
         run: composer cs:check
 
