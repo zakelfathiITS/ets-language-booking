@@ -16,10 +16,13 @@ interface IntlOptions extends Omit<RenderOptions, "wrapper"> {
   locale?: Locale;
 }
 
-interface Options extends IntlOptions {
+interface ProviderOptions {
   preloadedState?: Partial<RootState>;
   store?: AppStore;
+  locale?: Locale;
 }
+
+type Options = IntlOptions & ProviderOptions;
 
 /** Any missing or malformed message fails the test instead of rendering its key. */
 function IntlProvider({ locale, children }: { locale: Locale; children: ReactNode }) {
@@ -60,6 +63,15 @@ export function renderWithProviders(
   }
 
   return { store, user: userEvent.setup(), ...render(ui, { wrapper: Wrapper, ...options }) };
+}
+
+/** The tree renderWithProviders renders, for server rendering and hydration tests. */
+export function withProviders(ui: ReactElement, { preloadedState, store = makeStore(preloadedState), locale = "en" }: ProviderOptions = {}) {
+  return (
+    <IntlProvider locale={locale}>
+      <Provider store={store}>{ui}</Provider>
+    </IntlProvider>
+  );
 }
 
 /** Waits for the API calls triggered by rendering (e.g. refresh on mount) to settle. */

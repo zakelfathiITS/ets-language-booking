@@ -21,7 +21,7 @@ export function SessionFilters({ languages, language, availableOnly, onChange }:
       role="search"
       aria-label={t("label")}
       onSubmit={(event) => event.preventDefault()}
-      className="flex flex-col gap-4 rounded-lg border border-neutral-200 bg-white p-4 sm:flex-row sm:items-end"
+      className="flex flex-col gap-4 rounded-2xl border border-line bg-surface p-4 shadow-card sm:flex-row sm:items-end"
     >
       <div className="space-y-1.5 sm:w-64">
         <Label htmlFor="language-filter">{t("language")}</Label>

@@ -1,5 +1,6 @@
 "use client";
 
+import { CalendarPlus, Ticket } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
@@ -53,7 +54,7 @@ export function ReservationsScreen() {
   const past = items.filter((reservation) => reservation.session.hasStarted);
 
   const renderList = (list: Reservation[]) => (
-    <div className="space-y-3">
+    <div className="space-y-3 *:motion-safe:animate-rise">
       {list.map((reservation) => (
         <ReservationCard
           key={reservation.id}
@@ -70,7 +71,12 @@ export function ReservationsScreen() {
       <PageHeader
         title={t("title")}
         description={t("description")}
-        actions={<ButtonLink href="/sessions">{t("bookSession")}</ButtonLink>}
+        actions={
+          <ButtonLink href="/sessions">
+            <CalendarPlus aria-hidden="true" className="h-4 w-4" />
+            {t("bookSession")}
+          </ButtonLink>
+        }
       />
 
       <div className="space-y-6">
@@ -96,20 +102,21 @@ export function ReservationsScreen() {
           </Alert>
         ) : items.length === 0 ? (
           <EmptyState
+            icon={Ticket}
             title={t("emptyTitle")}
             description={t("emptyDescription")}
             action={<ButtonLink href="/sessions">{t("browseSessions")}</ButtonLink>}
           />
         ) : (
           <>
-            <section aria-labelledby="upcoming-reservations" className="space-y-3">
+            <section aria-labelledby="upcoming-reservations" className="space-y-4">
               <Heading level={2}>
                 <span id="upcoming-reservations">{t("upcoming", { count: upcoming.length })}</span>
               </Heading>
-              {upcoming.length > 0 ? renderList(upcoming) : <p className="text-sm text-neutral-600">{t("noUpcoming")}</p>}
+              {upcoming.length > 0 ? renderList(upcoming) : <p className="text-sm text-ink-muted">{t("noUpcoming")}</p>}
             </section>
             {past.length > 0 && (
-              <section aria-labelledby="past-reservations" className="space-y-3">
+              <section aria-labelledby="past-reservations" className="space-y-4 pt-2">
                 <Heading level={2}>
                   <span id="past-reservations">{t("past", { count: past.length })}</span>
                 </Heading>

@@ -36,7 +36,7 @@ export function RegisterScreen() {
       footer={
         <>
           {t("alreadyRegistered")}{" "}
-          <Link href="/login" className="font-medium text-brand-700 hover:underline">
+          <Link href="/login" className="font-medium text-brand-600 hover:underline dark:text-brand-300">
             {t("signIn")}
           </Link>
         </>

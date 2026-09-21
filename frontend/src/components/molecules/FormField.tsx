@@ -1,5 +1,6 @@
 "use client";
 
+import { CircleAlert } from "lucide-react";
 import { useId } from "react";
 
 import { Input, type InputProps } from "../atoms/Input";
@@ -27,12 +28,13 @@ export function FormField({ label, error, hint, id, ...inputProps }: FormFieldPr
       <Label htmlFor={inputId}>{label}</Label>
       <Input id={inputId} invalid={Boolean(error)} aria-describedby={describedBy} {...inputProps} />
       {error ? (
-        <p id={errorId} className="text-sm text-red-600">
+        <p id={errorId} className="flex items-center gap-1.5 text-sm text-red-600 motion-safe:animate-fade dark:text-red-400">
+          <CircleAlert aria-hidden="true" className="h-4 w-4 shrink-0" />
           {error}
         </p>
       ) : (
         hint && (
-          <p id={hintId} className="text-sm text-neutral-500">
+          <p id={hintId} className="text-sm text-ink-subtle">
             {hint}
           </p>
         )

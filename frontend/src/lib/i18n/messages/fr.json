@@ -80,6 +80,15 @@
       "description": "Découvrez l'application sans créer de compte.",
       "candidate": "Se connecter en tant que candidat",
       "admin": "Se connecter en tant qu'administrateur"
+    },
+    "hero": {
+      "title": "Réservez votre test de langue en quelques clics",
+      "subtitle": "Parcourez les prochaines sessions, choisissez votre place et gérez vos réservations au même endroit.",
+      "features": {
+        "realTime": "Places disponibles en temps réel",
+        "oneClick": "Réservation ou annulation en un clic",
+        "bilingual": "Disponible en anglais et en français"
+      }
     }
   },
   "account": {
@@ -204,12 +213,12 @@
       "editTitle": "Modifier la session",
       "editDescription": "{taken} place(s) réservée(s) sur {capacity} : la capacité ne peut pas descendre sous ce nombre.",
       "language": "Langue",
-      "languagePlaceholder": "Anglais",
+      "languagePlaceholder": "ex. : Anglais",
       "date": "Date",
       "time": "Heure",
       "timeHint": "Heure locale ({timezone}).",
       "location": "Lieu",
-      "locationPlaceholder": "Paris – Centre d'examen La Défense",
+      "locationPlaceholder": "ex. : Paris – Centre d'examen La Défense",
       "capacity": "Nombre de places",
       "create": "Créer la session",
       "loading": "Chargement de la session…",

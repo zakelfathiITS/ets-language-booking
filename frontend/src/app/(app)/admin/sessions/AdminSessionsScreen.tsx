@@ -1,5 +1,6 @@
 "use client";
 
+import { CalendarPlus, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
@@ -69,7 +70,12 @@ export function AdminSessionsScreen() {
       <PageHeader
         title={t("title")}
         description={t("description")}
-        actions={<ButtonLink href="/admin/sessions/new">{t("newSession")}</ButtonLink>}
+        actions={
+          <ButtonLink href="/admin/sessions/new">
+            <Plus aria-hidden="true" className="h-4 w-4" />
+            {t("newSession")}
+          </ButtonLink>
+        }
       />
 
       <div className="space-y-6">
@@ -100,6 +106,7 @@ export function AdminSessionsScreen() {
           </Alert>
         ) : data.items.length === 0 ? (
           <EmptyState
+            icon={CalendarPlus}
             title={t("emptyTitle")}
             description={t("emptyDescription")}
             action={<ButtonLink href="/admin/sessions/new">{t("newSession")}</ButtonLink>}

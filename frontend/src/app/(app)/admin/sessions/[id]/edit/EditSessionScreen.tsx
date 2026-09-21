@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useMemo } from "react";
 
 import { ButtonLink } from "@/components/atoms/ButtonLink";
+import { Card } from "@/components/atoms/Card";
 import { EmptyState } from "@/components/molecules/EmptyState";
 import { LoadingScreen } from "@/components/molecules/LoadingScreen";
 import { PageHeader } from "@/components/organisms/PageHeader";
@@ -66,7 +67,7 @@ export function EditSessionScreen() {
         title={t("admin.form.editTitle")}
         description={t("admin.form.editDescription", { taken: session.seatsTaken, capacity: session.capacity })}
       />
-      <div className="max-w-2xl rounded-lg border border-neutral-200 bg-white p-6 shadow-sm">
+      <Card className="max-w-2xl motion-safe:animate-rise">
         <SessionForm
           initialValues={initialValues}
           submitLabel={t("common.saveChanges")}
@@ -76,7 +77,7 @@ export function EditSessionScreen() {
           isSubmitting={update.isLoading}
           serverErrors={serverErrors}
         />
-      </div>
+      </Card>
     </>
   );
 }

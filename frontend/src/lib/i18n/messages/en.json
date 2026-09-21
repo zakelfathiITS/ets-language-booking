@@ -80,6 +80,15 @@
       "description": "Explore the application without creating an account.",
       "candidate": "Sign in as a candidate",
       "admin": "Sign in as an administrator"
+    },
+    "hero": {
+      "title": "Book your language test in a few clicks",
+      "subtitle": "Browse upcoming sessions, pick your seat and manage your bookings in one place.",
+      "features": {
+        "realTime": "Seat availability in real time",
+        "oneClick": "Book or cancel in one click",
+        "bilingual": "Available in English and French"
+      }
     }
   },
   "account": {
@@ -204,12 +213,12 @@
       "editTitle": "Edit session",
       "editDescription": "{taken} of {capacity} seats are booked: the capacity cannot go below the seats already booked.",
       "language": "Language",
-      "languagePlaceholder": "English",
+      "languagePlaceholder": "e.g. English",
       "date": "Date",
       "time": "Time",
       "timeHint": "Local time ({timezone}).",
       "location": "Location",
-      "locationPlaceholder": "Paris – Test Center La Défense",
+      "locationPlaceholder": "e.g. Paris – Test Center La Défense",
       "capacity": "Number of seats",
       "create": "Create session",
       "loading": "Loading the session…",

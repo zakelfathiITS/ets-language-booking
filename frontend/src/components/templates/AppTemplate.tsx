@@ -11,10 +11,10 @@ export function AppTemplate({ header, children }: AppTemplateProps) {
   const t = useTranslations("common");
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="canvas-glow flex min-h-screen flex-col">
       {header}
-      <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 py-8 sm:px-6">{children}</main>
-      <footer className="border-t border-neutral-200 bg-white py-4 text-center text-xs text-neutral-500">{t("footer")}</footer>
+      <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 py-8 sm:px-6 sm:py-10">{children}</main>
+      <footer className="border-t border-line py-6 text-center text-xs text-ink-subtle">{t("footer")}</footer>
     </div>
   );
 }

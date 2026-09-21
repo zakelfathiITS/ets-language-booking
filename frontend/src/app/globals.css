@@ -1,23 +1,144 @@
 @import "tailwindcss";
 
+/*
+ * Design tokens.
+ *
+ * Components use semantic colours (canvas, surface, line, ink...) rather than
+ * raw greys: the dark theme only swaps the variables below.
+ */
+
+:root {
+  --canvas: #f5f7fb;
+  --surface: #ffffff;
+  --surface-muted: #f1f4f9;
+  --line: #e2e7f0;
+  --line-strong: #cdd5e1;
+  --ink: #0f172a;
+  --ink-muted: #556074;
+  --ink-subtle: #636c80;
+  --shadow-color: 222 47% 11%;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --canvas: #0a0f1c;
+    --surface: #111827;
+    --surface-muted: #172033;
+    --line: #243049;
+    --line-strong: #33415f;
+    --ink: #e8edf7;
+    --ink-muted: #a3adc2;
+    --ink-subtle: #7e89a1;
+    --shadow-color: 222 70% 2%;
+    color-scheme: dark;
+  }
+}
+
 @theme {
-  /* Brand palette (deep blue), used for primary actions and highlights. */
-  --color-brand-50: #eef5ff;
-  --color-brand-100: #d9e8ff;
-  --color-brand-200: #bcd6ff;
-  --color-brand-300: #8ebcff;
-  --color-brand-400: #5896fd;
-  --color-brand-500: #3271f9;
-  --color-brand-600: #1c52ee;
-  --color-brand-700: #1440db;
-  --color-brand-800: #1735b1;
-  --color-brand-900: #19338b;
-  --color-brand-950: #142154;
+  /* Brand: a vivid royal blue leaning towards indigo. */
+  --color-brand-50: #eef4ff;
+  --color-brand-100: #dde8ff;
+  --color-brand-200: #c2d4ff;
+  --color-brand-300: #9cb7ff;
+  --color-brand-400: #6f8dfc;
+  --color-brand-500: #4c66f6;
+  --color-brand-600: #3a4aeb;
+  --color-brand-700: #2f3ad0;
+  --color-brand-800: #2932a8;
+  --color-brand-900: #282f84;
+  --color-brand-950: #181b4d;
 
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --shadow-card: 0 1px 2px hsl(var(--shadow-color) / 0.05), 0 4px 16px -6px hsl(var(--shadow-color) / 0.1);
+  --shadow-raised: 0 2px 4px hsl(var(--shadow-color) / 0.06), 0 16px 40px -12px hsl(var(--shadow-color) / 0.22);
+
+  --animate-rise: rise 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  --animate-fade: fade 0.25s ease-out both;
+  --animate-pop: pop 0.2s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  --animate-shimmer: shimmer 1.4s linear infinite;
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes pop {
+    from {
+      opacity: 0;
+      transform: scale(0.96) translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes shimmer {
+    from {
+      background-position: 200% 0;
+    }
+    to {
+      background-position: -200% 0;
+    }
+  }
+}
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-subtle: var(--ink-subtle);
 }
 
 body {
-  @apply bg-neutral-50 text-neutral-900 antialiased;
+  @apply bg-canvas text-ink antialiased;
+}
+
+/* A soft brand-coloured light at the top of the page. */
+@utility canvas-glow {
+  background-image: radial-gradient(
+    ellipse 70% 55% at 50% -12%,
+    color-mix(in oklab, var(--color-brand-500) 13%, transparent),
+    transparent
+  );
+  background-repeat: no-repeat;
+}
+
+/* Dotted grid for the sign-in hero. */
+@utility dot-grid {
+  background-image: radial-gradient(circle at 1px 1px, rgb(255 255 255 / 0.14) 1px, transparent 0);
+  background-size: 22px 22px;
+}
+
+/* Motion is decorative: removed for people who ask for less of it. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

@@ -32,7 +32,7 @@ export function LoginScreen() {
       footer={
         <>
           {t("signIn.noAccount")}{" "}
-          <Link href="/register" className="font-medium text-brand-700 hover:underline">
+          <Link href="/register" className="font-medium text-brand-600 hover:underline dark:text-brand-300">
             {t("signIn.createAccount")}
           </Link>
         </>

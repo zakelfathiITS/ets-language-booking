@@ -1,3 +1,4 @@
+import { Pencil, Trash2 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 
@@ -8,6 +9,7 @@ import type { TestSession } from "@/types/api";
 import { Badge } from "../atoms/Badge";
 import { Button } from "../atoms/Button";
 import { ButtonLink } from "../atoms/ButtonLink";
+import { LanguageMark } from "../atoms/LanguageMark";
 
 export interface SessionsTableProps {
   sessions: TestSession[];
@@ -24,10 +26,10 @@ export function SessionsTable({ sessions, editHref, onDelete, deletingId = null 
   const hidden = (chunks: ReactNode) => <span className="sr-only">{chunks}</span>;
 
   return (
-    <div className="overflow-x-auto rounded-lg border border-neutral-200 bg-white shadow-sm">
-      <table className="min-w-full divide-y divide-neutral-200 text-sm">
+    <div className="overflow-x-auto rounded-2xl border border-line bg-surface shadow-card motion-safe:animate-fade">
+      <table className="min-w-full divide-y divide-line text-sm">
         <caption className="sr-only">{t("caption")}</caption>
-        <thead className="bg-neutral-50 text-left text-xs font-medium uppercase tracking-wide text-neutral-500">
+        <thead className="bg-surface-muted/70 text-left text-xs font-semibold uppercase tracking-wider text-ink-subtle">
           <tr>
             <th scope="col" className="px-4 py-3">{t("language")}</th>
             <th scope="col" className="px-4 py-3">{t("date")}</th>
@@ -40,20 +42,23 @@ export function SessionsTable({ sessions, editHref, onDelete, deletingId = null 
             </th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-neutral-100">
+        <tbody className="divide-y divide-line">
           {sessions.map((session) => {
             const date = formatSessionDate(session.date, locale);
             const label = `${session.language} – ${date}`;
 
             return (
-              <tr key={session.id}>
-                <th scope="row" className="whitespace-nowrap px-4 py-3 text-left font-medium text-neutral-900">
-                  {session.language}
+              <tr key={session.id} className="transition-colors hover:bg-surface-muted/50">
+                <th scope="row" className="whitespace-nowrap px-4 py-3 text-left font-medium text-ink">
+                  <span className="flex items-center gap-3">
+                    <LanguageMark language={session.language} size="sm" />
+                    {session.language}
+                  </span>
                 </th>
-                <td className="whitespace-nowrap px-4 py-3 text-neutral-700">{date}</td>
-                <td className="whitespace-nowrap px-4 py-3 text-neutral-700">{session.time}</td>
-                <td className="px-4 py-3 text-neutral-700">{session.location}</td>
-                <td className="whitespace-nowrap px-4 py-3 text-right tabular-nums text-neutral-700">
+                <td className="whitespace-nowrap px-4 py-3 text-ink-muted">{date}</td>
+                <td className="whitespace-nowrap px-4 py-3 tabular-nums text-ink-muted">{session.time}</td>
+                <td className="px-4 py-3 text-ink-muted">{session.location}</td>
+                <td className="whitespace-nowrap px-4 py-3 text-right tabular-nums text-ink-muted">
                   {session.seatsTaken} / {session.capacity}
                 </td>
                 <td className="px-4 py-3">
@@ -66,17 +71,18 @@ export function SessionsTable({ sessions, editHref, onDelete, deletingId = null 
                   )}
                 </td>
                 <td className="whitespace-nowrap px-4 py-3 text-right">
-                  <div className="flex justify-end gap-2">
+                  <div className="flex justify-end gap-1.5">
                     <ButtonLink href={editHref(session)} variant="secondary" size="sm">
+                      <Pencil aria-hidden="true" className="h-3.5 w-3.5" />
                       {t.rich("edit", { session: label, hidden })}
                     </ButtonLink>
                     <Button
-                      variant="ghost"
+                      variant="dangerGhost"
                       size="sm"
-                      className="text-red-700 hover:bg-red-50"
                       isLoading={deletingId === session.id}
                       onClick={() => onDelete(session)}
                     >
+                      {deletingId !== session.id && <Trash2 aria-hidden="true" className="h-3.5 w-3.5" />}
                       {t.rich("delete", { session: label, hidden })}
                     </Button>
                   </div>

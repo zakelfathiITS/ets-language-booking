@@ -1,10 +1,12 @@
-import { screen, waitFor } from "@testing-library/react";
+import { act, screen, waitFor } from "@testing-library/react";
+import { hydrateRoot } from "react-dom/client";
+import { renderToString } from "react-dom/server";
 
 import { RedirectIfAuthenticated, RequireAdmin, RequireAuth } from "@/features/auth/guards";
 
 import { admin, anonymous, candidate, signedIn } from "@tests/fixtures";
 import { navigation, router } from "@tests/mocks/nextNavigation";
-import { renderWithProviders } from "@tests/renderWithProviders";
+import { renderWithProviders, withProviders } from "@tests/renderWithProviders";
 
 describe("RequireAuth", () => {
   it("waits while the session is being restored", () => {
@@ -77,5 +79,29 @@ describe("RedirectIfAuthenticated", () => {
     renderWithProviders(<RedirectIfAuthenticated>login form</RedirectIfAuthenticated>, { preloadedState: signedIn() });
 
     await waitFor(() => expect(router.replace).toHaveBeenCalledWith("/reservations"));
+  });
+});
+
+describe("guards on a server-rendered page", () => {
+  it("hydrate as the loading screen the server rendered, even once the session is known", async () => {
+    // The server cannot read localStorage: there, the session status is always unknown.
+    const container = document.createElement("div");
+    container.innerHTML = renderToString(withProviders(<RedirectIfAuthenticated>login form</RedirectIfAuthenticated>));
+    document.body.append(container);
+    expect(container).toHaveTextContent("Loading");
+
+    // A page inside a Suspense boundary may hydrate after the session was restored.
+    const onRecoverableError = jest.fn();
+    const root = await act(async () =>
+      hydrateRoot(container, withProviders(<RedirectIfAuthenticated>login form</RedirectIfAuthenticated>, { preloadedState: anonymous }), {
+        onRecoverableError,
+      }),
+    );
+
+    expect(container).toHaveTextContent("login form");
+    expect(onRecoverableError).not.toHaveBeenCalled();
+
+    act(() => root.unmount());
+    container.remove();
   });
 });

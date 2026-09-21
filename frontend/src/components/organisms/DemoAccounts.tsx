@@ -1,5 +1,6 @@
 "use client";
 
+import { LogIn, Sparkles } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { Button } from "../atoms/Button";
@@ -21,14 +22,16 @@ export function DemoAccounts({ accounts, onPick, disabled = false }: DemoAccount
   const t = useTranslations("auth.demo");
 
   return (
-    <section aria-labelledby="demo-accounts" className="rounded-lg border border-dashed border-neutral-300 p-4">
-      <h2 id="demo-accounts" className="text-sm font-medium text-neutral-800">
+    <section aria-labelledby="demo-accounts" className="rounded-xl border border-dashed border-line-strong bg-surface-muted/60 p-4">
+      <h2 id="demo-accounts" className="flex items-center gap-2 text-sm font-semibold text-ink">
+        <Sparkles aria-hidden="true" className="h-4 w-4 text-brand-600 dark:text-brand-300" />
         {t("title")}
       </h2>
-      <p className="mt-1 text-xs text-neutral-500">{t("description")}</p>
-      <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+      <p className="mt-1 text-xs text-ink-muted">{t("description")}</p>
+      <div className="mt-3 grid gap-2">
         {accounts.map((account) => (
           <Button key={account.email} variant="secondary" size="sm" fullWidth disabled={disabled} onClick={() => onPick(account)}>
+            <LogIn aria-hidden="true" className="h-3.5 w-3.5" />
             {account.label}
           </Button>
         ))}

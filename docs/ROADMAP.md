@@ -99,10 +99,10 @@ ETS-11 (deployment).
 - [x] Tests for both languages and the fallback
 
 ### ETS-14 · Modern UI refresh
-- [ ] Design tokens (palette, typography, radii, shadows) and a clear brand identity
-- [ ] Refreshed shell, authentication screens, cards, tables and empty states
-- [ ] Micro-interactions respecting `prefers-reduced-motion`; dark mode
-- [ ] Brand icon and metadata; WCAG AA contrast in both themes
+- [x] Design tokens (palette, typography, radii, shadows) and a clear brand identity
+- [x] Refreshed shell, authentication screens, cards, tables and empty states
+- [x] Micro-interactions respecting `prefers-reduced-motion`; dark mode
+- [x] Brand icon and metadata; WCAG AA contrast in both themes
 
 ### ETS-10 · Security review, hardening, documentation & release candidate
 - [ ] Security review: token storage and lifetime, sign-out and revocation, secrets in logs
