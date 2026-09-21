@@ -1,15 +1,16 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { ConfirmDialog } from "@/components/organisms/ConfirmDialog";
 import { SessionCard } from "@/components/organisms/SessionCard";
 
 import { aSession } from "@tests/fixtures";
+import { renderWithIntl } from "@tests/renderWithProviders";
 
 function renderCard(overrides: Parameters<typeof aSession>[0] = {}) {
   const onBook = jest.fn();
   const onCancel = jest.fn();
-  render(<SessionCard session={aSession(overrides)} onBook={onBook} onCancel={onCancel} />);
+  renderWithIntl(<SessionCard session={aSession(overrides)} onBook={onBook} onCancel={onCancel} />);
 
   return { onBook, onCancel };
 }
@@ -60,7 +61,7 @@ describe("ConfirmDialog", () => {
   function renderDialog() {
     const onConfirm = jest.fn();
     const onCancel = jest.fn();
-    render(
+    renderWithIntl(
       <ConfirmDialog open title="Cancel this booking?" description="Your seat will be released." confirmLabel="Cancel my booking" onConfirm={onConfirm} onCancel={onCancel} />,
     );
 
@@ -87,7 +88,7 @@ describe("ConfirmDialog", () => {
   });
 
   it("renders nothing when closed", () => {
-    const { container } = render(
+    const { container } = renderWithIntl(
       <ConfirmDialog open={false} title="t" description="d" confirmLabel="ok" onConfirm={jest.fn()} onCancel={jest.fn()} />,
     );
 

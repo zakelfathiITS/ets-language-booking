@@ -1,0 +1,255 @@
+{
+  "meta": {
+    "title": "ETS Réservation de tests de langues",
+    "description": "Réservez, suivez et annulez vos sessions de tests de langues.",
+    "signIn": "Connexion",
+    "register": "Créer un compte",
+    "sessions": "Sessions de test",
+    "reservations": "Mes réservations",
+    "account": "Mon compte",
+    "adminSessions": "Gérer les sessions",
+    "newSession": "Nouvelle session",
+    "editSession": "Modifier la session"
+  },
+  "common": {
+    "brand": "ETS",
+    "product": "Test Booking",
+    "footer": "ETS Réservation de tests de langues",
+    "loading": "Chargement…",
+    "checkingSession": "Vérification de votre session…",
+    "dismiss": "Fermer",
+    "tryAgain": "Réessayer",
+    "cancel": "Annuler",
+    "keepIt": "Conserver",
+    "saveChanges": "Enregistrer"
+  },
+  "language": {
+    "label": "Langue",
+    "en": "English",
+    "fr": "Français"
+  },
+  "nav": {
+    "label": "Principale",
+    "sessions": "Sessions de test",
+    "reservations": "Mes réservations",
+    "account": "Mon compte",
+    "admin": "Administration",
+    "signOut": "Se déconnecter",
+    "menu": "Menu",
+    "close": "Fermer"
+  },
+  "pagination": {
+    "label": "Pagination",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "status": "Page <strong>{page}</strong> sur <strong>{totalPages}</strong>"
+  },
+  "notFound": {
+    "title": "Page introuvable",
+    "description": "La page que vous cherchez n'existe pas ou a été déplacée.",
+    "home": "Retour à l'accueil"
+  },
+  "guards": {
+    "adminOnlyTitle": "Réservé aux administrateurs",
+    "adminOnlyDescription": "Cet espace est réservé aux administrateurs du catalogue de tests.",
+    "browseSessions": "Voir les sessions"
+  },
+  "auth": {
+    "email": "Adresse e-mail",
+    "password": "Mot de passe",
+    "fullName": "Nom complet",
+    "confirmPassword": "Confirmez le mot de passe",
+    "passwordHint": "Au moins {min} caractères.",
+    "signIn": {
+      "title": "Connexion",
+      "subtitle": "Accédez à vos réservations de tests de langues.",
+      "submit": "Se connecter",
+      "noAccount": "Pas encore de compte ?",
+      "createAccount": "Créez-en un",
+      "sessionExpired": "Votre session a expiré. Veuillez vous reconnecter."
+    },
+    "register": {
+      "title": "Créez votre compte",
+      "subtitle": "Réservez vos sessions de tests de langues en quelques clics.",
+      "submit": "Créer mon compte",
+      "alreadyRegistered": "Déjà inscrit ?",
+      "signIn": "Se connecter"
+    },
+    "demo": {
+      "title": "Comptes de démonstration",
+      "description": "Découvrez l'application sans créer de compte.",
+      "candidate": "Se connecter en tant que candidat",
+      "admin": "Se connecter en tant qu'administrateur"
+    }
+  },
+  "account": {
+    "title": "Mon compte",
+    "description": "Gérez votre nom et votre adresse e-mail.",
+    "personalInformation": "Informations personnelles",
+    "updated": "Votre compte a été mis à jour.",
+    "administrator": "Administrateur",
+    "candidate": "Candidat",
+    "memberSince": "Membre depuis le {date}"
+  },
+  "sessions": {
+    "title": "Sessions de test",
+    "description": "Parcourez les prochaines sessions et réservez votre place.",
+    "timezoneNote": "Les horaires sont indiqués à l'heure de {city}.",
+    "summary": "{language}, {date} à {time}",
+    "loading": "Chargement des sessions…",
+    "loadError": "Les sessions n'ont pas pu être chargées.",
+    "filters": {
+      "label": "Filtrer les sessions",
+      "language": "Langue",
+      "allLanguages": "Toutes les langues",
+      "availableOnly": "Uniquement les sessions avec des places"
+    },
+    "details": {
+      "date": "Date",
+      "time": "Heure",
+      "place": "Lieu"
+    },
+    "seats": {
+      "left": "{available, plural, =0 {Plus aucune place} one {# place restante sur {capacity}} other {# places restantes sur {capacity}}}",
+      "progress": "Places réservées"
+    },
+    "badge": {
+      "started": "Commencée",
+      "booked": "Réservée",
+      "full": "Complète",
+      "fewSeats": "Dernières places"
+    },
+    "action": {
+      "book": "Réserver une place",
+      "cancel": "Annuler ma réservation",
+      "full": "Complète",
+      "closed": "Réservations closes"
+    },
+    "empty": {
+      "filteredTitle": "Aucune session ne correspond à vos filtres",
+      "filteredDescription": "Essayez une autre langue ou incluez les sessions complètes.",
+      "clearFilters": "Effacer les filtres",
+      "title": "Aucune session à venir",
+      "description": "De nouvelles sessions sont publiées régulièrement.",
+      "pageTitle": "Cette page est vide",
+      "pageDescription": "Le catalogue a changé depuis l'ouverture de cette page.",
+      "firstPage": "Revenir à la première page"
+    },
+    "booked": "Votre place est réservée : {session}.",
+    "cancelled": "Votre réservation pour {session} a été annulée.",
+    "cancelDialog": {
+      "title": "Annuler cette réservation ?",
+      "description": "Votre place pour {session} sera libérée.",
+      "confirm": "Annuler ma réservation"
+    }
+  },
+  "reservations": {
+    "title": "Mes réservations",
+    "description": "Vos sessions de tests de langues réservées.",
+    "bookSession": "Réserver une session",
+    "loading": "Chargement de vos réservations…",
+    "loadError": "Vos réservations n'ont pas pu être chargées.",
+    "upcoming": "À venir ({count})",
+    "past": "Passées ({count})",
+    "noUpcoming": "Aucune session à venir.",
+    "confirmed": "Confirmée",
+    "pastBadge": "Passée",
+    "bookedOn": "Réservée le {date}",
+    "cancel": "Annuler",
+    "emptyTitle": "Aucune réservation pour le moment",
+    "emptyDescription": "Réservez une place dans l'une des prochaines sessions de tests de langues.",
+    "browseSessions": "Voir les sessions",
+    "cancelled": "Votre réservation pour {session} a été annulée.",
+    "cancelDialog": {
+      "title": "Annuler cette réservation ?",
+      "description": "Votre place pour {session} sera libérée.",
+      "confirm": "Annuler ma réservation"
+    }
+  },
+  "admin": {
+    "title": "Gérer les sessions",
+    "description": "Créez, modifiez et supprimez les sessions de test proposées aux candidats.",
+    "newSession": "Nouvelle session",
+    "includePast": "Inclure les sessions passées",
+    "loading": "Chargement des sessions…",
+    "loadError": "Les sessions n'ont pas pu être chargées.",
+    "emptyTitle": "Aucune session pour le moment",
+    "emptyDescription": "Créez la première session du catalogue.",
+    "deleted": "Session supprimée : {session}.",
+    "created": "Session créée : {session}.",
+    "updated": "Session modifiée : {session}.",
+    "table": {
+      "caption": "Sessions de test",
+      "language": "Langue",
+      "date": "Date",
+      "time": "Heure",
+      "location": "Lieu",
+      "seats": "Places réservées",
+      "status": "Statut",
+      "actions": "Actions",
+      "open": "Ouverte",
+      "full": "Complète",
+      "past": "Passée",
+      "edit": "Modifier <hidden>{session}</hidden>",
+      "delete": "Supprimer <hidden>{session}</hidden>"
+    },
+    "deleteDialog": {
+      "title": "Supprimer cette session ?",
+      "description": "{session} sera retirée du catalogue.",
+      "confirm": "Supprimer la session"
+    },
+    "form": {
+      "newTitle": "Nouvelle session",
+      "newDescription": "Publiez une nouvelle session de test de langue.",
+      "editTitle": "Modifier la session",
+      "editDescription": "{taken} place(s) réservée(s) sur {capacity} : la capacité ne peut pas descendre sous ce nombre.",
+      "language": "Langue",
+      "languagePlaceholder": "Anglais",
+      "date": "Date",
+      "time": "Heure",
+      "timeHint": "Heure locale ({timezone}).",
+      "location": "Lieu",
+      "locationPlaceholder": "Paris – Centre d'examen La Défense",
+      "capacity": "Nombre de places",
+      "create": "Créer la session",
+      "loading": "Chargement de la session…",
+      "notFoundTitle": "Session introuvable",
+      "notFoundDescription": "Elle a peut-être été supprimée entre-temps.",
+      "backToList": "Retour aux sessions"
+    }
+  },
+  "validation": {
+    "emailRequired": "L'adresse e-mail est obligatoire.",
+    "emailTooLong": "L'adresse e-mail ne doit pas dépasser 180 caractères.",
+    "emailInvalid": "Saisissez une adresse e-mail valide.",
+    "nameLength": "Le nom doit contenir entre 2 et 100 caractères.",
+    "passwordRequired": "Le mot de passe est obligatoire.",
+    "passwordTooShort": "Le mot de passe doit contenir au moins 8 caractères.",
+    "passwordTooLong": "Le mot de passe est trop long.",
+    "confirmPasswordRequired": "Veuillez confirmer votre mot de passe.",
+    "passwordMismatch": "Les mots de passe ne correspondent pas.",
+    "languageLength": "La langue doit contenir entre 2 et 60 caractères.",
+    "dateRequired": "Choisissez une date.",
+    "timeRequired": "Choisissez une heure (HH:MM).",
+    "locationLength": "Le lieu doit contenir entre 2 et 180 caractères.",
+    "capacityRequired": "Saisissez un nombre de places.",
+    "capacityInteger": "Le nombre de places doit être un nombre entier.",
+    "capacityRange": "Une session propose entre 1 et 1000 places."
+  },
+  "errors": {
+    "generic": "Une erreur est survenue. Veuillez réessayer.",
+    "network_error": "Le serveur est injoignable. Vérifiez votre connexion et réessayez.",
+    "invalid_credentials": "Adresse e-mail ou mot de passe incorrect.",
+    "too_many_login_attempts": "Trop de tentatives échouées. Réessayez dans une minute.",
+    "validation_failed": "Certains champs sont invalides.",
+    "email_already_in_use": "Cette adresse e-mail est déjà utilisée par un autre compte.",
+    "session_full": "Désolé, cette session vient d'être complète. Les places ont été actualisées.",
+    "already_reserved": "Vous avez déjà une réservation pour cette session.",
+    "session_already_started": "Cette session a déjà commencé : ses réservations ne peuvent plus changer.",
+    "session_not_found": "Cette session n'existe plus.",
+    "reservation_not_found": "Cette réservation n'existe plus.",
+    "session_has_reservations": "Cette session comporte des réservations : elle ne peut pas être supprimée.",
+    "session_in_past": "Une session doit être programmée dans le futur.",
+    "capacity_below_reserved_seats": "La capacité ne peut pas être inférieure aux places déjà réservées."
+  }
+}

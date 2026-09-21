@@ -25,7 +25,7 @@ describe("NewSessionScreen", () => {
 
     await user.click(screen.getByRole("button", { name: "Create session" }));
 
-    expect(await screen.findByText("Language must contain at least 2 characters.")).toBeInTheDocument();
+    expect(await screen.findByText("Language must contain between 2 and 60 characters.")).toBeInTheDocument();
     expect(screen.getByText("Pick a date.")).toBeInTheDocument();
   });
 
@@ -101,7 +101,12 @@ describe("EditSessionScreen", () => {
     await fill(user, { "Number of seats": "4" });
     await user.click(screen.getByRole("button", { name: "Save changes" }));
 
-    await waitFor(() => expect(screen.getByLabelText("Number of seats")).toHaveAccessibleDescription(/6 seat\(s\) are already booked/));
+    // The code is translated; the API's English detail is not shown.
+    await waitFor(() =>
+      expect(screen.getByLabelText("Number of seats")).toHaveAccessibleDescription(
+        "The capacity cannot be lower than the seats already booked.",
+      ),
+    );
   });
 
   it("says so when the session no longer exists", async () => {

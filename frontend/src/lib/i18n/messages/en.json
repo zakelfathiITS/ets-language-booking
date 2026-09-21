@@ -1,0 +1,255 @@
+{
+  "meta": {
+    "title": "ETS Language Test Booking",
+    "description": "Book, follow and cancel your language test sessions.",
+    "signIn": "Sign in",
+    "register": "Create an account",
+    "sessions": "Test sessions",
+    "reservations": "My reservations",
+    "account": "My account",
+    "adminSessions": "Manage sessions",
+    "newSession": "New session",
+    "editSession": "Edit session"
+  },
+  "common": {
+    "brand": "ETS",
+    "product": "Test Booking",
+    "footer": "ETS Language Test Booking",
+    "loading": "Loading…",
+    "checkingSession": "Checking your session…",
+    "dismiss": "Dismiss",
+    "tryAgain": "Try again",
+    "cancel": "Cancel",
+    "keepIt": "Keep it",
+    "saveChanges": "Save changes"
+  },
+  "language": {
+    "label": "Language",
+    "en": "English",
+    "fr": "Français"
+  },
+  "nav": {
+    "label": "Main",
+    "sessions": "Test sessions",
+    "reservations": "My reservations",
+    "account": "My account",
+    "admin": "Administration",
+    "signOut": "Sign out",
+    "menu": "Menu",
+    "close": "Close"
+  },
+  "pagination": {
+    "label": "Pagination",
+    "previous": "Previous",
+    "next": "Next",
+    "status": "Page <strong>{page}</strong> of <strong>{totalPages}</strong>"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The page you are looking for does not exist or has moved.",
+    "home": "Go to the home page"
+  },
+  "guards": {
+    "adminOnlyTitle": "Administrators only",
+    "adminOnlyDescription": "This area is reserved to administrators of the test catalogue.",
+    "browseSessions": "Browse sessions"
+  },
+  "auth": {
+    "email": "Email",
+    "password": "Password",
+    "fullName": "Full name",
+    "confirmPassword": "Confirm password",
+    "passwordHint": "At least {min} characters.",
+    "signIn": {
+      "title": "Sign in",
+      "subtitle": "Access your language test reservations.",
+      "submit": "Sign in",
+      "noAccount": "No account yet?",
+      "createAccount": "Create one",
+      "sessionExpired": "Your session has expired. Please sign in again."
+    },
+    "register": {
+      "title": "Create your account",
+      "subtitle": "Book language test sessions in a few clicks.",
+      "submit": "Create my account",
+      "alreadyRegistered": "Already registered?",
+      "signIn": "Sign in"
+    },
+    "demo": {
+      "title": "Demo accounts",
+      "description": "Explore the application without creating an account.",
+      "candidate": "Sign in as a candidate",
+      "admin": "Sign in as an administrator"
+    }
+  },
+  "account": {
+    "title": "My account",
+    "description": "Manage your name and email address.",
+    "personalInformation": "Personal information",
+    "updated": "Your account has been updated.",
+    "administrator": "Administrator",
+    "candidate": "Candidate",
+    "memberSince": "Member since {date}"
+  },
+  "sessions": {
+    "title": "Test sessions",
+    "description": "Browse upcoming sessions and book your seat.",
+    "timezoneNote": "Times are in {city} time.",
+    "summary": "{language}, {date} at {time}",
+    "loading": "Loading sessions…",
+    "loadError": "The sessions could not be loaded.",
+    "filters": {
+      "label": "Filter sessions",
+      "language": "Language",
+      "allLanguages": "All languages",
+      "availableOnly": "Only sessions with seats left"
+    },
+    "details": {
+      "date": "Date",
+      "time": "Time",
+      "place": "Place"
+    },
+    "seats": {
+      "left": "{available, plural, =0 {No seat left} one {# of {capacity} seat left} other {# of {capacity} seats left}}",
+      "progress": "Seats booked"
+    },
+    "badge": {
+      "started": "Started",
+      "booked": "Booked",
+      "full": "Full",
+      "fewSeats": "Few seats left"
+    },
+    "action": {
+      "book": "Book a seat",
+      "cancel": "Cancel my booking",
+      "full": "Full",
+      "closed": "Booking closed"
+    },
+    "empty": {
+      "filteredTitle": "No session matches your filters",
+      "filteredDescription": "Try another language or include full sessions.",
+      "clearFilters": "Clear filters",
+      "title": "No upcoming session",
+      "description": "New sessions are published regularly.",
+      "pageTitle": "This page is empty",
+      "pageDescription": "The catalogue has changed since this page was opened.",
+      "firstPage": "Back to the first page"
+    },
+    "booked": "Your seat is booked: {session}.",
+    "cancelled": "Your booking for {session} has been cancelled.",
+    "cancelDialog": {
+      "title": "Cancel this booking?",
+      "description": "Your seat for {session} will be released.",
+      "confirm": "Cancel my booking"
+    }
+  },
+  "reservations": {
+    "title": "My reservations",
+    "description": "Your booked language test sessions.",
+    "bookSession": "Book a session",
+    "loading": "Loading your reservations…",
+    "loadError": "Your reservations could not be loaded.",
+    "upcoming": "Upcoming ({count})",
+    "past": "Past ({count})",
+    "noUpcoming": "No upcoming session.",
+    "confirmed": "Confirmed",
+    "pastBadge": "Past",
+    "bookedOn": "Booked on {date}",
+    "cancel": "Cancel",
+    "emptyTitle": "No reservation yet",
+    "emptyDescription": "Book a seat in one of the upcoming language test sessions.",
+    "browseSessions": "Browse sessions",
+    "cancelled": "Your reservation for {session} has been cancelled.",
+    "cancelDialog": {
+      "title": "Cancel this reservation?",
+      "description": "Your seat for {session} will be released.",
+      "confirm": "Cancel my reservation"
+    }
+  },
+  "admin": {
+    "title": "Manage sessions",
+    "description": "Create, edit and delete the test sessions offered to candidates.",
+    "newSession": "New session",
+    "includePast": "Include past sessions",
+    "loading": "Loading sessions…",
+    "loadError": "The sessions could not be loaded.",
+    "emptyTitle": "No session yet",
+    "emptyDescription": "Create the first session of the catalogue.",
+    "deleted": "Session deleted: {session}.",
+    "created": "Session created: {session}.",
+    "updated": "Session updated: {session}.",
+    "table": {
+      "caption": "Test sessions",
+      "language": "Language",
+      "date": "Date",
+      "time": "Time",
+      "location": "Location",
+      "seats": "Seats booked",
+      "status": "Status",
+      "actions": "Actions",
+      "open": "Open",
+      "full": "Full",
+      "past": "Past",
+      "edit": "Edit <hidden>{session}</hidden>",
+      "delete": "Delete <hidden>{session}</hidden>"
+    },
+    "deleteDialog": {
+      "title": "Delete this session?",
+      "description": "{session} will be removed from the catalogue.",
+      "confirm": "Delete session"
+    },
+    "form": {
+      "newTitle": "New session",
+      "newDescription": "Publish a new language test session.",
+      "editTitle": "Edit session",
+      "editDescription": "{taken} of {capacity} seats are booked: the capacity cannot go below the seats already booked.",
+      "language": "Language",
+      "languagePlaceholder": "English",
+      "date": "Date",
+      "time": "Time",
+      "timeHint": "Local time ({timezone}).",
+      "location": "Location",
+      "locationPlaceholder": "Paris – Test Center La Défense",
+      "capacity": "Number of seats",
+      "create": "Create session",
+      "loading": "Loading the session…",
+      "notFoundTitle": "Session not found",
+      "notFoundDescription": "It may have been deleted in the meantime.",
+      "backToList": "Back to the sessions"
+    }
+  },
+  "validation": {
+    "emailRequired": "Email is required.",
+    "emailTooLong": "Email must not exceed 180 characters.",
+    "emailInvalid": "Enter a valid email address.",
+    "nameLength": "Name must contain between 2 and 100 characters.",
+    "passwordRequired": "Password is required.",
+    "passwordTooShort": "Password must contain at least 8 characters.",
+    "passwordTooLong": "Password is too long.",
+    "confirmPasswordRequired": "Please confirm your password.",
+    "passwordMismatch": "Passwords do not match.",
+    "languageLength": "Language must contain between 2 and 60 characters.",
+    "dateRequired": "Pick a date.",
+    "timeRequired": "Pick a time (HH:MM).",
+    "locationLength": "Location must contain between 2 and 180 characters.",
+    "capacityRequired": "Enter a number of seats.",
+    "capacityInteger": "The number of seats must be a whole number.",
+    "capacityRange": "A session offers between 1 and 1000 seats."
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "network_error": "The server cannot be reached. Check your connection and try again.",
+    "invalid_credentials": "Invalid email or password.",
+    "too_many_login_attempts": "Too many failed attempts. Please try again in a minute.",
+    "validation_failed": "Some fields are invalid.",
+    "email_already_in_use": "This email is already used by another account.",
+    "session_full": "Sorry, this session has just filled up. Seats have been refreshed.",
+    "already_reserved": "You already hold a reservation for this session.",
+    "session_already_started": "This session has already started: its bookings can no longer change.",
+    "session_not_found": "This session no longer exists.",
+    "reservation_not_found": "This reservation no longer exists.",
+    "session_has_reservations": "This session has bookings, so it cannot be deleted.",
+    "session_in_past": "A session must be scheduled in the future.",
+    "capacity_below_reserved_seats": "The capacity cannot be lower than the seats already booked."
+  }
+}

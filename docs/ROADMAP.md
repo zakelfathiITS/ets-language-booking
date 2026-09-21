@@ -93,10 +93,10 @@ ETS-11 (deployment).
 - [x] Project structure documented in the README
 
 ### ETS-13 · Internationalisation (English & French)
-- [ ] Translation infrastructure, language switcher, remembered choice (browser language by default)
-- [ ] Every screen, message, validation and date format translated
-- [ ] API errors translated from their stable code; backend validation messages localised from `Accept-Language`
-- [ ] Tests for both languages and the fallback
+- [x] Translation infrastructure, language switcher, remembered choice (browser language by default)
+- [x] Every screen, message, validation and date format translated
+- [x] API errors translated from their stable code; backend validation messages localised from `Accept-Language`
+- [x] Tests for both languages and the fallback
 
 ### ETS-14 · Modern UI refresh
 - [ ] Design tokens (palette, typography, radii, shadows) and a clear brand identity

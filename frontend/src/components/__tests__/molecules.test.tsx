@@ -1,13 +1,14 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { Alert } from "@/components/molecules/Alert";
 import { FormField } from "@/components/molecules/FormField";
 import { PaginationControls } from "@/components/molecules/PaginationControls";
+import { renderWithIntl } from "@tests/renderWithProviders";
 
 describe("FormField", () => {
   it("links the label, the hint and the input", () => {
-    render(<FormField label="Email" hint="We never share it." />);
+    renderWithIntl(<FormField label="Email" hint="We never share it." />);
 
     const input = screen.getByRole("textbox", { name: "Email" });
     expect(input).toHaveAccessibleDescription("We never share it.");
@@ -15,7 +16,7 @@ describe("FormField", () => {
   });
 
   it("announces the error instead of the hint", () => {
-    render(<FormField label="Email" hint="We never share it." error="This value is not a valid email address." />);
+    renderWithIntl(<FormField label="Email" hint="We never share it." error="This value is not a valid email address." />);
 
     const input = screen.getByRole("textbox", { name: "Email" });
     expect(input).toHaveAttribute("aria-invalid", "true");
@@ -25,7 +26,7 @@ describe("FormField", () => {
 
 describe("Alert", () => {
   it("interrupts for errors and stays polite otherwise", () => {
-    render(
+    renderWithIntl(
       <>
         <Alert tone="error">Failure</Alert>
         <Alert tone="success">Saved</Alert>
@@ -40,7 +41,7 @@ describe("Alert", () => {
 describe("PaginationControls", () => {
   it("moves between pages and disables the impossible moves", async () => {
     const onPageChange = jest.fn();
-    render(<PaginationControls page={1} totalPages={3} onPageChange={onPageChange} />);
+    renderWithIntl(<PaginationControls page={1} totalPages={3} onPageChange={onPageChange} />);
 
     expect(screen.getByRole("button", { name: "Previous" })).toBeDisabled();
     await userEvent.click(screen.getByRole("button", { name: "Next" }));
@@ -50,14 +51,14 @@ describe("PaginationControls", () => {
   });
 
   it("disables next on the last page", () => {
-    render(<PaginationControls page={3} totalPages={3} onPageChange={jest.fn()} />);
+    renderWithIntl(<PaginationControls page={3} totalPages={3} onPageChange={jest.fn()} />);
 
     expect(screen.getByRole("button", { name: "Next" })).toBeDisabled();
     expect(screen.getByRole("button", { name: "Previous" })).toBeEnabled();
   });
 
   it("disappears when everything fits on one page", () => {
-    const { container } = render(<PaginationControls page={1} totalPages={1} onPageChange={jest.fn()} />);
+    const { container } = renderWithIntl(<PaginationControls page={1} totalPages={1} onPageChange={jest.fn()} />);
 
     expect(container).toBeEmptyDOMElement();
   });

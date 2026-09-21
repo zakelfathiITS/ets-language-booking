@@ -16,16 +16,24 @@ const CODE_TO_FIELD: Record<string, string> = {
   capacity_below_reserved_seats: "capacity",
 };
 
-export function toServerFormErrors(error: unknown): ServerFormErrors {
+/** Turns an error code into a message in the current language (null if unknown). */
+export type ErrorCodeTranslator = (code: string) => string | null;
+
+/**
+ * Violation messages are already localised by the API (Accept-Language);
+ * errors identified by a code are translated here, the API text being the fallback.
+ */
+export function toServerFormErrors(error: unknown, translate: ErrorCodeTranslator): ServerFormErrors {
   if (!isApiError(error)) {
-    return { message: "Something went wrong. Please try again.", fields: {} };
+    return { message: translate("generic"), fields: {} };
   }
 
   const fields = { ...error.fieldErrors };
+  const message = translate(error.code) ?? error.message;
   const field = CODE_TO_FIELD[error.code];
   if (field) {
-    fields[field] = error.message;
+    fields[field] = message;
   }
 
-  return { message: Object.keys(fields).length > 0 ? null : error.message, fields };
+  return { message: Object.keys(fields).length > 0 ? null : message, fields };
 }

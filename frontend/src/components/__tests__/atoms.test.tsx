@@ -1,13 +1,14 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { Button } from "@/components/atoms/Button";
 import { Input } from "@/components/atoms/Input";
+import { renderWithIntl } from "@tests/renderWithProviders";
 
 describe("Button", () => {
   it("is disabled and busy while loading", async () => {
     const onClick = jest.fn();
-    render(
+    renderWithIntl(
       <Button isLoading onClick={onClick}>
         Save
       </Button>,
@@ -22,7 +23,7 @@ describe("Button", () => {
   });
 
   it("is a plain button by default, never an accidental submit", () => {
-    render(<Button>Cancel</Button>);
+    renderWithIntl(<Button>Cancel</Button>);
 
     expect(screen.getByRole("button", { name: "Cancel" })).toHaveAttribute("type", "button");
   });
@@ -30,7 +31,7 @@ describe("Button", () => {
 
 describe("Input", () => {
   it("flags an invalid value for assistive technologies", () => {
-    render(<Input aria-label="Email" invalid />);
+    renderWithIntl(<Input aria-label="Email" invalid />);
 
     expect(screen.getByRole("textbox", { name: "Email" })).toHaveAttribute("aria-invalid", "true");
   });

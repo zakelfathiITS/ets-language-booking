@@ -1,13 +1,17 @@
-import type { NavLink } from "@/components/organisms/Navbar";
+/** Destinations of the main navigation; labels are translation keys ("nav.*"). */
+export interface NavigationLink {
+  href: string;
+  labelKey: "sessions" | "reservations" | "account" | "admin";
+}
 
-const USER_LINKS: NavLink[] = [
-  { href: "/sessions", label: "Test sessions" },
-  { href: "/reservations", label: "My reservations" },
-  { href: "/account", label: "My account" },
+const USER_LINKS: NavigationLink[] = [
+  { href: "/sessions", labelKey: "sessions" },
+  { href: "/reservations", labelKey: "reservations" },
+  { href: "/account", labelKey: "account" },
 ];
 
-const ADMIN_LINKS: NavLink[] = [{ href: "/admin/sessions", label: "Administration" }];
+const ADMIN_LINKS: NavigationLink[] = [{ href: "/admin/sessions", labelKey: "admin" }];
 
-export function navigationLinks(isAdmin: boolean): NavLink[] {
+export function navigationLinks(isAdmin: boolean): NavigationLink[] {
   return isAdmin ? [...USER_LINKS, ...ADMIN_LINKS] : USER_LINKS;
 }

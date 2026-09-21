@@ -1,3 +1,5 @@
+import { useTranslations } from "next-intl";
+
 import { cn } from "@/lib/cn";
 
 export interface SeatIndicatorProps {
@@ -6,19 +8,16 @@ export interface SeatIndicatorProps {
 }
 
 export function SeatIndicator({ seatsAvailable, capacity }: SeatIndicatorProps) {
+  const t = useTranslations("sessions.seats");
   const taken = capacity - seatsAvailable;
   const ratio = capacity > 0 ? taken / capacity : 1;
-  const label =
-    seatsAvailable === 0
-      ? "No seat left"
-      : `${seatsAvailable} of ${capacity} seat${capacity > 1 ? "s" : ""} left`;
 
   return (
     <div>
-      <p className="text-sm text-neutral-700">{label}</p>
+      <p className="text-sm text-neutral-700">{t("left", { available: seatsAvailable, capacity })}</p>
       <div
         role="progressbar"
-        aria-label="Seats booked"
+        aria-label={t("progress")}
         aria-valuemin={0}
         aria-valuemax={capacity}
         aria-valuenow={taken}

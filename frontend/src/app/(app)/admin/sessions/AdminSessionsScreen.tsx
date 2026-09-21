@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/atoms/Button";
@@ -15,19 +16,19 @@ import { SessionsTable } from "@/components/organisms/SessionsTable";
 import { useDeleteSessionMutation } from "@/features/admin/adminSessionsApi";
 import type { Flash } from "@/features/flash/flashSlice";
 import { useFlash } from "@/features/flash/useFlash";
-import { bookingErrorMessage } from "@/features/reservations/bookingMessages";
+import { useApiErrors } from "@/features/i18n/useApiErrors";
 import { useListSessionsQuery } from "@/features/sessions/sessionsApi";
 import { useSessionFilters } from "@/features/sessions/useSessionFilters";
-import { formatSessionDate } from "@/lib/format";
+import { useSessionLabel } from "@/features/sessions/useSessionLabel";
 import type { TestSession } from "@/types/api";
 
 const PAGE_SIZE = 20;
 
-function describe(session: TestSession): string {
-  return `${session.language}, ${formatSessionDate(session.date)} at ${session.time}`;
-}
-
 export function AdminSessionsScreen() {
+  const t = useTranslations("admin");
+  const tc = useTranslations("common");
+  const describe = useSessionLabel();
+  const { messageOf } = useApiErrors();
   const { filters, setPage, setFilters } = useSessionFilters();
   const sessions = useListSessionsQuery({ page: filters.page, limit: PAGE_SIZE, includePast: filters.includePast });
   const [deleteSession, deletion] = useDeleteSessionMutation();
@@ -56,8 +57,8 @@ export function AdminSessionsScreen() {
     setSessionToDelete(null);
     showNotice(
       result.error
-        ? { tone: "error", message: bookingErrorMessage(result.error) }
-        : { tone: "success", message: `Session deleted: ${describe(session)}.` },
+        ? { tone: "error", message: messageOf(result.error) }
+        : { tone: "success", message: t("deleted", { session: describe(session) }) },
     );
   }
 
@@ -66,14 +67,14 @@ export function AdminSessionsScreen() {
   return (
     <>
       <PageHeader
-        title="Manage sessions"
-        description="Create, edit and delete the test sessions offered to candidates."
-        actions={<ButtonLink href="/admin/sessions/new">New session</ButtonLink>}
+        title={t("title")}
+        description={t("description")}
+        actions={<ButtonLink href="/admin/sessions/new">{t("newSession")}</ButtonLink>}
       />
 
       <div className="space-y-6">
         <Checkbox
-          label="Include past sessions"
+          label={t("includePast")}
           checked={filters.includePast}
           onChange={(event) => setFilters({ includePast: event.target.checked })}
         />
@@ -87,21 +88,21 @@ export function AdminSessionsScreen() {
         {sessions.isLoading ? (
           <>
             <p role="status" className="sr-only">
-              Loading sessions…
+              {t("loading")}
             </p>
             <CardSkeleton />
           </>
         ) : sessions.isError || !data ? (
-          <Alert tone="error" title="The sessions could not be loaded.">
+          <Alert tone="error" title={t("loadError")}>
             <Button variant="secondary" size="sm" className="mt-2" onClick={() => void sessions.refetch()}>
-              Try again
+              {tc("tryAgain")}
             </Button>
           </Alert>
         ) : data.items.length === 0 ? (
           <EmptyState
-            title="No session yet"
-            description="Create the first session of the catalogue."
-            action={<ButtonLink href="/admin/sessions/new">New session</ButtonLink>}
+            title={t("emptyTitle")}
+            description={t("emptyDescription")}
+            action={<ButtonLink href="/admin/sessions/new">{t("newSession")}</ButtonLink>}
           />
         ) : (
           <>
@@ -123,9 +124,9 @@ export function AdminSessionsScreen() {
 
       <ConfirmDialog
         open={sessionToDelete !== null}
-        title="Delete this session?"
-        description={sessionToDelete && `${describe(sessionToDelete)} will be removed from the catalogue.`}
-        confirmLabel="Delete session"
+        title={t("deleteDialog.title")}
+        description={sessionToDelete && t("deleteDialog.description", { session: describe(sessionToDelete) })}
+        confirmLabel={t("deleteDialog.confirm")}
         isConfirming={deletion.isLoading}
         onConfirm={() => void confirmDeletion()}
         onCancel={() => setSessionToDelete(null)}

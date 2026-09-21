@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 import { Button } from "../atoms/Button";
 
 export interface PaginationControlsProps {
@@ -10,18 +12,23 @@ export interface PaginationControlsProps {
 }
 
 export function PaginationControls({ page, totalPages, onPageChange, disabled = false }: PaginationControlsProps) {
+  const t = useTranslations("pagination");
+
   if (totalPages <= 1) {
     return null;
   }
 
   return (
-    <nav aria-label="Pagination" className="flex items-center justify-between gap-4">
+    <nav aria-label={t("label")} className="flex items-center justify-between gap-4">
       <Button variant="secondary" size="sm" disabled={disabled || page <= 1} onClick={() => onPageChange(page - 1)}>
-        Previous
+        {t("previous")}
       </Button>
       <p className="text-sm text-neutral-600" aria-live="polite">
-        Page <span className="font-medium text-neutral-900">{page}</span> of{" "}
-        <span className="font-medium text-neutral-900">{totalPages}</span>
+        {t.rich("status", {
+          page,
+          totalPages,
+          strong: (chunks) => <span className="font-medium text-neutral-900">{chunks}</span>,
+        })}
       </p>
       <Button
         variant="secondary"
@@ -29,7 +36,7 @@ export function PaginationControls({ page, totalPages, onPageChange, disabled = 
         disabled={disabled || page >= totalPages}
         onClick={() => onPageChange(page + 1)}
       >
-        Next
+        {t("next")}
       </Button>
     </nav>
   );

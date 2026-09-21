@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { useMemo } from "react";
 
 import { Alert } from "@/components/molecules/Alert";
@@ -10,30 +11,35 @@ import { AuthTemplate } from "@/components/templates/AuthTemplate";
 import { useLoginMutation } from "@/features/auth/authApi";
 import { DEMO_ACCOUNTS } from "@/features/auth/demoAccounts";
 import { useAuth } from "@/features/auth/useAuth";
-import { toServerFormErrors } from "@/features/forms/toServerFormErrors";
+import { LocaleSwitcher } from "@/features/i18n/LocaleSwitcher";
+import { useApiErrors } from "@/features/i18n/useApiErrors";
 import { SHOW_DEMO_ACCOUNTS } from "@/lib/env";
 
 /** On success, the (auth) layout redirects to ?next= or to the reservations. */
 export function LoginScreen() {
+  const t = useTranslations("auth");
   const [login, { isLoading, error }] = useLoginMutation();
   const { sessionEnd } = useAuth();
-  const serverErrors = useMemo(() => (error ? toServerFormErrors(error) : null), [error]);
+  const { formErrorsOf } = useApiErrors();
+  const serverErrors = useMemo(() => (error ? formErrorsOf(error) : null), [error, formErrorsOf]);
+  const demoAccounts = DEMO_ACCOUNTS.map(({ labelKey, email, password }) => ({ label: t(`demo.${labelKey}`), email, password }));
 
   return (
     <AuthTemplate
-      title="Sign in"
-      subtitle="Access your language test reservations."
+      title={t("signIn.title")}
+      subtitle={t("signIn.subtitle")}
+      toolbar={<LocaleSwitcher />}
       footer={
         <>
-          No account yet?{" "}
+          {t("signIn.noAccount")}{" "}
           <Link href="/register" className="font-medium text-brand-700 hover:underline">
-            Create one
+            {t("signIn.createAccount")}
           </Link>
         </>
       }
     >
       <div className="space-y-6">
-        {sessionEnd === "expiry" && <Alert tone="info">Your session has expired. Please sign in again.</Alert>}
+        {sessionEnd === "expiry" && <Alert tone="info">{t("signIn.sessionExpired")}</Alert>}
         <LoginForm
           onSubmit={(values) => {
             void login(values);
@@ -43,7 +49,7 @@ export function LoginScreen() {
         />
         {SHOW_DEMO_ACCOUNTS && (
           <DemoAccounts
-            accounts={DEMO_ACCOUNTS}
+            accounts={demoAccounts}
             disabled={isLoading}
             onPick={({ email, password }) => {
               void login({ email, password });

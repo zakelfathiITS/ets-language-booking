@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 
 import { cn } from "@/lib/cn";
@@ -17,6 +18,8 @@ export interface AlertProps {
 
 /** Errors are announced immediately (role="alert"), other messages politely. */
 export function Alert({ tone = "info", title, children, onDismiss }: AlertProps) {
+  const t = useTranslations("common");
+
   return (
     <div
       role={tone === "error" ? "alert" : "status"}
@@ -30,7 +33,7 @@ export function Alert({ tone = "info", title, children, onDismiss }: AlertProps)
         <button
           type="button"
           onClick={onDismiss}
-          aria-label="Dismiss"
+          aria-label={t("dismiss")}
           className="-m-1 rounded p-1 leading-none opacity-70 hover:opacity-100 focus-visible:outline-2 focus-visible:outline-current"
         >
           ×

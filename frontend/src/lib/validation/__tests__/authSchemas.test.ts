@@ -9,7 +9,7 @@ describe("auth schemas", () => {
     const result = loginSchema.safeParse({ email: "jane@", password: "x" });
 
     expect(result.success).toBe(false);
-    expect(result.error?.issues[0]?.message).toBe("Enter a valid email address.");
+    expect(result.error?.issues[0]?.message).toBe("validation.emailInvalid");
   });
 
   it("requires matching passwords of at least 8 characters on sign-up", () => {
@@ -23,7 +23,7 @@ describe("auth schemas", () => {
 
     expect(tooShort.error?.issues.map((issue) => issue.path.join("."))).toEqual(["password"]);
     expect(mismatch.error?.issues.map((issue) => [issue.path.join("."), issue.message])).toEqual([
-      ["confirmPassword", "Passwords do not match."],
+      ["confirmPassword", "validation.passwordMismatch"],
     ]);
   });
 

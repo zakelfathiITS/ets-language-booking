@@ -1,0 +1,12 @@
+framework:
+    default_locale: en
+    # Languages offered by the application. The locale of each request is taken
+    # from its Accept-Language header (sent by the web client), and echoed back
+    # in Content-Language. Validation messages follow it; business errors keep
+    # an English "detail" and a stable "code" that clients translate.
+    enabled_locales: [en, fr]
+    set_locale_from_accept_language: true
+    set_content_language_from_locale: true
+    translator:
+        default_path: '%kernel.project_dir%/translations'
+        fallbacks: [en]

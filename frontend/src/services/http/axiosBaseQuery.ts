@@ -18,12 +18,15 @@ interface StateWithToken {
 }
 
 /**
- * RTK Query base query backed by Axios: adds the Bearer token, normalises
- * errors, and signals an expired session when the API rejects the token.
+ * RTK Query base query backed by Axios: adds the Bearer token and the page
+ * language, normalises errors, and signals an expired session when the API
+ * rejects the token.
  */
 export function axiosBaseQuery(): BaseQueryFn<ApiRequest, unknown, ApiError> {
   return async ({ url, method = "GET", data, params }, api) => {
     const { token } = (api.getState() as StateWithToken).auth;
+    // The API localises its validation messages: send the language of the page.
+    const language = globalThis.document?.documentElement.lang || "en";
 
     try {
       const response = await axiosClient.request({
@@ -32,7 +35,7 @@ export function axiosBaseQuery(): BaseQueryFn<ApiRequest, unknown, ApiError> {
         data,
         params,
         signal: api.signal,
-        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+        headers: { "Accept-Language": language, ...(token ? { Authorization: `Bearer ${token}` } : {}) },
       });
 
       return { data: response.data };

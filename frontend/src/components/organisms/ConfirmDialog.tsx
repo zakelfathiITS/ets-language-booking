@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { type ReactNode, useEffect, useId, useRef } from "react";
 
 import { Button } from "../atoms/Button";
@@ -26,12 +27,13 @@ export function ConfirmDialog({
   title,
   description,
   confirmLabel,
-  cancelLabel = "Keep it",
+  cancelLabel,
   tone = "danger",
   isConfirming = false,
   onConfirm,
   onCancel,
 }: ConfirmDialogProps) {
+  const t = useTranslations("common");
   const titleId = useId();
   const descriptionId = useId();
   const cancelRef = useRef<HTMLButtonElement>(null);
@@ -79,7 +81,7 @@ export function ConfirmDialog({
         </div>
         <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
           <Button ref={cancelRef} variant="secondary" onClick={onCancel} disabled={isConfirming}>
-            {cancelLabel}
+            {cancelLabel ?? t("keepIt")}
           </Button>
           <Button variant={tone} onClick={onConfirm} isLoading={isConfirming}>
             {confirmLabel}

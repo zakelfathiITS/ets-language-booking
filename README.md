@@ -50,6 +50,13 @@ Loaded automatically on first start, together with 30 upcoming test sessions (th
 
 Set `APP_SEED_DEMO_DATA=0` in `.env` to start with an empty database.
 
+### Languages
+
+The application is available in **English** and **French**. It follows the browser language
+by default; the switcher in the header remembers an explicit choice. API validation messages
+are localised from the `Accept-Language` header, and business errors carry a stable `code`
+that the client translates.
+
 ### Development mode
 
 ```bash
@@ -143,6 +150,13 @@ Créés automatiquement au premier démarrage, avec 30 sessions de test à venir
 | Candidat | `candidate@ets.test` | `Candidate123!` |
 
 Définissez `APP_SEED_DEMO_DATA=0` dans `.env` pour démarrer avec une base vide.
+
+### Langues
+
+L'application est disponible en **anglais** et en **français**. Elle suit la langue du
+navigateur par défaut ; le sélecteur de l'en-tête mémorise un choix explicite. Les messages
+de validation de l'API sont localisés selon l'en-tête `Accept-Language`, et les erreurs
+métier portent un `code` stable que le client traduit.
 
 ### Mode développement
 

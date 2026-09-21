@@ -1,16 +1,21 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
 import { LoadingScreen } from "@/components/molecules/LoadingScreen";
 
 import { SessionsScreen } from "./SessionsScreen";
 
-export const metadata: Metadata = { title: "Test sessions" };
+export async function generateMetadata(): Promise<Metadata> {
+  return { title: (await getTranslations("meta"))("sessions") };
+}
 
-export default function SessionsPage() {
+export default async function SessionsPage() {
+  const t = await getTranslations();
+
   // The screen reads its filters from the URL (useSearchParams).
   return (
-    <Suspense fallback={<LoadingScreen label="Loading sessions…" />}>
+    <Suspense fallback={<LoadingScreen label={t("sessions.loading")} />}>
       <SessionsScreen />
     </Suspense>
   );

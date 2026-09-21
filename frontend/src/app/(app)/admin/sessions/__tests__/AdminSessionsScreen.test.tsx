@@ -31,7 +31,7 @@ describe("AdminSessionsScreen", () => {
     const row = await screen.findByRole("row", { name: /English/ });
     expect(within(row).getByText("2 / 8")).toBeInTheDocument();
     expect(within(row).getByText("Open")).toBeInTheDocument();
-    expect(within(row).getByRole("link", { name: "Edit English on Mon 23 September 2030" })).toHaveAttribute(
+    expect(within(row).getByRole("link", { name: "Edit English – Mon 23 September 2030" })).toHaveAttribute(
       "href",
       "/admin/sessions/s1/edit",
     );
