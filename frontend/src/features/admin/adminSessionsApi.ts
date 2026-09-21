@@ -10,7 +10,7 @@ export interface SessionPayload {
 }
 
 /** Catalogue management (administrators only; enforced by the API). */
-export const adminSessionsApi = baseApi.injectEndpoints({
+const adminSessionsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     getSession: build.query<TestSession, string>({
       query: (id) => ({ url: `/api/sessions/${id}` }),

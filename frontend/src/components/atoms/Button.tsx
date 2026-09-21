@@ -7,7 +7,7 @@ import { Spinner } from "./Spinner";
 const base =
   "inline-flex items-center justify-center gap-2 rounded-md font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-60";
 
-export const buttonVariants = {
+const buttonVariants = {
   primary: "bg-brand-600 text-white shadow-sm hover:bg-brand-700 focus-visible:outline-brand-600",
   secondary:
     "border border-neutral-300 bg-white text-neutral-800 shadow-sm hover:bg-neutral-50 focus-visible:outline-brand-600",
@@ -15,7 +15,7 @@ export const buttonVariants = {
   danger: "bg-red-600 text-white shadow-sm hover:bg-red-700 focus-visible:outline-red-600",
 } as const;
 
-export const buttonSizes = {
+const buttonSizes = {
   sm: "px-3 py-1.5 text-sm",
   md: "px-4 py-2 text-sm",
 } as const;

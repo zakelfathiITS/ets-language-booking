@@ -20,7 +20,7 @@ function toQueryParams({ page, limit, language, availableOnly, includePast }: Se
   };
 }
 
-export const sessionsApi = baseApi.injectEndpoints({
+const sessionsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     listSessions: build.query<Paginated<TestSession>, SessionListParams>({
       query: (params) => ({ url: "/api/sessions", params: toQueryParams(params) }),

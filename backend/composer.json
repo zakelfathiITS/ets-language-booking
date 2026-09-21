@@ -114,6 +114,7 @@
         "phpstan/phpstan-phpunit": "^2",
         "phpstan/phpstan-symfony": "^2",
         "phpunit/phpunit": "^11",
+        "shipmonk/dead-code-detector": "^1.4",
         "symfony/browser-kit": "6.4.*",
         "symfony/process": "6.4.*"
     }

@@ -1,10 +1,10 @@
 import { screen, within } from "@testing-library/react";
 import { http, HttpResponse } from "msw";
 
-import { aReservation, signedIn } from "../../../../../test/fixtures";
-import { api } from "../../../../../test/msw/handlers";
-import { server } from "../../../../../test/msw/server";
-import { renderWithProviders } from "../../../../../test/renderWithProviders";
+import { aReservation, signedIn } from "@tests/fixtures";
+import { api } from "@tests/msw/handlers";
+import { server } from "@tests/msw/server";
+import { renderWithProviders } from "@tests/renderWithProviders";
 import { ReservationsScreen } from "../ReservationsScreen";
 
 const upcoming = aReservation({ id: "r-upcoming" }, { id: "s1", language: "German", date: "2030-10-01" });

@@ -19,7 +19,7 @@ function affectedBy(sessionId: string) {
   ];
 }
 
-export const reservationsApi = baseApi.injectEndpoints({
+const reservationsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     listReservations: build.query<Collection<Reservation>, void>({
       query: () => ({ url: "/api/reservations" }),

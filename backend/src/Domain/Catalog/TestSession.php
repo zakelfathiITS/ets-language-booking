@@ -163,11 +163,6 @@ class TestSession
         return $this->scheduledAt <= $now;
     }
 
-    public function createdAt(): \DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
     public function updatedAt(): \DateTimeImmutable
     {
         return $this->updatedAt;

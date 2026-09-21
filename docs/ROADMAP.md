@@ -1,8 +1,12 @@
 # Roadmap — ETS Language Test Booking
 
-Delivery plan for the ETS EMEA technical test. Work is split into large tickets
-(`ETS-01` … `ETS-11`); each ticket is tracked as a GitHub issue, delivered through a
-pull request and squash-merged, so `main` holds exactly one commit per ticket.
+Delivery plan for the ETS EMEA technical test. Work is split into large tickets;
+each ticket is tracked as a GitHub issue, delivered through a pull request and
+squash-merged, so `main` holds exactly one commit per ticket.
+
+Delivery order: ETS-01 → ETS-09, then ETS-12 (cleanup), ETS-13 (i18n) and ETS-14
+(UI refresh), added along the way, then ETS-10 (security review and release) and
+ETS-11 (deployment).
 
 ## Architecture decisions
 
@@ -81,8 +85,29 @@ pull request and squash-merged, so `main` holds exactly one commit per ticket.
 - [x] Paginated table, create/edit form, guarded deletion
 - [x] Tests
 
-### ETS-10 · Hardening, documentation & release candidate
-- [ ] Security headers, CORS allowlist, rate limiting, dependency audits
+### ETS-12 · Codebase cleanup & reorganisation
+- [x] Unused files, exports and dependencies detected with tools (knip, shipmonk dead-code detector) and removed
+- [x] Scaffolding leftovers removed (unused routes, redundant wrappers, boilerplate configuration)
+- [x] Harmonised layout: `tests/` on both sides, `@tests/*` import alias for test utilities
+- [x] Unused-code checks added to the quality gates and CI
+- [x] Project structure documented in the README
+
+### ETS-13 · Internationalisation (English & French)
+- [ ] Translation infrastructure, language switcher, remembered choice (browser language by default)
+- [ ] Every screen, message, validation and date format translated
+- [ ] API errors translated from their stable code; backend validation messages localised from `Accept-Language`
+- [ ] Tests for both languages and the fallback
+
+### ETS-14 · Modern UI refresh
+- [ ] Design tokens (palette, typography, radii, shadows) and a clear brand identity
+- [ ] Refreshed shell, authentication screens, cards, tables and empty states
+- [ ] Micro-interactions respecting `prefers-reduced-motion`; dark mode
+- [ ] Brand icon and metadata; WCAG AA contrast in both themes
+
+### ETS-10 · Security review, hardening, documentation & release candidate
+- [ ] Security review: token storage and lifetime, sign-out and revocation, secrets in logs
+- [ ] Security headers and Content Security Policy, CORS allowlist, rate limiting beyond login
+- [ ] Password policy, account enumeration, error disclosure; dependency audits and secret scanning
 - [ ] Index usage review, production build tuning
 - [ ] Complete bilingual README: architecture, setup, tests, API, demo accounts, trade-offs
 - [ ] Coverage reports, CI badges, clean-clone verification, `v1.0.0` tag

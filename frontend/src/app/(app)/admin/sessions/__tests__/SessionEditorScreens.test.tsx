@@ -1,11 +1,11 @@
 import { screen, waitFor } from "@testing-library/react";
 import { http, HttpResponse } from "msw";
 
-import { admin, aSession, signedIn } from "../../../../../../test/fixtures";
-import { navigation, router } from "../../../../../../test/mocks/nextNavigation";
-import { api, problem } from "../../../../../../test/msw/handlers";
-import { server } from "../../../../../../test/msw/server";
-import { renderWithProviders } from "../../../../../../test/renderWithProviders";
+import { admin, aSession, signedIn } from "@tests/fixtures";
+import { navigation, router } from "@tests/mocks/nextNavigation";
+import { api, problem } from "@tests/msw/handlers";
+import { server } from "@tests/msw/server";
+import { renderWithProviders } from "@tests/renderWithProviders";
 import { EditSessionScreen } from "../[id]/edit/EditSessionScreen";
 import { NewSessionScreen } from "../new/NewSessionScreen";
 

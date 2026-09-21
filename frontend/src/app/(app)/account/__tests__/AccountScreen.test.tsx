@@ -1,10 +1,10 @@
 import { screen, waitFor } from "@testing-library/react";
 import { http, HttpResponse } from "msw";
 
-import { candidate, signedIn } from "../../../../../test/fixtures";
-import { api, problem } from "../../../../../test/msw/handlers";
-import { server } from "../../../../../test/msw/server";
-import { renderWithProviders, settleApi } from "../../../../../test/renderWithProviders";
+import { candidate, signedIn } from "@tests/fixtures";
+import { api, problem } from "@tests/msw/handlers";
+import { server } from "@tests/msw/server";
+import { renderWithProviders, settleApi } from "@tests/renderWithProviders";
 import { AccountScreen } from "../AccountScreen";
 
 describe("AccountScreen", () => {

@@ -66,13 +66,34 @@ make test       # test suites only (make test-backend / make test-frontend)
 
 The same checks run in GitHub Actions on every pull request.
 
-### Repository layout
+### Project structure
 
 ```
-backend/    Symfony REST API
-frontend/   Next.js web client
-docs/       Roadmap and technical documentation
+backend/                     Symfony REST API (hexagonal architecture)
+├── src/
+│   ├── Domain/              business rules, framework-free: Identity, Catalog, Booking
+│   ├── Application/         use cases (one command/query + handler each) and ports
+│   ├── Infrastructure/      adapters: MongoDB (XML mapping, repositories), security, clock
+│   └── UI/                  entry points: HTTP controllers, request DTOs, presenters, CLI
+├── tests/                   Unit/, Integration/, Functional/ (+ Support/ helpers)
+├── config/                  Symfony configuration
+└── docker/                  FrankenPHP image configuration
+
+frontend/                    Next.js client
+├── src/
+│   ├── app/                 routes (pages) wiring features into components
+│   ├── components/          Atomic Design: atoms/, molecules/, organisms/, templates/
+│   ├── features/            business logic per domain: auth, sessions, reservations, admin
+│   ├── store/               Redux store and typed hooks
+│   ├── services/http/       Axios client and RTK Query base API
+│   └── lib/, types/         shared helpers, validation schemas, API contract types
+└── tests/                   test setup, MSW mocks, fixtures, architecture tests
+
+docs/                        roadmap and technical documentation
 ```
+
+Architecture rules are enforced automatically: Deptrac for the backend layers,
+eslint-plugin-boundaries for the frontend (see `make qa`).
 
 ---
 
@@ -139,10 +160,31 @@ make test       # suites de tests uniquement (make test-backend / make test-fron
 
 Les mêmes contrôles s'exécutent dans GitHub Actions à chaque pull request.
 
-### Organisation du dépôt
+### Organisation du code
 
 ```
-backend/    API REST Symfony
-frontend/   Client web Next.js
-docs/       Feuille de route et documentation technique
+backend/                     API REST Symfony (architecture hexagonale)
+├── src/
+│   ├── Domain/              règles métier, sans framework : Identity, Catalog, Booking
+│   ├── Application/         cas d'usage (une commande/requête + un handler chacun) et ports
+│   ├── Infrastructure/      adaptateurs : MongoDB (mapping XML, repositories), sécurité, horloge
+│   └── UI/                  points d'entrée : contrôleurs HTTP, DTO de requête, présentateurs, CLI
+├── tests/                   Unit/, Integration/, Functional/ (+ utilitaires Support/)
+├── config/                  configuration Symfony
+└── docker/                  configuration de l'image FrankenPHP
+
+frontend/                    client Next.js
+├── src/
+│   ├── app/                 routes (pages) reliant les features aux composants
+│   ├── components/          Atomic Design : atoms/, molecules/, organisms/, templates/
+│   ├── features/            logique métier par domaine : auth, sessions, reservations, admin
+│   ├── store/               store Redux et hooks typés
+│   ├── services/http/       client Axios et API RTK Query
+│   └── lib/, types/         utilitaires, schémas de validation, types du contrat d'API
+└── tests/                   configuration des tests, mocks MSW, jeux de données, tests d'architecture
+
+docs/                        feuille de route et documentation technique
 ```
+
+Les règles d'architecture sont vérifiées automatiquement : Deptrac pour les couches du
+backend, eslint-plugin-boundaries pour le frontend (voir `make qa`).

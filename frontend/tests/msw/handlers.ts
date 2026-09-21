@@ -3,7 +3,7 @@ import { http, HttpResponse } from "msw";
 import { API_URL } from "@/lib/env";
 import type { Problem } from "@/types/api";
 
-import { aPage, aSession, candidate, makeToken } from "../fixtures";
+import { aPage, aSession, candidate, makeToken } from "@tests/fixtures";
 
 export const api = (path: string) => `${API_URL}${path}`;
 

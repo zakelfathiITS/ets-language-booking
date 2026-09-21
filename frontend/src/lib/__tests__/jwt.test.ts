@@ -1,6 +1,6 @@
 import { isTokenExpired, tokenExpiresAt } from "@/lib/jwt";
 
-import { makeToken } from "../../../test/fixtures";
+import { makeToken } from "@tests/fixtures";
 
 describe("jwt", () => {
   it("reads the expiry of a token", () => {
