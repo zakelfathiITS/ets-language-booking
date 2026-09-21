@@ -60,8 +60,8 @@ make help       # all available commands
 ### Quality checks
 
 ```bash
-make qa         # coding standards, static analysis (PHPStan level 8), architecture rules (Deptrac), tests
-make test       # test suites only
+make qa         # both apps: code style, static analysis, architecture rules, tests
+make test       # test suites only (make test-backend / make test-frontend)
 ```
 
 The same checks run in GitHub Actions on every pull request.
@@ -133,8 +133,8 @@ make help       # liste des commandes disponibles
 ### Contrôles qualité
 
 ```bash
-make qa         # style de code, analyse statique (PHPStan niveau 8), règles d'architecture (Deptrac), tests
-make test       # suites de tests uniquement
+make qa         # les deux applications : style, analyse statique, règles d'architecture, tests
+make test       # suites de tests uniquement (make test-backend / make test-frontend)
 ```
 
 Les mêmes contrôles s'exécutent dans GitHub Actions à chaque pull request.

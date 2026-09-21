@@ -1,0 +1,75 @@
+"use client";
+
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { type ReactNode, useEffect } from "react";
+
+import { ButtonLink } from "@/components/atoms/ButtonLink";
+import { EmptyState } from "@/components/molecules/EmptyState";
+import { LoadingScreen } from "@/components/molecules/LoadingScreen";
+import { safeRedirectPath } from "@/lib/safeRedirect";
+
+import { useAuth } from "./useAuth";
+
+export const HOME_PATH = "/reservations";
+export const LOGIN_PATH = "/login";
+
+/**
+ * Renders its children for signed-in users only; others are sent to the login
+ * page, which brings them back here afterwards.
+ */
+export function RequireAuth({ children }: { children: ReactNode }) {
+  const { status } = useAuth();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (status === "anonymous") {
+      router.replace(`${LOGIN_PATH}?next=${encodeURIComponent(pathname)}`);
+    }
+  }, [status, router, pathname]);
+
+  if (status !== "authenticated") {
+    return <LoadingScreen label="Checking your session…" />;
+  }
+
+  return children;
+}
+
+/** Must be nested in <RequireAuth>. The API enforces the same rule. */
+export function RequireAdmin({ children }: { children: ReactNode }) {
+  const { isAdmin } = useAuth();
+
+  if (!isAdmin) {
+    return (
+      <EmptyState
+        title="Administrators only"
+        description="This area is reserved to administrators of the test catalogue."
+        action={<ButtonLink href="/sessions">Browse sessions</ButtonLink>}
+      />
+    );
+  }
+
+  return children;
+}
+
+/**
+ * For the login and registration pages: signed-in users go straight to where
+ * they were heading (?next=), or to their reservations.
+ */
+export function RedirectIfAuthenticated({ children }: { children: ReactNode }) {
+  const { status } = useAuth();
+  const router = useRouter();
+  const next = useSearchParams().get("next");
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.replace(safeRedirectPath(next, HOME_PATH));
+    }
+  }, [status, router, next]);
+
+  if (status !== "anonymous") {
+    return <LoadingScreen label="Loading…" />;
+  }
+
+  return children;
+}

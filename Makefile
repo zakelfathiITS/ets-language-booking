@@ -4,7 +4,7 @@ BACKEND      = $(COMPOSE_DEV) exec backend
 FRONTEND     = $(COMPOSE_DEV) exec frontend
 
 .DEFAULT_GOAL := help
-.PHONY: help up down dev dev-down logs ps sh-backend sh-frontend console qa test cs-fix clean
+.PHONY: help up down dev dev-down logs ps sh-backend sh-frontend console qa qa-backend qa-frontend test test-backend test-frontend cs-fix clean
 
 help: ## List available commands
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-14s\033[0m %s\n", $$1, $$2}'
@@ -36,11 +36,23 @@ sh-frontend: ## Open a shell in the frontend container (dev stack)
 console: ## Run a Symfony console command, e.g. make console c="debug:router"
 	$(BACKEND) bin/console $(c)
 
-qa: ## Run all backend quality gates: code style, static analysis, architecture, tests (dev stack)
+qa: qa-backend qa-frontend ## Run every quality gate of both applications (dev stack)
+
+qa-backend: ## Backend: code style, static analysis, architecture rules, tests
 	$(BACKEND) composer qa
 
-test: ## Run the backend test suites (dev stack)
+qa-frontend: ## Frontend: lint (incl. architecture boundaries), type check, tests
+	$(FRONTEND) npm run lint
+	$(FRONTEND) npm run typecheck
+	$(FRONTEND) npm test
+
+test: test-backend test-frontend ## Run the test suites of both applications (dev stack)
+
+test-backend: ## Run the backend test suites
 	$(BACKEND) composer test
+
+test-frontend: ## Run the frontend test suites
+	$(FRONTEND) npm test
 
 cs-fix: ## Fix backend coding standards (dev stack)
 	$(BACKEND) composer cs:fix
