@@ -1,12 +1,17 @@
-import { EmptyState } from "@/components/molecules/EmptyState";
-import { PageHeader } from "@/components/organisms/PageHeader";
+import type { Metadata } from "next";
+import { Suspense } from "react";
 
-// Placeholder: this screen is delivered with the upcoming frontend tickets.
-export default function Page() {
+import { LoadingScreen } from "@/components/molecules/LoadingScreen";
+
+import { SessionsScreen } from "./SessionsScreen";
+
+export const metadata: Metadata = { title: "Test sessions" };
+
+export default function SessionsPage() {
+  // The screen reads its filters from the URL (useSearchParams).
   return (
-    <>
-      <PageHeader title="Test sessions" description="Browse upcoming language test sessions and book a seat." />
-      <EmptyState title="Coming next" description="This screen is part of the next delivery." />
-    </>
+    <Suspense fallback={<LoadingScreen label="Loading sessions…" />}>
+      <SessionsScreen />
+    </Suspense>
   );
 }

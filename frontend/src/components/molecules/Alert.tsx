@@ -12,14 +12,30 @@ export interface AlertProps {
   tone?: keyof typeof tones;
   title?: string;
   children: ReactNode;
+  onDismiss?: () => void;
 }
 
 /** Errors are announced immediately (role="alert"), other messages politely. */
-export function Alert({ tone = "info", title, children }: AlertProps) {
+export function Alert({ tone = "info", title, children, onDismiss }: AlertProps) {
   return (
-    <div role={tone === "error" ? "alert" : "status"} className={cn("rounded-md border px-4 py-3 text-sm", tones[tone])}>
-      {title && <p className="font-medium">{title}</p>}
-      <div className={cn(title && "mt-1")}>{children}</div>
+    <div
+      role={tone === "error" ? "alert" : "status"}
+      className={cn("flex items-start justify-between gap-4 rounded-md border px-4 py-3 text-sm", tones[tone])}
+    >
+      <div>
+        {title && <p className="font-medium">{title}</p>}
+        <div className={cn(title && "mt-1")}>{children}</div>
+      </div>
+      {onDismiss && (
+        <button
+          type="button"
+          onClick={onDismiss}
+          aria-label="Dismiss"
+          className="-m-1 rounded p-1 leading-none opacity-70 hover:opacity-100 focus-visible:outline-2 focus-visible:outline-current"
+        >
+          ×
+        </button>
+      )}
     </div>
   );
 }

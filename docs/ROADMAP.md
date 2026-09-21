@@ -71,10 +71,10 @@ pull request and squash-merged, so `main` holds exactly one commit per ticket.
 - [x] Tests
 
 ### ETS-08 · Frontend: session booking & reservation management
-- [ ] Paginated session list (language, date, time, location, seats) with URL-synced page and filters
-- [ ] Booking with explicit states (available, full, already booked, past) and conflict messages
-- [ ] Reservation list with confirmed cancellation
-- [ ] Loading, empty and error states; mobile-first layout; tests
+- [x] Paginated session list (language, date, time, location, seats) with URL-synced page and filters
+- [x] Booking with explicit states (available, full, already booked, past) and conflict messages
+- [x] Reservation list with confirmed cancellation
+- [x] Loading, empty and error states; mobile-first layout; tests
 
 ### ETS-09 · Frontend: admin back-office
 - [ ] `/admin/sessions` restricted to administrators
