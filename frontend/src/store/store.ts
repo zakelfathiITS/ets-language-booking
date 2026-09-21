@@ -2,10 +2,12 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
 import { authListener } from "@/features/auth/authPersistence";
 import { authReducer } from "@/features/auth/authSlice";
+import { flashReducer } from "@/features/flash/flashSlice";
 import { baseApi } from "@/services/http/baseApi";
 
 const rootReducer = combineReducers({
   auth: authReducer,
+  flash: flashReducer,
   [baseApi.reducerPath]: baseApi.reducer,
 });
 

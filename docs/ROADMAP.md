@@ -77,9 +77,9 @@ pull request and squash-merged, so `main` holds exactly one commit per ticket.
 - [x] Loading, empty and error states; mobile-first layout; tests
 
 ### ETS-09 · Frontend: admin back-office
-- [ ] `/admin/sessions` restricted to administrators
-- [ ] Paginated table, create/edit form, guarded deletion
-- [ ] Tests
+- [x] `/admin/sessions` restricted to administrators
+- [x] Paginated table, create/edit form, guarded deletion
+- [x] Tests
 
 ### ETS-10 · Hardening, documentation & release candidate
 - [ ] Security headers, CORS allowlist, rate limiting, dependency audits

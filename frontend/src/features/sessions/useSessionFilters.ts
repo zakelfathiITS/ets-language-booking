@@ -7,6 +7,7 @@ export interface SessionFilters {
   page: number;
   language: string | null;
   availableOnly: boolean;
+  includePast: boolean;
 }
 
 function parsePage(value: string | null): number {
@@ -29,6 +30,7 @@ export function useSessionFilters() {
       page: parsePage(searchParams.get("page")),
       language: searchParams.get("language") || null,
       availableOnly: searchParams.get("availableOnly") === "true",
+      includePast: searchParams.get("includePast") === "true",
     }),
     [searchParams],
   );
@@ -39,6 +41,7 @@ export function useSessionFilters() {
       if (next.page > 1) params.set("page", String(next.page));
       if (next.language) params.set("language", next.language);
       if (next.availableOnly) params.set("availableOnly", "true");
+      if (next.includePast) params.set("includePast", "true");
 
       const query = params.toString();
       router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });

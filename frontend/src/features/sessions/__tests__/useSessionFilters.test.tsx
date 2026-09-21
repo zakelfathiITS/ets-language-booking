@@ -27,14 +27,14 @@ describe("useSessionFilters", () => {
     navigation.searchParams = new URLSearchParams("page=2&language=German&availableOnly=true");
     render(<Probe />);
 
-    expect(screen.getByRole("status")).toHaveTextContent('{"page":2,"language":"German","availableOnly":true}');
+    expect(screen.getByRole("status")).toHaveTextContent('{"page":2,"language":"German","availableOnly":true,"includePast":false}');
   });
 
   it("falls back to sane defaults for invalid values", () => {
     navigation.searchParams = new URLSearchParams("page=-4&availableOnly=maybe");
     render(<Probe />);
 
-    expect(screen.getByRole("status")).toHaveTextContent('{"page":1,"language":null,"availableOnly":false}');
+    expect(screen.getByRole("status")).toHaveTextContent('{"page":1,"language":null,"availableOnly":false,"includePast":false}');
   });
 
   it("writes the page to the URL", async () => {

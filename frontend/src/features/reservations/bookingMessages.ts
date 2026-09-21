@@ -7,6 +7,7 @@ const MESSAGES: Record<string, string> = {
   session_already_started: "This session has already started: its bookings can no longer change.",
   session_not_found: "This session no longer exists.",
   reservation_not_found: "This reservation no longer exists.",
+  session_has_reservations: "This session has bookings, so it cannot be deleted.",
 };
 
 export function bookingErrorMessage(error: unknown): string {
