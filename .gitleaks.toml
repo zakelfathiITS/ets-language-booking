@@ -1,0 +1,13 @@
+# Secret scanning (gitleaks), run by .github/workflows/security.yml.
+title = "ETS Language Test Booking"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Test fixtures: credentials of throwaway accounts that only exist in test databases"
+paths = ['''(^|/)tests/''', '''(^|/)__tests__/''']
+
+[[allowlists]]
+description = "Symfony's development-only APP_SECRET; outside development, APP_SECRET comes from the environment"
+paths = ['''^backend/\.env\.dev$''']

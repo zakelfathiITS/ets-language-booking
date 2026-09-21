@@ -17,8 +17,8 @@ export const LOGIN_PATH = "/login";
 const subscribeToNothing = () => () => {};
 
 /**
- * False while server HTML is being hydrated. The session is restored from
- * localStorage right after the first commit, and a page inside a Suspense
+ * False while server HTML is being hydrated. The session check starts right
+ * after the first commit and may already be over when a page inside a Suspense
  * boundary may hydrate later: until then, guards must render what the server
  * rendered (the loading screen), whatever the status already is.
  */

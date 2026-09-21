@@ -13,6 +13,7 @@ use App\Application\Booking\GetReservation\GetReservationQuery;
 use App\Application\Booking\ListUserReservations\ListUserReservationsHandler;
 use App\Application\Booking\ListUserReservations\ListUserReservationsQuery;
 use App\UI\Http\OpenApi\ErrorResponse;
+use App\UI\Http\RateLimit\RateLimit;
 use App\UI\Http\Request\Booking\BookSessionRequest;
 use App\UI\Http\Response\Booking\ReservationPresenter;
 use OpenApi\Attributes as OA;
@@ -54,10 +55,12 @@ final readonly class ReservationController
     #[ErrorResponse(404, ErrorResponse::NOT_FOUND)]
     #[ErrorResponse(409, '`already_reserved`, `session_full` or `session_already_started`.')]
     #[ErrorResponse(422, ErrorResponse::VALIDATION_FAILED)]
+    #[ErrorResponse(429, ErrorResponse::TOO_MANY_REQUESTS)]
+    #[RateLimit('booking')]
     public function create(
         #[CurrentUser]
         UserInterface $user,
-        #[MapRequestPayload]
+        #[MapRequestPayload(acceptFormat: 'json')]
         BookSessionRequest $request,
         BookSessionHandler $bookSession,
         UrlGeneratorInterface $urlGenerator,

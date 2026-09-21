@@ -14,7 +14,8 @@ const email = z
 
 const name = z.string().trim().min(2, "validation.nameLength").max(100, "validation.nameLength");
 
-export const PASSWORD_MIN_LENGTH = 8;
+/** Same rule as the API (OWASP ASVS 2.1.1); the API also rejects breached passwords. */
+export const PASSWORD_MIN_LENGTH = 12;
 
 export const loginSchema = z.object({
   email,

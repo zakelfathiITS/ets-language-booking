@@ -1,0 +1,31 @@
+# Limits are kept in the "cache.rate_limiter" pool; one instance needs no shared store.
+framework:
+    rate_limiter:
+        # Login (failed attempts only: a successful login resets them).
+        login_per_client:
+            policy: sliding_window
+            limit: 20
+            interval: '1 minute'
+        login_per_account:
+            # Whatever the client: slows down distributed guessing of one password.
+            policy: sliding_window
+            limit: 10
+            interval: '15 minutes'
+        login_per_client_and_account:
+            policy: sliding_window
+            limit: 5
+            interval: '1 minute'
+
+        # Other endpoints (see the #[RateLimit] attribute).
+        registration:
+            policy: sliding_window
+            limit: 10
+            interval: '1 hour'
+        booking:
+            policy: sliding_window
+            limit: 20
+            interval: '1 minute'
+        profile_update:
+            policy: sliding_window
+            limit: 10
+            interval: '1 minute'

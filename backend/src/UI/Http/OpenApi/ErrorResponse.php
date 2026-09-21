@@ -17,6 +17,7 @@ final class ErrorResponse extends OA\Response
     public const FORBIDDEN = 'Administrator role required (`forbidden`).';
     public const NOT_FOUND = 'Not found, or not visible to the current user.';
     public const VALIDATION_FAILED = 'Invalid payload (`validation_failed` with `violations`) or broken business rule.';
+    public const TOO_MANY_REQUESTS = 'Rate limit reached (`too_many_requests`), see `Retry-After`.';
 
     public function __construct(int $status, string $description)
     {

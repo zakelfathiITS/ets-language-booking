@@ -12,8 +12,13 @@ describe("auth schemas", () => {
     expect(result.error?.issues[0]?.message).toBe("validation.emailInvalid");
   });
 
-  it("requires matching passwords of at least 8 characters on sign-up", () => {
-    const tooShort = registerSchema.safeParse({ name: "Jane", email: "jane@example.com", password: "short", confirmPassword: "short" });
+  it("requires matching passwords of at least 12 characters on sign-up", () => {
+    const tooShort = registerSchema.safeParse({
+      name: "Jane",
+      email: "jane@example.com",
+      password: "Elev3n-char",
+      confirmPassword: "Elev3n-char",
+    });
     const mismatch = registerSchema.safeParse({
       name: "Jane",
       email: "jane@example.com",

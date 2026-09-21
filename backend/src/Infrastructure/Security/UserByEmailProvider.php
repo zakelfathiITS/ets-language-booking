@@ -9,6 +9,7 @@ use App\Domain\Identity\Exception\InvalidEmail;
 use App\Domain\Identity\UserId;
 use App\Domain\Identity\UserRepository;
 use App\Domain\Shared\Clock;
+use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -26,6 +27,7 @@ final readonly class UserByEmailProvider implements UserProviderInterface, Passw
     public function __construct(
         private UserRepository $users,
         private Clock $clock,
+        private PasswordHasherFactoryInterface $hasherFactory,
     ) {
     }
 
@@ -38,6 +40,10 @@ final readonly class UserByEmailProvider implements UserProviderInterface, Passw
         }
 
         if ($user === null) {
+            // Hashing is what makes a wrong password slow: an unknown email must
+            // cost the same, or response times would reveal which accounts exist.
+            $this->hasherFactory->getPasswordHasher(SecurityUser::class)->hash($identifier);
+
             $exception = new UserNotFoundException();
             $exception->setUserIdentifier($identifier);
 

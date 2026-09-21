@@ -41,6 +41,19 @@ final class AuthenticationTest extends ApiTestCase
         self::assertEqualsCanonicalizing(['name', 'email', 'password'], array_column($data['violations'], 'field'));
     }
 
+    public function testPasswordsNeedAtLeastTwelveCharacters(): void
+    {
+        $data = $this->requestJson('POST', '/api/auth/register', [
+            'name' => 'Jane Doe',
+            'email' => 'jane@example.com',
+            'password' => 'Elev3n-char',
+        ]);
+
+        self::assertResponseStatusCodeSame(422);
+        self::assertIsArray($data['violations']);
+        self::assertSame(['password'], array_column($data['violations'], 'field'));
+    }
+
     public function testRegistrationTreatsMissingFieldsAsViolations(): void
     {
         $data = $this->requestJson('POST', '/api/auth/register', []);
@@ -64,7 +77,7 @@ final class AuthenticationTest extends ApiTestCase
         self::assertSame('email_already_in_use', $data['code']);
     }
 
-    public function testLoginReturnsATokenAndTheProfile(): void
+    public function testLoginReturnsTheProfileButNotTheToken(): void
     {
         $this->createUser('jane@example.com');
 
@@ -74,11 +87,11 @@ final class AuthenticationTest extends ApiTestCase
         ]);
 
         self::assertResponseIsSuccessful();
-        self::assertIsString($data['token']);
-        self::assertCount(3, explode('.', $data['token']), 'A JWT has three segments.');
+        self::assertSame(['user'], array_keys($data), 'The token only travels in its httpOnly cookie.');
         self::assertIsArray($data['user']);
         self::assertSame('jane@example.com', $data['user']['email']);
         self::assertArrayNotHasKey('password', $data['user']);
+        self::assertCount(3, explode('.', (string) $this->tokenCookie()?->getValue()), 'A JWT has three segments.');
     }
 
     public function testTheTokenSubjectIsTheUserIdNotTheEmail(): void

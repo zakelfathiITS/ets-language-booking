@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Collection "revoked_tokens": JWTs revoked on sign-out, by "jti" claim.
+    MongoDB removes each entry once the token has expired (TTL index).
+-->
+<doctrine-mongo-mapping xmlns="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping"
+                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                        xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
+                                            https://www.doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
+
+    <document name="App\Infrastructure\Security\RevokedToken" collection="revoked_tokens">
+        <id field-name="id" strategy="NONE" type="string" />
+
+        <field field-name="expiresAt" name="expires_at" type="date_immutable" />
+
+        <indexes>
+            <index name="ttl_revoked_tokens_expires_at">
+                <key name="expiresAt" order="asc" />
+                <option name="expireAfterSeconds" value="0" />
+            </index>
+        </indexes>
+    </document>
+</doctrine-mongo-mapping>

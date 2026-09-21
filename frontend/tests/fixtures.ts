@@ -17,19 +17,11 @@ export const admin: UserProfile = {
   createdAt: "2026-09-01T10:00:00+00:00",
 };
 
-/** An unsigned JWT: enough for the client, which never verifies signatures. */
-export function makeToken(expiresInSeconds = 3600, sub = candidate.id): string {
-  const encode = (value: object) => btoa(JSON.stringify(value)).replace(/=+$/, "");
-  const exp = Math.floor(Date.now() / 1000) + expiresInSeconds;
-
-  return `${encode({ alg: "RS256", typ: "JWT" })}.${encode({ sub, exp })}.signature`;
+export function signedIn(user: UserProfile = candidate): { auth: AuthState } {
+  return { auth: { status: "authenticated", user, endedBy: null } };
 }
 
-export function signedIn(user: UserProfile = candidate, token: string = makeToken()): { auth: AuthState } {
-  return { auth: { status: "authenticated", token, user, endedBy: null } };
-}
-
-export const anonymous: { auth: AuthState } = { auth: { status: "anonymous", token: null, user: null, endedBy: null } };
+export const anonymous: { auth: AuthState } = { auth: { status: "anonymous", user: null, endedBy: null } };
 
 export function aSession(overrides: Partial<TestSession> = {}): TestSession {
   return {

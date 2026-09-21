@@ -11,6 +11,7 @@ use App\Domain\Identity\Role;
 use App\Domain\Identity\UserRepository;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\Cookie;
 
 /**
  * Base class for HTTP tests: a clean database and JSON helpers.
@@ -97,13 +98,33 @@ abstract class ApiTestCase extends WebTestCase
         return $profile->id;
     }
 
+    /**
+     * Signs in and returns the token, taken from its cookie.
+     *
+     * The cookie jar is then emptied: tests send the token explicitly, as a
+     * Bearer header, so that "no token" really means no token.
+     */
     protected function login(string $email = 'jane@example.com', string $password = self::DEFAULT_PASSWORD): string
     {
-        $data = $this->requestJson('POST', '/api/auth/login', ['email' => $email, 'password' => $password]);
+        $this->requestJson('POST', '/api/auth/login', ['email' => $email, 'password' => $password]);
         self::assertResponseIsSuccessful();
-        self::assertIsString($data['token'] ?? null);
 
-        return $data['token'];
+        $token = $this->tokenCookie()?->getValue();
+        self::assertIsString($token);
+        $this->client->getCookieJar()->clear();
+
+        return $token;
+    }
+
+    protected function tokenCookie(): ?Cookie
+    {
+        foreach ($this->client->getResponse()->headers->getCookies() as $cookie) {
+            if ($cookie->getName() === 'ets_token') {
+                return $cookie;
+            }
+        }
+
+        return null;
     }
 
     /**
