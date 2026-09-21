@@ -9,6 +9,11 @@ const CODE_TO_FIELD: Record<string, string> = {
   email_already_in_use: "email",
   invalid_email: "email",
   invalid_name: "name",
+  session_in_past: "date",
+  invalid_language: "language",
+  invalid_location: "location",
+  invalid_capacity: "capacity",
+  capacity_below_reserved_seats: "capacity",
 };
 
 export function toServerFormErrors(error: unknown): ServerFormErrors {

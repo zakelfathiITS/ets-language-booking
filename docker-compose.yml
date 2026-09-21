@@ -48,6 +48,8 @@ services:
       args:
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000}
         NEXT_PUBLIC_SHOW_DEMO_ACCOUNTS: ${NEXT_PUBLIC_SHOW_DEMO_ACCOUNTS:-true}
+        # Same timezone as the API (display hint of the back-office form).
+        NEXT_PUBLIC_APP_TIMEZONE: ${APP_TIMEZONE:-Europe/Paris}
     restart: unless-stopped
     depends_on:
       backend:

@@ -1,12 +1,16 @@
-import { EmptyState } from "@/components/molecules/EmptyState";
-import { PageHeader } from "@/components/organisms/PageHeader";
+import type { Metadata } from "next";
+import { Suspense } from "react";
 
-// Placeholder: the back-office is delivered with ETS-09.
+import { LoadingScreen } from "@/components/molecules/LoadingScreen";
+
+import { AdminSessionsScreen } from "./AdminSessionsScreen";
+
+export const metadata: Metadata = { title: "Manage sessions" };
+
 export default function AdminSessionsPage() {
   return (
-    <>
-      <PageHeader title="Manage sessions" description="Create, edit and delete test sessions." />
-      <EmptyState title="Coming next" description="This screen is part of the next delivery." />
-    </>
+    <Suspense fallback={<LoadingScreen label="Loading sessions…" />}>
+      <AdminSessionsScreen />
+    </Suspense>
   );
 }
