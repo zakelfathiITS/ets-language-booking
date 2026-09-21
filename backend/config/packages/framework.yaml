@@ -1,0 +1,16 @@
+# see https://symfony.com/doc/current/reference/configuration/framework.html
+framework:
+    secret: '%env(APP_SECRET)%'
+    annotations: false
+    http_method_override: false
+    handle_all_throwables: true
+
+    # Stateless REST API: the caller's identity travels in the JWT, never in a session.
+    session: false
+
+    php_errors:
+        log: true
+
+when@test:
+    framework:
+        test: true
