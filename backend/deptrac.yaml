@@ -27,7 +27,7 @@ deptrac:
         - name: Framework
           collectors:
               - type: classNameRegex
-                value: '#^(Symfony|Nelmio|Lexik|Psr)\\#'
+                value: '#^(Symfony|Nelmio|Lexik|OpenApi|Psr)\\#'
         - name: Persistence
           collectors:
               - type: classNameRegex

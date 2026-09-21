@@ -6,8 +6,11 @@ namespace App\UI\Http\Controller;
 
 use App\Application\Identity\RegisterUser\RegisterUserCommand;
 use App\Application\Identity\RegisterUser\RegisterUserHandler;
+use App\UI\Http\OpenApi\ErrorResponse;
 use App\UI\Http\Request\Identity\RegisterUserRequest;
 use App\UI\Http\Response\Identity\UserProfileResource;
+use Nelmio\ApiDocBundle\Attribute\Security;
+use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -18,6 +21,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 #[AsController]
 #[Route('/api/auth', name: 'api_auth_')]
+#[OA\Tag(name: 'Authentication')]
+#[Security(name: null)]
 final readonly class AuthController
 {
     public function __construct(
@@ -27,6 +32,10 @@ final readonly class AuthController
     }
 
     #[Route('/register', name: 'register', methods: ['POST'])]
+    #[OA\Post(summary: 'Create an account')]
+    #[OA\Response(response: 201, description: 'Account created.', content: new OA\JsonContent(ref: '#/components/schemas/UserProfile'))]
+    #[ErrorResponse(409, 'Conflicts with the current state (see `code`).')]
+    #[ErrorResponse(422, ErrorResponse::VALIDATION_FAILED)]
     public function register(#[MapRequestPayload] RegisterUserRequest $request): JsonResponse
     {
         $profile = ($this->registerUser)(
@@ -45,6 +54,20 @@ final readonly class AuthController
      * "login" firewall before reaching this point; only non-JSON requests get here.
      */
     #[Route('/login', name: 'login', methods: ['POST'])]
+    #[OA\Post(summary: 'Exchange email and password for a JWT (valid 1 hour)')]
+    #[OA\RequestBody(required: true, content: new OA\JsonContent(
+        required: ['email', 'password'],
+        properties: [
+            new OA\Property(property: 'email', type: 'string', format: 'email', example: 'candidate@ets.test'),
+            new OA\Property(property: 'password', type: 'string', format: 'password', example: 'Candidate123!'),
+        ],
+    ))]
+    #[OA\Response(response: 200, description: 'Signed in.', content: new OA\JsonContent(properties: [
+        new OA\Property(property: 'token', type: 'string'),
+        new OA\Property(property: 'user', ref: '#/components/schemas/UserProfile'),
+    ]))]
+    #[ErrorResponse(401, 'Invalid credentials (`invalid_credentials`).')]
+    #[ErrorResponse(429, 'Too many failed attempts (`too_many_login_attempts`).')]
     public function login(): never
     {
         throw new UnsupportedMediaTypeHttpException('Send the credentials as JSON: {"email": "...", "password": "..."}.');

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\UI\Cli;
 
+use App\Domain\Booking\Reservation;
 use App\Domain\Catalog\TestSession;
 use App\Domain\Identity\Email;
 use App\Domain\Identity\Role;
@@ -32,8 +33,14 @@ final class SeedDemoDataCommandTest extends KernelTestCase
         self::assertSame(0, $tester->execute([]));
         self::assertStringContainsString('already loaded', $tester->getDisplay());
 
-        $sessions = self::getContainer()->get(DocumentManager::class)->getDocumentCollection(TestSession::class);
+        $documentManager = self::getContainer()->get(DocumentManager::class);
+        $sessions = $documentManager->getDocumentCollection(TestSession::class);
         self::assertSame(SeedDemoDataCommand::SESSION_COUNT, $sessions->countDocuments());
+        self::assertSame(1, $sessions->countDocuments(['capacity' => 1, 'seats_taken' => 1]), 'One session is shown as full.');
+        self::assertSame(
+            \count(SeedDemoDataCommand::CANDIDATE_BOOKINGS) + 1,
+            $documentManager->getDocumentCollection(Reservation::class)->countDocuments(),
+        );
 
         $users = self::getContainer()->get(UserRepository::class);
         $admin = $users->ofEmail(Email::fromString(SeedDemoDataCommand::ADMIN_EMAIL));

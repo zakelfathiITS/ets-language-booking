@@ -1,0 +1,90 @@
+nelmio_api_doc:
+    areas:
+        path_patterns:
+            - ^/api(?!/doc) # every API route except the documentation itself
+    documentation:
+        info:
+            title: ETS Language Test Booking API
+            description: |
+                Book seats in language test sessions.
+
+                **Authentication**: call `POST /api/auth/login`, then send the returned token
+                as `Authorization: Bearer <token>` (use the "Authorize" button above).
+                Demo accounts: `admin@ets.test` / `Admin123!` and `candidate@ets.test` / `Candidate123!`.
+
+                **Errors** follow RFC 9457 (`application/problem+json`) with a stable `code`
+                (e.g. `session_full`) and field-level `violations` for invalid payloads.
+            version: 1.0.0
+        components:
+            securitySchemes:
+                Bearer:
+                    type: http
+                    scheme: bearer
+                    bearerFormat: JWT
+            schemas:
+                Problem:
+                    type: object
+                    required: [type, title, status, code, detail]
+                    properties:
+                        type: { type: string, example: about:blank }
+                        title: { type: string, example: Conflict }
+                        status: { type: integer, example: 409 }
+                        code: { type: string, example: session_full }
+                        detail: { type: string, example: Session "65f0..." has no seat left. }
+                        violations:
+                            type: array
+                            items:
+                                type: object
+                                properties:
+                                    field: { type: string, example: email }
+                                    message: { type: string, example: This value is not a valid email address. }
+                Pagination:
+                    type: object
+                    properties:
+                        page: { type: integer, example: 1 }
+                        limit: { type: integer, example: 10 }
+                        totalItems: { type: integer, example: 30 }
+                        totalPages: { type: integer, example: 3 }
+                        hasNextPage: { type: boolean, example: true }
+                        hasPreviousPage: { type: boolean, example: false }
+                UserProfile:
+                    type: object
+                    properties:
+                        id: { type: string, example: 6ab11f30a428d1b92a0028c3 }
+                        name: { type: string, example: Camille Martin }
+                        email: { type: string, format: email, example: candidate@ets.test }
+                        roles: { type: array, items: { type: string }, example: [ROLE_USER] }
+                        createdAt: { type: string, format: date-time }
+                TestSession:
+                    type: object
+                    properties:
+                        id: { type: string, example: 6ab11f30a428d1b92a0028c5 }
+                        language: { type: string, example: English }
+                        date: { type: string, format: date, example: '2026-09-23' }
+                        time: { type: string, example: '09:00' }
+                        timezone: { type: string, example: Europe/Paris }
+                        scheduledAt: { type: string, format: date-time, example: '2026-09-23T09:00:00+02:00' }
+                        location: { type: string, example: Paris – Test Center La Défense }
+                        capacity: { type: integer, example: 8 }
+                        seatsTaken: { type: integer, example: 3 }
+                        seatsAvailable: { type: integer, example: 5 }
+                        isFull: { type: boolean, example: false }
+                        hasStarted: { type: boolean, example: false }
+                        myReservationId:
+                            type: string
+                            nullable: true
+                            description: Id of the current user's reservation for this session, if any.
+                TestSessionPage:
+                    type: object
+                    properties:
+                        items: { type: array, items: { $ref: '#/components/schemas/TestSession' } }
+                        pagination: { $ref: '#/components/schemas/Pagination' }
+                Reservation:
+                    type: object
+                    properties:
+                        id: { type: string, example: 6ab11f30a428d1b92a0028d1 }
+                        reservedAt: { type: string, format: date-time }
+                        canBeCancelled: { type: boolean, example: true }
+                        session: { $ref: '#/components/schemas/TestSession' }
+        security:
+            - Bearer: []
