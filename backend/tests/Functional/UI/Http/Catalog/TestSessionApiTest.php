@@ -70,6 +70,7 @@ final class TestSessionApiTest extends ApiTestCase
             'seatsAvailable' => 5,
             'isFull' => false,
             'hasStarted' => false,
+            'myReservationId' => null,
         ], $data);
     }
 

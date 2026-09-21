@@ -47,6 +47,26 @@ final class MongoTestSessionRepository implements TestSessionRepository
         return $this->documentManager->find(TestSession::class, $id->value);
     }
 
+    public function ofIds(array $ids): array
+    {
+        $values = array_values(array_filter(
+            array_map(static fn (TestSessionId $id): string => $id->value, $ids),
+            ObjectIds::isValid(...),
+        ));
+
+        if ($values === []) {
+            return [];
+        }
+
+        $indexed = [];
+        foreach ($this->documentManager->createQueryBuilder(TestSession::class)->field('id')->in($values)->getQuery()->toArray() as $session) {
+            \assert($session instanceof TestSession);
+            $indexed[$session->id()->value] = $session;
+        }
+
+        return $indexed;
+    }
+
     public function search(SessionCriteria $criteria, PageRequest $pageRequest): Page
     {
         /** @var list<TestSession> $items */

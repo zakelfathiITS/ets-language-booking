@@ -6,6 +6,7 @@ namespace App\UI\Http\Request\Identity;
 
 use App\Domain\Identity\Email;
 use App\Domain\Identity\User;
+use OpenApi\Attributes as OA;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -14,6 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Defaults turn a missing field into a readable 422 violation instead of a
  * deserialization error.
  */
+#[OA\Schema(required: ['name', 'email', 'password'])]
 final readonly class RegisterUserRequest
 {
     public const PASSWORD_MIN_LENGTH = 8;

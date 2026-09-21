@@ -7,6 +7,8 @@ namespace App\Tests\Unit\Domain\Catalog;
 use App\Domain\Catalog\Capacity;
 use App\Domain\Catalog\Exception\CapacityBelowReservedSeats;
 use App\Domain\Catalog\Exception\InvalidTestSession;
+use App\Domain\Catalog\Exception\SessionAlreadyStarted;
+use App\Domain\Catalog\Exception\SessionFull;
 use App\Domain\Catalog\Exception\SessionHasReservations;
 use App\Domain\Catalog\TestSession;
 use App\Domain\Catalog\TestSessionId;
@@ -20,6 +22,8 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(InvalidTestSession::class)]
 #[CoversClass(CapacityBelowReservedSeats::class)]
 #[CoversClass(SessionHasReservations::class)]
+#[CoversClass(SessionFull::class)]
+#[CoversClass(SessionAlreadyStarted::class)]
 final class TestSessionTest extends TestCase
 {
     private const NOW = '2026-03-01 12:00:00';
@@ -124,6 +128,37 @@ final class TestSessionTest extends TestCase
 
         self::assertTrue($session->isFull());
         self::assertSame(0, $session->seatsAvailable());
+    }
+
+    public function testReservingASeatTakesItUntilTheSessionIsFull(): void
+    {
+        $session = TestSessionState::withSeatsTaken($this->schedule(), 19);
+        $now = new \DateTimeImmutable(self::NOW);
+
+        $session->reserveSeat($now);
+        self::assertTrue($session->isFull());
+
+        $this->expectException(SessionFull::class);
+        $session->reserveSeat($now);
+    }
+
+    public function testASessionThatHasStartedCannotBeBooked(): void
+    {
+        $session = $this->schedule(scheduledAt: new \DateTimeImmutable('2026-03-10 09:00:00'));
+
+        $this->expectException(SessionAlreadyStarted::class);
+
+        $session->reserveSeat(new \DateTimeImmutable('2026-03-10 09:00:00'));
+    }
+
+    public function testReleasingASeatNeverGoesBelowZero(): void
+    {
+        $session = TestSessionState::withSeatsTaken($this->schedule(), 1);
+
+        $session->releaseSeat();
+        $session->releaseSeat();
+
+        self::assertSame(0, $session->seatsTaken());
     }
 
     public function testItKnowsWhenItHasStarted(): void

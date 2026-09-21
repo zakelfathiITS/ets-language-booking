@@ -38,6 +38,18 @@ final class InMemoryTestSessionRepository implements TestSessionRepository
         return $this->sessions[$id->value] ?? null;
     }
 
+    public function ofIds(array $ids): array
+    {
+        $found = [];
+        foreach ($ids as $id) {
+            if (isset($this->sessions[$id->value])) {
+                $found[$id->value] = $this->sessions[$id->value];
+            }
+        }
+
+        return $found;
+    }
+
     public function search(SessionCriteria $criteria, PageRequest $pageRequest): Page
     {
         $matching = array_values(array_filter(

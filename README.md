@@ -34,13 +34,14 @@ docker compose up -d --build
 |---|---|
 | Web client | http://localhost:3000 |
 | API | http://localhost:8000 |
+| API documentation (Swagger UI) | http://localhost:8000/api/doc |
 | Health check | http://localhost:8000/api/health |
 
 Default settings work out of the box; copy `.env.example` to `.env` to change ports or credentials.
 
 ### Demo accounts
 
-Loaded automatically on first start, together with 30 upcoming test sessions:
+Loaded automatically on first start, together with 30 upcoming test sessions (the candidate already holds two reservations, and one session is full):
 
 | Role | Email | Password |
 |---|---|---|
@@ -106,13 +107,14 @@ docker compose up -d --build
 |---|---|
 | Client web | http://localhost:3000 |
 | API | http://localhost:8000 |
+| Documentation de l'API (Swagger UI) | http://localhost:8000/api/doc |
 | Sonde de santé | http://localhost:8000/api/health |
 
 La configuration par défaut fonctionne telle quelle ; copiez `.env.example` en `.env` pour modifier les ports ou les identifiants.
 
 ### Comptes de démonstration
 
-Créés automatiquement au premier démarrage, avec 30 sessions de test à venir :
+Créés automatiquement au premier démarrage, avec 30 sessions de test à venir (le candidat a déjà deux réservations et une session est complète) :
 
 | Rôle | Email | Mot de passe |
 |---|---|---|

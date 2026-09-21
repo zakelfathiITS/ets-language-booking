@@ -52,11 +52,11 @@ pull request and squash-merged, so `main` holds exactly one commit per ticket.
 - [x] Unit and functional tests
 
 ### ETS-05 · Booking: reservations, business rules & concurrency
-- [ ] `Reservation` aggregate (`session_id`, `user_id`, reservation date) with a unique `(session_id, user_id)` index
-- [ ] Atomic seat allocation port + MongoDB adapter (conditional `$inc`, compensation on failure)
-- [ ] Use cases: `BookSession`, `CancelReservation`, `ListUserReservations` (ownership enforced)
-- [ ] OpenAPI documentation at `/api/doc`
-- [ ] Unit, integration and functional tests (last seat, duplicates, cancellation, isolation between users)
+- [x] `Reservation` aggregate (`session_id`, `user_id`, reservation date) with a unique `(session_id, user_id)` index
+- [x] Atomic seat allocation port + MongoDB adapter (conditional `$inc`, compensation on failure)
+- [x] Use cases: `BookSession`, `CancelReservation`, `ListUserReservations` (ownership enforced)
+- [x] OpenAPI documentation at `/api/doc`
+- [x] Unit, integration and functional tests (last seat, duplicates, cancellation, isolation between users)
 
 ### ETS-06 · Frontend foundations
 - [ ] Atomic Design component tree and feature modules, boundaries enforced by `eslint-plugin-boundaries`

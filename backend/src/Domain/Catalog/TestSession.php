@@ -6,13 +6,16 @@ namespace App\Domain\Catalog;
 
 use App\Domain\Catalog\Exception\CapacityBelowReservedSeats;
 use App\Domain\Catalog\Exception\InvalidTestSession;
+use App\Domain\Catalog\Exception\SessionAlreadyStarted;
+use App\Domain\Catalog\Exception\SessionFull;
 use App\Domain\Catalog\Exception\SessionHasReservations;
 
 /**
  * A language test session: where, when and how many seats.
  *
- * The number of seats taken is maintained by the Booking context; the catalogue
- * only guarantees it is never exceeded by the capacity it sets.
+ * reserveSeat() and releaseSeat() state the seat rules. In production, the
+ * MongoDB seat allocator applies the very same rules as one atomic update, so
+ * concurrent bookings cannot oversell the last seat.
  *
  * Not final: Doctrine generates lazy-loading proxies that extend persisted classes.
  */
@@ -73,6 +76,36 @@ class TestSession
 
         $this->applyDetails($language, $scheduledAt, $location, $capacity, $now);
         $this->updatedAt = $now;
+    }
+
+    /**
+     * @throws SessionAlreadyStarted
+     * @throws SessionFull
+     */
+    public function reserveSeat(\DateTimeImmutable $now): void
+    {
+        $this->ensureBookingsCanChange($now);
+
+        if ($this->isFull()) {
+            throw SessionFull::withId($this->id());
+        }
+
+        ++$this->seatsTaken;
+    }
+
+    public function releaseSeat(): void
+    {
+        $this->seatsTaken = max(0, $this->seatsTaken - 1);
+    }
+
+    /**
+     * @throws SessionAlreadyStarted
+     */
+    public function ensureBookingsCanChange(\DateTimeImmutable $now): void
+    {
+        if ($this->hasStarted($now)) {
+            throw SessionAlreadyStarted::withId($this->id());
+        }
     }
 
     /**

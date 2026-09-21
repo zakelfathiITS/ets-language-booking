@@ -6,11 +6,13 @@ namespace App\UI\Http\Request\Identity;
 
 use App\Domain\Identity\Email;
 use App\Domain\Identity\User;
+use OpenApi\Attributes as OA;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Body of PUT /api/me.
  */
+#[OA\Schema(required: ['name', 'email'])]
 final readonly class UpdateProfileRequest
 {
     public function __construct(

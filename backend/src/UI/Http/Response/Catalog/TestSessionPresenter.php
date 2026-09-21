@@ -12,6 +12,7 @@ use App\UI\Shared\ScheduleConverter;
  *
  * "date" and "time" are ready to display (application timezone); "scheduledAt"
  * carries the same instant as ISO 8601 with its offset, for programmatic use.
+ * "myReservationId" tells whether the current user booked the session.
  */
 final readonly class TestSessionPresenter
 {
@@ -22,7 +23,7 @@ final readonly class TestSessionPresenter
     /**
      * @return array<string, mixed>
      */
-    public function present(TestSessionView $session): array
+    public function present(TestSessionView $session, ?string $myReservationId = null): array
     {
         return [
             'id' => $session->id,
@@ -37,6 +38,7 @@ final readonly class TestSessionPresenter
             'seatsAvailable' => $session->seatsAvailable,
             'isFull' => $session->isFull,
             'hasStarted' => $session->hasStarted,
+            'myReservationId' => $myReservationId,
         ];
     }
 }

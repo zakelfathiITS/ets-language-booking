@@ -8,8 +8,10 @@ use App\Application\Identity\GetProfile\GetProfileHandler;
 use App\Application\Identity\GetProfile\GetProfileQuery;
 use App\Application\Identity\UpdateProfile\UpdateProfileCommand;
 use App\Application\Identity\UpdateProfile\UpdateProfileHandler;
+use App\UI\Http\OpenApi\ErrorResponse;
 use App\UI\Http\Request\Identity\UpdateProfileRequest;
 use App\UI\Http\Response\Identity\UserProfileResource;
+use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -22,6 +24,8 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
  */
 #[AsController]
 #[Route('/api/me', name: 'api_me_')]
+#[OA\Tag(name: 'Account')]
+#[ErrorResponse(401, ErrorResponse::UNAUTHORIZED)]
 final readonly class MeController
 {
     public function __construct(
@@ -31,6 +35,8 @@ final readonly class MeController
     }
 
     #[Route('', name: 'show', methods: ['GET'])]
+    #[OA\Get(summary: 'Get my account')]
+    #[OA\Response(response: 200, description: 'The account.', content: new OA\JsonContent(ref: '#/components/schemas/UserProfile'))]
     public function show(#[CurrentUser] UserInterface $user): JsonResponse
     {
         $profile = ($this->getProfile)(new GetProfileQuery($user->getUserIdentifier()));
@@ -39,6 +45,10 @@ final readonly class MeController
     }
 
     #[Route('', name: 'update', methods: ['PUT'])]
+    #[OA\Put(summary: 'Update my name and email')]
+    #[OA\Response(response: 200, description: 'The updated account.', content: new OA\JsonContent(ref: '#/components/schemas/UserProfile'))]
+    #[ErrorResponse(409, 'Conflicts with the current state (see `code`).')]
+    #[ErrorResponse(422, ErrorResponse::VALIDATION_FAILED)]
     public function update(
         #[CurrentUser]
         UserInterface $user,

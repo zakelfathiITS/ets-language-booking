@@ -18,6 +18,15 @@ interface TestSessionRepository
     public function ofId(TestSessionId $id): ?TestSession;
 
     /**
+     * Loads several sessions in one round trip; unknown ids are ignored.
+     *
+     * @param list<TestSessionId> $ids
+     *
+     * @return array<string, TestSession> indexed by session id
+     */
+    public function ofIds(array $ids): array;
+
+    /**
      * Sessions matching the criteria, soonest first.
      *
      * @return Page<TestSession>
