@@ -59,10 +59,10 @@ pull request and squash-merged, so `main` holds exactly one commit per ticket.
 - [x] Unit, integration and functional tests (last seat, duplicates, cancellation, isolation between users)
 
 ### ETS-06 · Frontend foundations
-- [ ] Atomic Design component tree and feature modules, boundaries enforced by `eslint-plugin-boundaries`
-- [ ] Redux store, auth slice with persistence, RTK Query + Axios base query (Bearer token, 401 handling)
-- [ ] Route guards (authenticated / admin), responsive templates, base atoms and molecules
-- [ ] Jest + React Testing Library + MSW; GitHub Actions frontend pipeline
+- [x] Atomic Design component tree and feature modules, boundaries enforced by `eslint-plugin-boundaries`
+- [x] Redux store, auth slice with persistence, RTK Query + Axios base query (Bearer token, 401 handling)
+- [x] Route guards (authenticated / admin), responsive templates, base atoms and molecules
+- [x] Jest + React Testing Library + MSW; GitHub Actions frontend pipeline
 
 ### ETS-07 · Frontend: authentication & account management
 - [ ] Login and registration forms with schema validation and API error mapping
