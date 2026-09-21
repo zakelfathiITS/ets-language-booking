@@ -55,11 +55,12 @@ final class ApiProblemListener
             );
         }
 
-        if ($throwable instanceof DomainException) {
+        $domainException = $this->findDomainException($throwable);
+        if ($domainException !== null) {
             return new ProblemResponse(
-                $this->statusForDomainException($throwable),
-                $throwable->errorCode(),
-                $throwable->getMessage(),
+                $this->statusForDomainException($domainException),
+                $domainException->errorCode(),
+                $domainException->getMessage(),
             );
         }
 
@@ -89,6 +90,21 @@ final class ApiProblemListener
             $exception instanceof InvariantViolationException => Response::HTTP_UNPROCESSABLE_ENTITY,
             default => Response::HTTP_BAD_REQUEST,
         };
+    }
+
+    /**
+     * Domain exceptions may reach the kernel wrapped (e.g. by framework
+     * listeners): the most specific error code must win anyway.
+     */
+    private function findDomainException(\Throwable $throwable): ?DomainException
+    {
+        for ($current = $throwable; $current !== null; $current = $current->getPrevious()) {
+            if ($current instanceof DomainException) {
+                return $current;
+            }
+        }
+
+        return null;
     }
 
     /**
