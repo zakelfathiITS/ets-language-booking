@@ -1,0 +1,12 @@
+# docker-compose variable overrides (root only: backend/.env holds committed defaults)
+/.env
+
+# Local environment overrides
+.env.local
+.env.*.local
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

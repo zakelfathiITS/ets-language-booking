@@ -1,0 +1,51 @@
+# Production-like stack: `docker compose up -d --build` is all a reviewer needs.
+# For hot reload during development, see docker-compose.dev.yml (`make dev`).
+name: ets-language-booking
+
+services:
+  mongodb:
+    image: mongo:8.0
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME:-ets}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD:-ets_local_password}
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+
+  backend:
+    build:
+      context: ./backend
+      target: prod
+    restart: unless-stopped
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    environment:
+      APP_SECRET: ${APP_SECRET:-local_only_change_me_in_production}
+      MONGODB_URI: mongodb://${MONGO_ROOT_USERNAME:-ets}:${MONGO_ROOT_PASSWORD:-ets_local_password}@mongodb:27017/?authSource=admin&serverSelectionTimeoutMS=3000
+      MONGODB_DB: ${MONGODB_DB:-ets_booking}
+      CORS_ALLOW_ORIGIN: ${CORS_ALLOW_ORIGIN:-^https?://(localhost|127\.0\.0\.1)(:[0-9]+)?$}
+    ports:
+      - "${BACKEND_PORT:-8000}:80"
+
+  frontend:
+    build:
+      context: ./frontend
+      target: runner
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000}
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
+
+volumes:
+  mongo_data:

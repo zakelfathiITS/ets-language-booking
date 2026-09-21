@@ -1,0 +1,28 @@
+{
+	{$CADDY_GLOBAL_OPTIONS}
+
+	frankenphp {
+		{$FRANKENPHP_CONFIG}
+	}
+}
+
+{$CADDY_EXTRA_CONFIG}
+
+# SERVER_NAME defaults to ":80" (plain HTTP inside the container network).
+# Container platforms inject their own port, e.g. SERVER_NAME=":10000".
+{$SERVER_NAME::80} {
+	log {
+		{$CADDY_SERVER_LOG_OPTIONS}
+		# Never write bearer tokens to the access log.
+		format filter {
+			request>headers>Authorization delete
+		}
+	}
+
+	root * /app/public
+	encode zstd br gzip
+
+	{$CADDY_SERVER_EXTRA_DIRECTIVES}
+
+	php_server
+}
