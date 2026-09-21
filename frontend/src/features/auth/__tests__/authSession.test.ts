@@ -29,7 +29,7 @@ describe("auth session", () => {
 
     store.dispatch(restoreSession());
 
-    expect(store.getState().auth).toEqual({ status: "authenticated", token, user: admin });
+    expect(store.getState().auth).toEqual({ status: "authenticated", token, user: admin, endedBy: null });
     expect(selectIsAdmin(store.getState())).toBe(true);
   });
 
@@ -53,16 +53,16 @@ describe("auth session", () => {
   });
 
   it.each([
-    ["signing out", signedOut()],
-    ["an expired session", sessionExpired()],
-  ])("forgets everything on %s", (_label, action) => {
+    ["signing out", signedOut(), "user"],
+    ["an expired session", sessionExpired(), "expiry"],
+  ] as const)("forgets everything on %s", (_label, action, endedBy) => {
     const store = makeStore(signedIn());
     store.dispatch(profileUpdated(candidate));
     expect(persisted()).not.toBeNull();
 
     store.dispatch(action);
 
-    expect(store.getState().auth).toEqual(anonymous.auth);
+    expect(store.getState().auth).toEqual({ ...anonymous.auth, endedBy });
     expect(persisted()).toBeNull();
   });
 

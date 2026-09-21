@@ -18,15 +18,18 @@ export const LOGIN_PATH = "/login";
  * page, which brings them back here afterwards.
  */
 export function RequireAuth({ children }: { children: ReactNode }) {
-  const { status } = useAuth();
+  const { status, sessionEnd } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
 
   useEffect(() => {
-    if (status === "anonymous") {
-      router.replace(`${LOGIN_PATH}?next=${encodeURIComponent(pathname)}`);
+    if (status !== "anonymous") {
+      return;
     }
-  }, [status, router, pathname]);
+
+    // After signing out on purpose, the next person starts from a clean login page.
+    router.replace(sessionEnd === "user" ? LOGIN_PATH : `${LOGIN_PATH}?next=${encodeURIComponent(pathname)}`);
+  }, [status, sessionEnd, router, pathname]);
 
   if (status !== "authenticated") {
     return <LoadingScreen label="Checking your session…" />;

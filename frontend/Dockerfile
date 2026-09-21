@@ -29,7 +29,9 @@ CMD ["npm", "run", "dev", "--", "--hostname", "0.0.0.0"]
 #------------------------------------------------------------------------------
 FROM deps AS builder
 ARG NEXT_PUBLIC_API_URL=http://localhost:8000
-ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+ARG NEXT_PUBLIC_SHOW_DEMO_ACCOUNTS=true
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL} \
+    NEXT_PUBLIC_SHOW_DEMO_ACCOUNTS=${NEXT_PUBLIC_SHOW_DEMO_ACCOUNTS}
 COPY . .
 RUN npm run build
 

@@ -1,6 +1,17 @@
 import { baseApi } from "@/services/http/baseApi";
 import type { Credentials, LoginResponse, UserProfile } from "@/types/api";
 
+export interface RegistrationPayload {
+  name: string;
+  email: string;
+  password: string;
+}
+
+export interface ProfilePayload {
+  name: string;
+  email: string;
+}
+
 import { profileUpdated, signedIn } from "./authSlice";
 
 export const authApi = baseApi.injectEndpoints({
@@ -11,6 +22,23 @@ export const authApi = baseApi.injectEndpoints({
         try {
           const { data } = await queryFulfilled;
           dispatch(signedIn(data));
+        } catch {
+          // The error is exposed to the form through the mutation result.
+        }
+      },
+    }),
+    register: build.mutation<UserProfile, RegistrationPayload>({
+      query: (payload) => ({ url: "/api/auth/register", method: "POST", data: payload }),
+    }),
+    updateMe: build.mutation<UserProfile, ProfilePayload>({
+      query: (payload) => ({ url: "/api/me", method: "PUT", data: payload }),
+      // The API answers with the updated profile: write it to the cache directly
+      // instead of invalidating it, which would cost a second request.
+      async onQueryStarted(_payload, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(profileUpdated(data));
+          dispatch(authApi.util.upsertQueryData("getMe", undefined, data));
         } catch {
           // The error is exposed to the form through the mutation result.
         }
@@ -31,4 +59,4 @@ export const authApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useLoginMutation, useGetMeQuery } = authApi;
+export const { useLoginMutation, useRegisterMutation, useUpdateMeMutation, useGetMeQuery } = authApi;

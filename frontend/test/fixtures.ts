@@ -26,7 +26,7 @@ export function makeToken(expiresInSeconds = 3600, sub = candidate.id): string {
 }
 
 export function signedIn(user: UserProfile = candidate, token: string = makeToken()): { auth: AuthState } {
-  return { auth: { status: "authenticated", token, user } };
+  return { auth: { status: "authenticated", token, user, endedBy: null } };
 }
 
-export const anonymous: { auth: AuthState } = { auth: { status: "anonymous", token: null, user: null } };
+export const anonymous: { auth: AuthState } = { auth: { status: "anonymous", token: null, user: null, endedBy: null } };

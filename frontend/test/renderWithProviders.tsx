@@ -1,8 +1,9 @@
-import { render, type RenderOptions } from "@testing-library/react";
+import { act, render, type RenderOptions } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ReactElement, ReactNode } from "react";
 import { Provider } from "react-redux";
 
+import { baseApi } from "@/services/http/baseApi";
 import { type AppStore, makeStore, type RootState } from "@/store/store";
 
 interface Options extends Omit<RenderOptions, "wrapper"> {
@@ -17,4 +18,11 @@ export function renderWithProviders(ui: ReactElement, { preloadedState, store = 
   }
 
   return { store, user: userEvent.setup(), ...render(ui, { wrapper: Wrapper, ...options }) };
+}
+
+/** Waits for the API calls triggered by rendering (e.g. refresh on mount) to settle. */
+export async function settleApi(store: AppStore): Promise<void> {
+  await act(async () => {
+    await Promise.all(store.dispatch(baseApi.util.getRunningQueriesThunk()));
+  });
 }
