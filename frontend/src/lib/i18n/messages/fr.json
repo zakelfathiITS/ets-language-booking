@@ -266,6 +266,8 @@
   "availability": {
     "title": "Réveil du service…",
     "description": "L'API est hébergée sur une offre gratuite qui la met en pause lorsque personne ne l'utilise. Elle redémarre, ce qui peut prendre jusqu'à une minute.",
-    "hint": "Cette page reprendra d'elle-même dès que le service sera prêt."
+    "hint": "Cette page reprendra d'elle-même dès que le service sera prêt.",
+    "slow": "Cela prend plus de temps que d'habitude. Le service devrait répondre sous peu ; vous pouvez aussi réessayer maintenant.",
+    "retry": "Réessayer"
   }
 }
