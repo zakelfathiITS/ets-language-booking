@@ -6,12 +6,10 @@ namespace App\Tests\Functional\UI\Http;
 
 use App\Domain\Identity\Role;
 use App\Tests\Support\ApiTestCase;
-use PHPUnit\Framework\Attributes\CoversNothing;
 
 /**
  * Validation messages follow the Accept-Language header sent by the client.
  */
-#[CoversNothing]
 final class LocalisationTest extends ApiTestCase
 {
     public function testViolationsAreInFrenchWhenFrenchIsRequested(): void

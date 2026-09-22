@@ -63,5 +63,22 @@ jobs:
       - name: Architecture rules
         run: composer deptrac
 
-      - name: Tests
-        run: vendor/bin/phpunit --coverage-text --only-summary-for-coverage-text --colors=never
+      - name: Tests (with coverage)
+        shell: bash
+        run: |
+          vendor/bin/phpunit --colors=never --coverage-html var/coverage \
+            --coverage-text=var/coverage.txt --only-summary-for-coverage-text
+          cat var/coverage.txt
+          {
+            echo "### Backend coverage"
+            echo '```'
+            grep -E "Classes:|Methods:|Lines:" var/coverage.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-coverage
+          path: backend/var/coverage
+          retention-days: 14

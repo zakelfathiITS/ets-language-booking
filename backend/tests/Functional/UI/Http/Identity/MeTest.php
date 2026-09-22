@@ -7,9 +7,7 @@ namespace App\Tests\Functional\UI\Http\Identity;
 use App\Domain\Identity\User;
 use App\Tests\Support\ApiTestCase;
 use Doctrine\ODM\MongoDB\DocumentManager;
-use PHPUnit\Framework\Attributes\CoversNothing;
 
-#[CoversNothing]
 final class MeTest extends ApiTestCase
 {
     public function testItReturnsTheAuthenticatedUser(): void

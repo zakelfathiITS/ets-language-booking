@@ -6,9 +6,7 @@ namespace App\Tests\Functional\UI\Http\Identity;
 
 use App\Tests\Support\ApiTestCase;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
-use PHPUnit\Framework\Attributes\CoversNothing;
 
-#[CoversNothing]
 final class AuthenticationTest extends ApiTestCase
 {
     public function testRegistrationCreatesAnAccount(): void

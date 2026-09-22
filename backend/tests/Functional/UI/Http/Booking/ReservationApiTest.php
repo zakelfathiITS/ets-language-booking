@@ -7,9 +7,7 @@ namespace App\Tests\Functional\UI\Http\Booking;
 use App\Domain\Identity\Role;
 use App\Tests\Support\ApiTestCase;
 use App\Tests\Support\CatalogFixtures;
-use PHPUnit\Framework\Attributes\CoversNothing;
 
-#[CoversNothing]
 final class ReservationApiTest extends ApiTestCase
 {
     use CatalogFixtures;

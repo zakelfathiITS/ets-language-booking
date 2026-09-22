@@ -112,9 +112,11 @@ split from ETS-10) and ETS-11 (deployment).
 - [x] Dependency audits and secret scanning in CI (and weekly); `docs/SECURITY.md`
 
 ### ETS-15 · Release candidate
-- [ ] Index usage review, production build tuning
-- [ ] Complete bilingual README: architecture, setup, tests, API, demo accounts, trade-offs
-- [ ] Coverage reports, CI badges, clean-clone verification, `v1.0.0` tag
+- [x] Index usage review (listings read in index order, no in-memory sort), production build review
+- [x] Capacity changes and deletions made atomic: no overbooking under concurrent administrator edits
+- [x] Complete bilingual README: features, architecture, API, business rules, tests, configuration, trade-offs
+- [x] Coverage counted for functional tests, coverage reports and badges in CI; Swagger UI served without third-party scripts
+- [x] Clean-clone verification, `v1.0.0` tag
 
 ### ETS-11 · Deployment readiness
 - [ ] Environment-driven production configuration (Atlas URI, JWT keys, proxy secret)

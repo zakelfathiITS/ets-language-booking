@@ -1,4 +1,8 @@
 nelmio_api_doc:
+    # Swagger UI's files are served by the API itself: its Content Security
+    # Policy allows no third-party script (see SecurityHeadersListener).
+    html_config:
+        assets_mode: bundle
     areas:
         path_patterns:
             - ^/api(?!/doc) # every API route except the documentation itself

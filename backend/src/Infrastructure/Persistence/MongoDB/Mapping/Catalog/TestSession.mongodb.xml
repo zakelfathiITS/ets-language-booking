@@ -20,15 +20,22 @@
         <field field-name="createdAt" name="created_at" type="date_immutable" />
         <field field-name="updatedAt" name="updated_at" type="date_immutable" />
 
+        <!--
+            Listings sort by date, then by id so that pages never overlap. With
+            the id in the index, rows come out already sorted: a page reads only
+            the sessions it returns instead of sorting all matches in memory.
+        -->
         <indexes>
             <!-- Default listing: upcoming sessions, soonest first. -->
-            <index name="idx_sessions_scheduled_at">
+            <index name="idx_sessions_scheduled_at_id">
                 <key name="scheduledAt" order="asc" />
+                <key name="id" order="asc" />
             </index>
-            <!-- Listing filtered by language (equality first, then the range). -->
-            <index name="idx_sessions_language_scheduled_at">
+            <!-- Listing filtered by language (equality first, then the range and the sort). -->
+            <index name="idx_sessions_language_scheduled_at_id">
                 <key name="language" order="asc" />
                 <key name="scheduledAt" order="asc" />
+                <key name="id" order="asc" />
             </index>
         </indexes>
     </document>

@@ -7,10 +7,8 @@ namespace App\Tests\Functional\UI\Http\Catalog;
 use App\Domain\Identity\Role;
 use App\Tests\Support\ApiTestCase;
 use App\Tests\Support\CatalogFixtures;
-use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-#[CoversNothing]
 final class TestSessionApiTest extends ApiTestCase
 {
     use CatalogFixtures;
