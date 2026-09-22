@@ -266,6 +266,8 @@
   "availability": {
     "title": "Waking up the service…",
     "description": "The API runs on a free hosting plan that pauses it when nobody uses it. It is starting again, which can take up to a minute.",
-    "hint": "This page carries on by itself as soon as the service is ready."
+    "hint": "This page carries on by itself as soon as the service is ready.",
+    "slow": "This is taking longer than usual. The service should still answer shortly; you can also try again now.",
+    "retry": "Try again"
   }
 }

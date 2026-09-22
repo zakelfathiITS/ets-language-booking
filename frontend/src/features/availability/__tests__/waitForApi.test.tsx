@@ -1,14 +1,16 @@
 import { screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { delay, http, HttpResponse } from "msw";
 
 import { ApiAvailabilityGate } from "@/features/availability/ApiAvailabilityGate";
 import { type ApiAvailability, selectApiAvailability } from "@/features/availability/availabilitySlice";
 import { waitForApi } from "@/features/availability/waitForApi";
+import { WakeUpScreen } from "@/components/organisms/WakeUpScreen";
 import { makeStore } from "@/store/store";
 
 import { api, problem } from "@tests/msw/handlers";
 import { server } from "@tests/msw/server";
-import { renderWithProviders } from "@tests/renderWithProviders";
+import { renderWithIntl, renderWithProviders } from "@tests/renderWithProviders";
 
 const timing = { noticeAfterMs: 20, retryEveryMs: 5 };
 
@@ -66,6 +68,17 @@ describe("ApiAvailabilityGate", () => {
 
     expect(screen.getByRole("status")).toHaveTextContent("Waking up the service");
     expect(screen.queryByText("page")).not.toBeInTheDocument();
+  });
+
+  it("offers a reload when waking up takes too long", async () => {
+    const user = userEvent.setup();
+    const retry = jest.fn();
+    renderWithIntl(<WakeUpScreen slowAfterMs={10} onRetry={retry} />);
+    expect(screen.queryByRole("button", { name: "Try again" })).not.toBeInTheDocument();
+
+    await user.click(await screen.findByRole("button", { name: "Try again" }));
+
+    expect(retry).toHaveBeenCalledTimes(1);
   });
 
   it.each(["checking", "ready"] as const)("shows the page while %s", (status) => {
