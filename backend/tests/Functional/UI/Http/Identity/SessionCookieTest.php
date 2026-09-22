@@ -6,14 +6,12 @@ namespace App\Tests\Functional\UI\Http\Identity;
 
 use App\Tests\Support\ApiTestCase;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
-use PHPUnit\Framework\Attributes\CoversNothing;
 use Symfony\Component\HttpFoundation\Cookie;
 
 /**
  * The web client's session: an httpOnly cookie holding the JWT, revoked on sign-out.
  * Requests go over HTTPS, as the cookie is marked Secure.
  */
-#[CoversNothing]
 final class SessionCookieTest extends ApiTestCase
 {
     private const API = 'https://localhost/api';

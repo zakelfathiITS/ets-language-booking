@@ -49,8 +49,23 @@ jobs:
       - name: Unused code and dependencies
         run: npm run knip
 
-      - name: Tests
-        run: npm run test:coverage -- --coverageReporters=text-summary
+      - name: Tests (with coverage)
+        shell: bash
+        run: |
+          npm run -s test:coverage -- --coverageReporters=text-summary --coverageReporters=html | tee coverage-summary.txt
+          {
+            echo "### Frontend coverage"
+            echo '```'
+            grep -E "Statements|Branches|Functions|Lines" coverage-summary.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-coverage
+          path: frontend/coverage
+          retention-days: 14
 
       - name: Production build
         run: npm run build

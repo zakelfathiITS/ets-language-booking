@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Persistence\MongoDB\Repository;
 
+use App\Domain\Catalog\Exception\CapacityBelowReservedSeats;
+use App\Domain\Catalog\Exception\SessionHasReservations;
 use App\Domain\Catalog\SessionCriteria;
 use App\Domain\Catalog\TestSession;
 use App\Domain\Catalog\TestSessionId;
@@ -13,7 +15,9 @@ use App\Domain\Shared\Pagination\PageRequest;
 use App\Infrastructure\Persistence\MongoDB\ObjectIds;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\Query\Builder;
+use Doctrine\ODM\MongoDB\UnitOfWork;
 use MongoDB\BSON\ObjectId;
+use MongoDB\Collection;
 
 final class MongoTestSessionRepository implements TestSessionRepository
 {
@@ -28,14 +32,31 @@ final class MongoTestSessionRepository implements TestSessionRepository
 
     public function save(TestSession $session): void
     {
+        if ($this->documentManager->getUnitOfWork()->getDocumentState($session) !== UnitOfWork::STATE_NEW) {
+            $this->changeCapacityAtomically($session);
+        }
+
         $this->documentManager->persist($session);
         $this->documentManager->flush();
     }
 
+    /**
+     * Deletes the session only if no seat is taken at this very moment: a
+     * booking made since it was loaded would otherwise leave an orphan
+     * reservation behind (bookings take their seat before being recorded).
+     */
     public function remove(TestSession $session): void
     {
-        $this->documentManager->remove($session);
-        $this->documentManager->flush();
+        $filter = ['_id' => new ObjectId($session->id()->value)];
+        $deleted = $this->collection()->deleteOne($filter + ['seats_taken' => 0])->getDeletedCount();
+
+        if ($deleted === 0 && ($current = $this->seatsTakenOf($session)) !== null) {
+            $this->documentManager->refresh($session);
+
+            throw SessionHasReservations::withSeatsTaken($current);
+        }
+
+        $this->documentManager->detach($session);
     }
 
     public function ofId(TestSessionId $id): ?TestSession
@@ -96,6 +117,45 @@ final class MongoTestSessionRepository implements TestSessionRepository
         sort($languages);
 
         return $languages;
+    }
+
+    /**
+     * The aggregate checked the new capacity against the seats it knew of;
+     * bookings made since then are only visible here. The capacity is therefore
+     * written first, on condition that the seats taken at this very moment
+     * still fit. The flush that follows writes it again, never the seat counter.
+     */
+    private function changeCapacityAtomically(TestSession $session): void
+    {
+        $capacity = $session->capacity()->seats;
+        $changed = $this->collection()->updateOne(
+            ['_id' => new ObjectId($session->id()->value), '$expr' => ['$lte' => ['$seats_taken', $capacity]]],
+            ['$set' => ['capacity' => $capacity]],
+        );
+
+        if ($changed->getMatchedCount() === 0 && ($current = $this->seatsTakenOf($session)) !== null) {
+            $this->documentManager->refresh($session);
+
+            throw CapacityBelowReservedSeats::create($capacity, $current);
+        }
+    }
+
+    /**
+     * Seats taken right now, or null when the session no longer exists.
+     */
+    private function seatsTakenOf(TestSession $session): ?int
+    {
+        $stored = $this->collection()->findOne(
+            ['_id' => new ObjectId($session->id()->value)],
+            ['projection' => ['seats_taken' => 1]],
+        );
+
+        return \is_array($stored) ? (int) ($stored['seats_taken'] ?? 0) : null;
+    }
+
+    private function collection(): Collection
+    {
+        return $this->documentManager->getDocumentCollection(TestSession::class);
     }
 
     private function filtered(SessionCriteria $criteria): Builder

@@ -6,12 +6,10 @@ namespace App\Tests\Functional\UI\Http;
 
 use App\Tests\Support\ApiTestCase;
 use App\UI\Http\EventListener\ProxyClientIpListener;
-use PHPUnit\Framework\Attributes\CoversNothing;
 
 /**
  * Security headers, cross-origin policy and rate limits.
  */
-#[CoversNothing]
 final class SecurityTest extends ApiTestCase
 {
     private const PROXY_SECRET = 'test_only_proxy_secret';

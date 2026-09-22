@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\UI\Http;
 
-use PHPUnit\Framework\Attributes\CoversNothing;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
  * The OpenAPI document is generated from code: a mistake in an attribute
  * only shows up at runtime, so its generation is part of the test suite.
  */
-#[CoversNothing]
 final class ApiDocumentationTest extends WebTestCase
 {
     public function testTheOpenApiDocumentDescribesEveryEndpoint(): void
@@ -46,5 +44,22 @@ final class ApiDocumentationTest extends WebTestCase
 
         self::assertResponseIsSuccessful();
         self::assertStringContainsString('<title>ETS Language Test Booking API</title>', (string) $client->getResponse()->getContent());
+    }
+
+    public function testTheDocumentationPageOnlyLoadsFilesServedByTheApi(): void
+    {
+        $client = self::createClient();
+
+        $crawler = $client->request('GET', '/api/doc');
+
+        // Anything else would be blocked by the page's Content Security Policy.
+        $sources = [
+            ...$crawler->filterXPath('//script[@src]')->extract(['src']),
+            ...$crawler->filterXPath('//link[@rel="stylesheet"]')->extract(['href']),
+        ];
+        self::assertNotEmpty($sources);
+        foreach ($sources as $source) {
+            self::assertStringStartsWith('/bundles/nelmioapidoc/', $source);
+        }
     }
 }
