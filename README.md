@@ -4,6 +4,16 @@
 [![Frontend](https://github.com/zakelfathiITS/ets-language-booking/actions/workflows/frontend.yml/badge.svg)](https://github.com/zakelfathiITS/ets-language-booking/actions/workflows/frontend.yml)
 [![Security](https://github.com/zakelfathiITS/ets-language-booking/actions/workflows/security.yml/badge.svg)](https://github.com/zakelfathiITS/ets-language-booking/actions/workflows/security.yml)
 
+| | |
+|---|---|
+| **Live demo · Démo en ligne** | https://ets-language-booking.vercel.app |
+| **API documentation · Documentation de l'API** | https://ets-booking-api.onrender.com/api/doc |
+| **Demo accounts · Comptes de démonstration** | `candidate@ets.test` / `Candidate123!` · `admin@ets.test` / `Admin123!` |
+
+The API is hosted for free and sleeps when unused: the first page can take up to a minute to load.
+
+L'API, hébergée gratuitement, se met en veille : le premier chargement peut prendre jusqu'à une minute.
+
 [English](#english) · [Français](#français)
 
 ---
@@ -150,7 +160,7 @@ make test       # test suites only (make test-backend / make test-frontend)
 | | Tests | Line coverage | Also checked |
 |---|---|---|---|
 | API | 211 PHPUnit tests: unit (domain, use cases), integration (MongoDB adapters, real concurrency), functional (HTTP) | 97.6 % | PHP-CS-Fixer, PHPStan level 8, dead code, Deptrac |
-| Web client | 139 Jest tests (Testing Library, MSW): components, screens, store, API relay | 90.7 % | ESLint and architecture boundaries, TypeScript, knip, production build |
+| Web client | 145 Jest tests (Testing Library, MSW): components, screens, store, API relay | 90.7 % | ESLint and architecture boundaries, TypeScript, knip, production build |
 
 GitHub Actions runs everything on each pull request, publishes the coverage in the run summary
 (with the HTML report as an artifact), and a Security workflow scans for secrets and audits the
@@ -209,8 +219,9 @@ Details, trade-offs and known limitations: [docs/SECURITY.md](docs/SECURITY.md).
 
 ### Deployment
 
-A free live preview runs on Vercel (web client), Render (API) and MongoDB Atlas (database), all
-in Frankfurt. Step by step, in about 30 minutes: [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
+The live demo (https://ets-language-booking.vercel.app) runs for free on Vercel (web client),
+Render (API) and MongoDB Atlas (database), all in Frankfurt. Step by step, in about 30 minutes:
+[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
 ### Development
 
@@ -377,7 +388,7 @@ make test       # suites de tests uniquement (make test-backend / make test-fron
 | | Tests | Couverture des lignes | Autres contrôles |
 |---|---|---|---|
 | API | 211 tests PHPUnit : unitaires (domaine, cas d'usage), d'intégration (adaptateurs MongoDB, vraie concurrence), fonctionnels (HTTP) | 97,6 % | PHP-CS-Fixer, PHPStan niveau 8, code mort, Deptrac |
-| Client web | 139 tests Jest (Testing Library, MSW) : composants, écrans, store, relais d'API | 90,7 % | ESLint et frontières d'architecture, TypeScript, knip, build de production |
+| Client web | 145 tests Jest (Testing Library, MSW) : composants, écrans, store, relais d'API | 90,7 % | ESLint et frontières d'architecture, TypeScript, knip, build de production |
 
 GitHub Actions exécute l'ensemble à chaque pull request, publie la couverture dans le résumé de
 l'exécution (avec le rapport HTML en artefact), et un workflow Security recherche les secrets et
@@ -442,9 +453,9 @@ Détails, compromis et limites connues (en anglais) : [docs/SECURITY.md](docs/SE
 
 ### Déploiement
 
-Une préversion gratuite tourne sur Vercel (client web), Render (API) et MongoDB Atlas (base de
-données), tous à Francfort. Pas à pas, en 30 minutes environ (en anglais) :
-[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
+La démo en ligne (https://ets-language-booking.vercel.app) tourne gratuitement sur Vercel
+(client web), Render (API) et MongoDB Atlas (base de données), tous à Francfort. Pas à pas, en
+30 minutes environ (en anglais) : [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
 ### Développement
 
