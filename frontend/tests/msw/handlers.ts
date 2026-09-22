@@ -18,6 +18,7 @@ export function problem(status: number, code: string, detail = code, violations?
 export const handlers = [
   http.post(api("/api/auth/login"), () => HttpResponse.json({ user: candidate })),
   http.post(api("/api/auth/logout"), () => new HttpResponse(null, { status: 204 })),
+  http.get(api("/api/health"), () => HttpResponse.json({ status: "ok" })),
   http.get(api("/api/me"), () => HttpResponse.json(candidate)),
   http.get(api("/api/sessions"), () => HttpResponse.json(aPage([aSession()]))),
   http.get(api("/api/sessions/languages"), () => HttpResponse.json({ items: ["English", "French"] })),

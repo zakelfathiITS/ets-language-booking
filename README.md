@@ -207,6 +207,11 @@ Details, trade-offs and known limitations: [docs/SECURITY.md](docs/SECURITY.md).
   state kept between requests.
 - **Demo data** and one-click demo accounts suit a review; turn both off for real use.
 
+### Deployment
+
+A free live preview runs on Vercel (web client), Render (API) and MongoDB Atlas (database), all
+in Frankfurt. Step by step, in about 30 minutes: [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
+
 ### Development
 
 ```bash
@@ -434,6 +439,12 @@ Détails, compromis et limites connues (en anglais) : [docs/SECURITY.md](docs/SE
   services qui conservent un état entre les requêtes.
 - **Les données de démonstration** et les comptes en un clic conviennent à une revue ;
   désactivez-les pour un usage réel.
+
+### Déploiement
+
+Une préversion gratuite tourne sur Vercel (client web), Render (API) et MongoDB Atlas (base de
+données), tous à Francfort. Pas à pas, en 30 minutes environ (en anglais) :
+[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
 ### Développement
 

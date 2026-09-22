@@ -262,5 +262,10 @@
     "capacity_below_reserved_seats": "La capacité ne peut pas être inférieure aux places déjà réservées.",
     "too_many_requests": "Trop de requêtes. Veuillez patienter un instant avant de réessayer.",
     "api_unavailable": "Le service est momentanément indisponible. Veuillez réessayer dans un instant."
+  },
+  "availability": {
+    "title": "Réveil du service…",
+    "description": "L'API est hébergée sur une offre gratuite qui la met en pause lorsque personne ne l'utilise. Elle redémarre, ce qui peut prendre jusqu'à une minute.",
+    "hint": "Cette page reprendra d'elle-même dès que le service sera prêt."
   }
 }

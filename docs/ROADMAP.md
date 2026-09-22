@@ -119,8 +119,8 @@ split from ETS-10) and ETS-11 (deployment).
 - [x] Clean-clone verification, `v1.0.0` tag
 
 ### ETS-11 · Deployment readiness
-- [ ] Environment-driven production configuration (Atlas URI, JWT keys, proxy secret)
-- [ ] Backend deployment descriptors (Render blueprint, Alwaysdata guide) — target to be confirmed
-- [ ] Vercel configuration, Atlas setup, demo data seeding
-- [ ] API wake-up screen for sleeping free-tier instances
-- [ ] `docs/DEPLOYMENT.md`
+- [x] Environment-driven production configuration: key pair from the environment (`make deploy-secrets`), proxy secret, HTTPS-only cookie
+- [x] Render Blueprint for the API (free Docker web service); Alwaysdata set aside (no Docker, no MongoDB driver guarantee, 100 MB)
+- [x] Vercel configuration (Frankfurt functions, 60 s relay), Atlas setup, demo data on first start
+- [x] API wake-up screen for sleeping free-tier instances; sessions are only checked once the API answers
+- [x] `docs/DEPLOYMENT.md`, rehearsed locally with the production image

@@ -112,6 +112,7 @@ a shared store such as Redis.
 |---|---|---|
 | `APP_SECRET` | API | random, 32+ bytes |
 | `JWT_PASSPHRASE` | API | random; protects the private key |
+| `JWT_SECRET_KEY_BASE64`, `JWT_PUBLIC_KEY_BASE64` | API | the key pair, kept across restarts (`make deploy-secrets`) |
 | `AUTH_COOKIE_SECURE` | API | `1` (HTTPS only) |
 | `API_PROXY_SECRET` | both | random, identical on both sides |
 | `API_INTERNAL_URL` | web client | URL of the API as reached from the web client's server |

@@ -12,3 +12,6 @@ function relay(request: Request): Promise<Response> {
 }
 
 export { relay as DELETE, relay as GET, relay as PATCH, relay as POST, relay as PUT };
+
+/** Seconds a hosted function may wait: an API on a free plan takes up to a minute to wake up. */
+export const maxDuration = 60;

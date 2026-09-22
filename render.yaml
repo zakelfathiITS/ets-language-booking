@@ -1,0 +1,45 @@
+# Render Blueprint: the API as a free Docker web service, in Frankfurt like
+# the database (MongoDB Atlas) and the web client's functions (Vercel).
+# Step by step: docs/DEPLOYMENT.md.
+services:
+  - type: web
+    name: ets-booking-api
+    runtime: docker
+    plan: free
+    region: frankfurt
+    dockerContext: ./backend
+    dockerfilePath: ./backend/Dockerfile
+    # Also checks MongoDB: a deploy only goes live once the database answers.
+    healthCheckPath: /api/health
+    autoDeploy: true
+    buildFilter:
+      paths:
+        - backend/**
+    envVars:
+      # Render routes traffic to port 10000; TLS ends at Render's edge.
+      - key: SERVER_NAME
+        value: ":10000"
+      - key: APP_SECRET
+        generateValue: true
+      # Copy this generated value into the web client's API_PROXY_SECRET (Vercel).
+      - key: API_PROXY_SECRET
+        generateValue: true
+      - key: AUTH_COOKIE_SECURE
+        value: "1"
+      - key: APP_TIMEZONE
+        value: Europe/Paris
+      - key: APP_SEED_DEMO_DATA
+        value: "1"
+      - key: MONGODB_DB
+        value: ets_booking
+      # Asked for when the Blueprint is created:
+      #   MONGODB_URI: the Atlas connection string;
+      #   JWT_*: printed by `make deploy-secrets`.
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_PASSPHRASE
+        sync: false
+      - key: JWT_SECRET_KEY_BASE64
+        sync: false
+      - key: JWT_PUBLIC_KEY_BASE64
+        sync: false
