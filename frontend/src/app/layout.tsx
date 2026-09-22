@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
 
+import { ApiAvailabilityGate } from "@/features/availability/ApiAvailabilityGate";
 import { StoreProvider } from "@/store/StoreProvider";
 
 import "./globals.css";
@@ -41,7 +42,9 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     <html lang={locale} className={`${geistSans.variable} ${geistMono.variable} h-full`}>
       <body className="flex min-h-full flex-col">
         <NextIntlClientProvider>
-          <StoreProvider>{children}</StoreProvider>
+          <StoreProvider>
+            <ApiAvailabilityGate>{children}</ApiAvailabilityGate>
+          </StoreProvider>
         </NextIntlClientProvider>
       </body>
     </html>

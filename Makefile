@@ -4,7 +4,7 @@ BACKEND      = $(COMPOSE_DEV) exec backend
 FRONTEND     = $(COMPOSE_DEV) exec frontend
 
 .DEFAULT_GOAL := help
-.PHONY: help up down dev dev-down logs ps sh-backend sh-frontend console qa qa-backend qa-frontend test test-backend test-frontend cs-fix clean
+.PHONY: help up down dev dev-down logs ps sh-backend sh-frontend console qa qa-backend qa-frontend test test-backend test-frontend cs-fix clean deploy-secrets
 
 help: ## List available commands
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-14s\033[0m %s\n", $$1, $$2}'
@@ -57,6 +57,9 @@ test-frontend: ## Run the frontend test suites
 
 cs-fix: ## Fix backend coding standards (dev stack)
 	$(BACKEND) composer cs:fix
+
+deploy-secrets: ## Print fresh secrets for a hosted API: JWT key pair and passphrase (docs/DEPLOYMENT.md)
+	@./scripts/deploy-secrets.sh
 
 clean: ## Stop everything and delete volumes (database included)
 	$(COMPOSE_DEV) down -v --remove-orphans

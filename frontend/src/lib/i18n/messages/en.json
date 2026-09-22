@@ -262,5 +262,10 @@
     "capacity_below_reserved_seats": "The capacity cannot be lower than the seats already booked.",
     "too_many_requests": "Too many requests. Please wait a moment and try again.",
     "api_unavailable": "The service is temporarily unavailable. Please try again in a moment."
+  },
+  "availability": {
+    "title": "Waking up the service…",
+    "description": "The API runs on a free hosting plan that pauses it when nobody uses it. It is starting again, which can take up to a minute.",
+    "hint": "This page carries on by itself as soon as the service is ready."
   }
 }

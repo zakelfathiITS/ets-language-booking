@@ -1,11 +1,13 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
+import { availabilityReducer } from "@/features/availability/availabilitySlice";
 import { authListener } from "@/features/auth/authSession";
 import { authReducer } from "@/features/auth/authSlice";
 import { flashReducer } from "@/features/flash/flashSlice";
 import { baseApi } from "@/services/http/baseApi";
 
 const rootReducer = combineReducers({
+  availability: availabilityReducer,
   auth: authReducer,
   flash: flashReducer,
   [baseApi.reducerPath]: baseApi.reducer,
