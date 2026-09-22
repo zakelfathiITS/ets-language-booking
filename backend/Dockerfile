@@ -24,6 +24,12 @@ RUN set -eux; \
 ENV COMPOSER_ALLOW_SUPERUSER=1 \
     SERVER_NAME=":80"
 
+# The base image lets FrankenPHP bind ports below 1024 through a file
+# capability. Hosts that drop all capabilities (e.g. Render) refuse to start a
+# binary carrying one ("Operation not permitted"), and the server does not need
+# it: it runs as root locally, on a high port (10000) when hosted.
+RUN setcap -r /usr/local/bin/frankenphp
+
 COPY --link docker/frankenphp/conf.d/10-app.ini $PHP_INI_DIR/conf.d/
 COPY --link --chmod=755 docker/frankenphp/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 COPY --link docker/frankenphp/Caddyfile /etc/caddy/Caddyfile
