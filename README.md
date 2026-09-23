@@ -159,7 +159,7 @@ make test       # test suites only (make test-backend / make test-frontend)
 
 | | Tests | Line coverage | Also checked |
 |---|---|---|---|
-| API | 211 PHPUnit tests: unit (domain, use cases), integration (MongoDB adapters, real concurrency), functional (HTTP) | 97.6 % | PHP-CS-Fixer, PHPStan level 8, dead code, Deptrac |
+| API | 215 PHPUnit tests: unit (domain, use cases), integration (MongoDB adapters, real concurrency), functional (HTTP) | 97.4 % | PHP-CS-Fixer, PHPStan level 8, dead code, Deptrac |
 | Web client | 145 Jest tests (Testing Library, MSW): components, screens, store, API relay | 90.7 % | ESLint and architecture boundaries, TypeScript, knip, production build |
 
 GitHub Actions runs everything on each pull request, publishes the coverage in the run summary
@@ -387,7 +387,7 @@ make test       # suites de tests uniquement (make test-backend / make test-fron
 
 | | Tests | Couverture des lignes | Autres contrôles |
 |---|---|---|---|
-| API | 211 tests PHPUnit : unitaires (domaine, cas d'usage), d'intégration (adaptateurs MongoDB, vraie concurrence), fonctionnels (HTTP) | 97,6 % | PHP-CS-Fixer, PHPStan niveau 8, code mort, Deptrac |
+| API | 215 tests PHPUnit : unitaires (domaine, cas d'usage), d'intégration (adaptateurs MongoDB, vraie concurrence), fonctionnels (HTTP) | 97,4 % | PHP-CS-Fixer, PHPStan niveau 8, code mort, Deptrac |
 | Client web | 145 tests Jest (Testing Library, MSW) : composants, écrans, store, relais d'API | 90,7 % | ESLint et frontières d'architecture, TypeScript, knip, build de production |
 
 GitHub Actions exécute l'ensemble à chaque pull request, publie la couverture dans le résumé de

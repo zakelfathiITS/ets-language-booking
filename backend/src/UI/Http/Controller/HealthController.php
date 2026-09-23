@@ -28,8 +28,8 @@ final class HealthController
     #[Route('/api/health', name: 'api_health', methods: ['GET'])]
     #[OA\Get(summary: 'Report whether the API and its database are up', tags: ['Health'])]
     #[Security(name: null)]
-    #[OA\Response(response: 200, description: 'API and database are up.')]
-    #[OA\Response(response: 503, description: 'The database is unreachable.')]
+    #[OA\Response(response: Response::HTTP_OK, description: 'API and database are up.')]
+    #[OA\Response(response: Response::HTTP_SERVICE_UNAVAILABLE, description: 'The database is unreachable.')]
     public function __invoke(): JsonResponse
     {
         $databaseUp = $this->database->isAvailable();

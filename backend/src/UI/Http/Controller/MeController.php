@@ -12,13 +12,13 @@ use App\UI\Http\OpenApi\ErrorResponse;
 use App\UI\Http\RateLimit\RateLimit;
 use App\UI\Http\Request\Identity\UpdateProfileRequest;
 use App\UI\Http\Response\Identity\UserProfileResource;
+use App\UI\Http\Security\CurrentUserId;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 /**
  * The authenticated user's own account.
@@ -26,41 +26,34 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 #[AsController]
 #[Route('/api/me', name: 'api_me_')]
 #[OA\Tag(name: 'Account')]
-#[ErrorResponse(401, ErrorResponse::UNAUTHORIZED)]
+#[ErrorResponse(Response::HTTP_UNAUTHORIZED, ErrorResponse::UNAUTHORIZED)]
 final readonly class MeController
 {
-    public function __construct(
-        private GetProfileHandler $getProfile,
-        private UpdateProfileHandler $updateProfile,
-    ) {
-    }
-
     #[Route('', name: 'show', methods: ['GET'])]
     #[OA\Get(summary: 'Get my account')]
-    #[OA\Response(response: 200, description: 'The account.', content: new OA\JsonContent(ref: '#/components/schemas/UserProfile'))]
-    public function show(#[CurrentUser] UserInterface $user): JsonResponse
+    #[OA\Response(response: Response::HTTP_OK, description: 'The account.', content: new OA\JsonContent(ref: '#/components/schemas/UserProfile'))]
+    public function show(#[CurrentUserId] string $userId, GetProfileHandler $getProfile): JsonResponse
     {
-        $profile = ($this->getProfile)(new GetProfileQuery($user->getUserIdentifier()));
+        $profile = $getProfile(new GetProfileQuery($userId));
 
         return new JsonResponse(UserProfileResource::from($profile));
     }
 
     #[Route('', name: 'update', methods: ['PUT'])]
     #[OA\Put(summary: 'Update my name and email')]
-    #[OA\Response(response: 200, description: 'The updated account.', content: new OA\JsonContent(ref: '#/components/schemas/UserProfile'))]
-    #[ErrorResponse(409, 'Conflicts with the current state (see `code`).')]
-    #[ErrorResponse(422, ErrorResponse::VALIDATION_FAILED)]
-    #[ErrorResponse(429, ErrorResponse::TOO_MANY_REQUESTS)]
+    #[OA\Response(response: Response::HTTP_OK, description: 'The updated account.', content: new OA\JsonContent(ref: '#/components/schemas/UserProfile'))]
+    #[ErrorResponse(Response::HTTP_CONFLICT, 'Conflicts with the current state (see `code`).')]
+    #[ErrorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, ErrorResponse::VALIDATION_FAILED)]
+    #[ErrorResponse(Response::HTTP_TOO_MANY_REQUESTS, ErrorResponse::TOO_MANY_REQUESTS)]
     #[RateLimit('profile_update')]
     public function update(
-        #[CurrentUser]
-        UserInterface $user,
+        #[CurrentUserId]
+        string $userId,
         #[MapRequestPayload(acceptFormat: 'json')]
         UpdateProfileRequest $request,
+        UpdateProfileHandler $updateProfile,
     ): JsonResponse {
-        $profile = ($this->updateProfile)(
-            new UpdateProfileCommand($user->getUserIdentifier(), $request->name, $request->email),
-        );
+        $profile = $updateProfile(new UpdateProfileCommand($userId, $request->name, $request->email));
 
         return new JsonResponse(UserProfileResource::from($profile));
     }
