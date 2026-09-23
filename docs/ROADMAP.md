@@ -118,6 +118,12 @@ split from ETS-10) and ETS-11 (deployment).
 - [x] Coverage counted for functional tests, coverage reports and badges in CI; Swagger UI served without third-party scripts
 - [x] Clean-clone verification, `v1.0.0` tag
 
+### ETS-16 · Controller clean-up
+- [x] Named `Response::HTTP_*` constants for every status code, documentation attributes included; pagination bounds from the controller's constants
+- [x] One injection convention: services used by a single action arrive as action arguments
+- [x] `#[CurrentUserId]` value resolver instead of unwrapping the user object in every action; id normalisation moved to the use case
+- [x] Verified by a byte-identical OpenAPI document
+
 ### ETS-11 · Deployment readiness
 - [x] Environment-driven production configuration: key pair from the environment (`make deploy-secrets`), proxy secret, HTTPS-only cookie
 - [x] Render Blueprint for the API (free Docker web service); Alwaysdata set aside (no Docker, no MongoDB driver guarantee, 100 MB)

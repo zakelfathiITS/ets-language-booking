@@ -23,6 +23,7 @@ use App\UI\Http\Request\Catalog\TestSessionRequest;
 use App\UI\Http\Request\QueryParameters;
 use App\UI\Http\Response\Catalog\TestSessionPresenter;
 use App\UI\Http\Response\PaginatedResource;
+use App\UI\Http\Security\CurrentUserId;
 use App\UI\Shared\ScheduleConverter;
 use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -32,8 +33,6 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -42,7 +41,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[AsController]
 #[Route('/api/sessions', name: 'api_sessions_')]
 #[OA\Tag(name: 'Sessions')]
-#[ErrorResponse(401, ErrorResponse::UNAUTHORIZED)]
+#[ErrorResponse(Response::HTTP_UNAUTHORIZED, ErrorResponse::UNAUTHORIZED)]
 final readonly class TestSessionController
 {
     public const DEFAULT_LIMIT = 10;
@@ -61,17 +60,17 @@ final readonly class TestSessionController
     #[Route('', name: 'list', methods: ['GET'])]
     #[OA\Get(summary: 'List test sessions (upcoming first, paginated)')]
     #[OA\Parameter(name: 'page', in: 'query', schema: new OA\Schema(type: 'integer', minimum: 1, default: 1))]
-    #[OA\Parameter(name: 'limit', in: 'query', schema: new OA\Schema(type: 'integer', minimum: 1, maximum: 50, default: 10))]
+    #[OA\Parameter(name: 'limit', in: 'query', schema: new OA\Schema(type: 'integer', minimum: 1, maximum: self::MAX_LIMIT, default: self::DEFAULT_LIMIT))]
     #[OA\Parameter(name: 'language', in: 'query', description: 'Case-insensitive, e.g. "english".', schema: new OA\Schema(type: 'string'))]
     #[OA\Parameter(name: 'availableOnly', in: 'query', description: 'Hide full sessions.', schema: new OA\Schema(type: 'boolean', default: false))]
     #[OA\Parameter(name: 'includePast', in: 'query', description: 'Include sessions that have started.', schema: new OA\Schema(type: 'boolean', default: false))]
-    #[OA\Response(response: 200, description: 'One page of sessions.', content: new OA\JsonContent(ref: '#/components/schemas/TestSessionPage'))]
-    #[ErrorResponse(400, ErrorResponse::BAD_REQUEST)]
+    #[OA\Response(response: Response::HTTP_OK, description: 'One page of sessions.', content: new OA\JsonContent(ref: '#/components/schemas/TestSessionPage'))]
+    #[ErrorResponse(Response::HTTP_BAD_REQUEST, ErrorResponse::BAD_REQUEST)]
     public function list(
         Request $request,
         ListTestSessionsHandler $listSessions,
-        #[CurrentUser]
-        UserInterface $user,
+        #[CurrentUserId]
+        string $userId,
     ): JsonResponse {
         $page = $listSessions(new ListTestSessionsQuery(
             page: QueryParameters::positiveInt($request, 'page', 1),
@@ -81,7 +80,7 @@ final readonly class TestSessionController
             includePast: QueryParameters::boolean($request, 'includePast'),
         ));
 
-        $reserved = $this->reservedSessionsOf($user);
+        $reserved = $this->reservedSessionsOf($userId);
 
         return new JsonResponse(PaginatedResource::from(
             $page,
@@ -91,7 +90,7 @@ final readonly class TestSessionController
 
     #[Route('/languages', name: 'languages', methods: ['GET'], priority: 1)]
     #[OA\Get(summary: 'List the languages of upcoming sessions')]
-    #[OA\Response(response: 200, description: 'Sorted languages.', content: new OA\JsonContent(properties: [new OA\Property(property: 'items', type: 'array', items: new OA\Items(type: 'string'), example: ['English', 'French'])]))]
+    #[OA\Response(response: Response::HTTP_OK, description: 'Sorted languages.', content: new OA\JsonContent(properties: [new OA\Property(property: 'items', type: 'array', items: new OA\Items(type: 'string'), example: ['English', 'French'])]))]
     public function languages(ListLanguagesHandler $listLanguages): JsonResponse
     {
         return new JsonResponse(['items' => $listLanguages()]);
@@ -99,20 +98,20 @@ final readonly class TestSessionController
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
     #[OA\Get(summary: 'Get a test session')]
-    #[OA\Response(response: 200, description: 'The session.', content: new OA\JsonContent(ref: '#/components/schemas/TestSession'))]
-    #[ErrorResponse(404, ErrorResponse::NOT_FOUND)]
-    public function show(string $id, GetTestSessionHandler $getSession, #[CurrentUser] UserInterface $user): JsonResponse
+    #[OA\Response(response: Response::HTTP_OK, description: 'The session.', content: new OA\JsonContent(ref: '#/components/schemas/TestSession'))]
+    #[ErrorResponse(Response::HTTP_NOT_FOUND, ErrorResponse::NOT_FOUND)]
+    public function show(string $id, GetTestSessionHandler $getSession, #[CurrentUserId] string $userId): JsonResponse
     {
         $session = $getSession(new GetTestSessionQuery($id));
 
-        return new JsonResponse($this->presenter->present($session, $this->reservedSessionsOf($user)[$session->id] ?? null));
+        return new JsonResponse($this->presenter->present($session, $this->reservedSessionsOf($userId)[$session->id] ?? null));
     }
 
     #[Route('', name: 'create', methods: ['POST'])]
     #[OA\Post(summary: 'Create a test session (administrators)')]
-    #[OA\Response(response: 201, description: 'Session created.', content: new OA\JsonContent(ref: '#/components/schemas/TestSession'))]
-    #[ErrorResponse(403, ErrorResponse::FORBIDDEN)]
-    #[ErrorResponse(422, ErrorResponse::VALIDATION_FAILED)]
+    #[OA\Response(response: Response::HTTP_CREATED, description: 'Session created.', content: new OA\JsonContent(ref: '#/components/schemas/TestSession'))]
+    #[ErrorResponse(Response::HTTP_FORBIDDEN, ErrorResponse::FORBIDDEN)]
+    #[ErrorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, ErrorResponse::VALIDATION_FAILED)]
     #[IsGranted('ROLE_ADMIN')]
     public function create(
         #[MapRequestPayload(acceptFormat: 'json')]
@@ -136,11 +135,11 @@ final readonly class TestSessionController
 
     #[Route('/{id}', name: 'update', methods: ['PUT'])]
     #[OA\Put(summary: 'Update a test session (administrators)')]
-    #[OA\Response(response: 200, description: 'The updated session.', content: new OA\JsonContent(ref: '#/components/schemas/TestSession'))]
-    #[ErrorResponse(403, ErrorResponse::FORBIDDEN)]
-    #[ErrorResponse(404, ErrorResponse::NOT_FOUND)]
-    #[ErrorResponse(409, 'Conflicts with the current state (see `code`).')]
-    #[ErrorResponse(422, ErrorResponse::VALIDATION_FAILED)]
+    #[OA\Response(response: Response::HTTP_OK, description: 'The updated session.', content: new OA\JsonContent(ref: '#/components/schemas/TestSession'))]
+    #[ErrorResponse(Response::HTTP_FORBIDDEN, ErrorResponse::FORBIDDEN)]
+    #[ErrorResponse(Response::HTTP_NOT_FOUND, ErrorResponse::NOT_FOUND)]
+    #[ErrorResponse(Response::HTTP_CONFLICT, 'Conflicts with the current state (see `code`).')]
+    #[ErrorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, ErrorResponse::VALIDATION_FAILED)]
     #[IsGranted('ROLE_ADMIN')]
     public function update(
         string $id,
@@ -161,10 +160,10 @@ final readonly class TestSessionController
 
     #[Route('/{id}', name: 'delete', methods: ['DELETE'])]
     #[OA\Delete(summary: 'Delete a test session without bookings (administrators)')]
-    #[OA\Response(response: 204, description: 'Deleted.')]
-    #[ErrorResponse(403, ErrorResponse::FORBIDDEN)]
-    #[ErrorResponse(404, ErrorResponse::NOT_FOUND)]
-    #[ErrorResponse(409, 'Conflicts with the current state (see `code`).')]
+    #[OA\Response(response: Response::HTTP_NO_CONTENT, description: 'Deleted.')]
+    #[ErrorResponse(Response::HTTP_FORBIDDEN, ErrorResponse::FORBIDDEN)]
+    #[ErrorResponse(Response::HTTP_NOT_FOUND, ErrorResponse::NOT_FOUND)]
+    #[ErrorResponse(Response::HTTP_CONFLICT, 'Conflicts with the current state (see `code`).')]
     #[IsGranted('ROLE_ADMIN')]
     public function delete(string $id, DeleteTestSessionHandler $deleteSession): Response
     {
@@ -176,8 +175,8 @@ final readonly class TestSessionController
     /**
      * @return array<string, string> reservation id indexed by session id
      */
-    private function reservedSessionsOf(UserInterface $user): array
+    private function reservedSessionsOf(string $userId): array
     {
-        return ($this->reservedSessions)(new ListReservedSessionsQuery($user->getUserIdentifier()));
+        return ($this->reservedSessions)(new ListReservedSessionsQuery($userId));
     }
 }

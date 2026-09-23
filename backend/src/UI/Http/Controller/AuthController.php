@@ -26,29 +26,25 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 #[Security(name: null)]
 final readonly class AuthController
 {
-    public function __construct(
-        private RegisterUserHandler $registerUser,
-        private UrlGeneratorInterface $urlGenerator,
-    ) {
-    }
-
     #[Route('/register', name: 'register', methods: ['POST'])]
     #[OA\Post(summary: 'Create an account')]
-    #[OA\Response(response: 201, description: 'Account created.', content: new OA\JsonContent(ref: '#/components/schemas/UserProfile'))]
-    #[ErrorResponse(409, 'Conflicts with the current state (see `code`).')]
-    #[ErrorResponse(422, ErrorResponse::VALIDATION_FAILED)]
-    #[ErrorResponse(429, ErrorResponse::TOO_MANY_REQUESTS)]
+    #[OA\Response(response: Response::HTTP_CREATED, description: 'Account created.', content: new OA\JsonContent(ref: '#/components/schemas/UserProfile'))]
+    #[ErrorResponse(Response::HTTP_CONFLICT, 'Conflicts with the current state (see `code`).')]
+    #[ErrorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, ErrorResponse::VALIDATION_FAILED)]
+    #[ErrorResponse(Response::HTTP_TOO_MANY_REQUESTS, ErrorResponse::TOO_MANY_REQUESTS)]
     #[RateLimit('registration')]
-    public function register(#[MapRequestPayload(acceptFormat: 'json')] RegisterUserRequest $request): JsonResponse
-    {
-        $profile = ($this->registerUser)(
-            new RegisterUserCommand($request->name, $request->email, $request->password),
-        );
+    public function register(
+        #[MapRequestPayload(acceptFormat: 'json')]
+        RegisterUserRequest $request,
+        RegisterUserHandler $registerUser,
+        UrlGeneratorInterface $urlGenerator,
+    ): JsonResponse {
+        $profile = $registerUser(new RegisterUserCommand($request->name, $request->email, $request->password));
 
         return new JsonResponse(
             UserProfileResource::from($profile),
             Response::HTTP_CREATED,
-            ['Location' => $this->urlGenerator->generate('api_me_show')],
+            ['Location' => $urlGenerator->generate('api_me_show')],
         );
     }
 
@@ -69,13 +65,13 @@ final readonly class AuthController
         ],
     ))]
     #[OA\Response(
-        response: 200,
+        response: Response::HTTP_OK,
         description: 'Signed in.',
         headers: [new OA\Header(header: 'Set-Cookie', description: '`ets_token=<JWT>; Path=/api; HttpOnly; SameSite=Strict; Secure`', schema: new OA\Schema(type: 'string'))],
         content: new OA\JsonContent(properties: [new OA\Property(property: 'user', ref: '#/components/schemas/UserProfile')]),
     )]
-    #[ErrorResponse(401, 'Invalid credentials (`invalid_credentials`).')]
-    #[ErrorResponse(429, 'Too many failed attempts (`too_many_login_attempts`), see `Retry-After`.')]
+    #[ErrorResponse(Response::HTTP_UNAUTHORIZED, 'Invalid credentials (`invalid_credentials`).')]
+    #[ErrorResponse(Response::HTTP_TOO_MANY_REQUESTS, 'Too many failed attempts (`too_many_login_attempts`), see `Retry-After`.')]
     public function login(): never
     {
         throw new UnsupportedMediaTypeHttpException('Send the credentials as JSON: {"email": "...", "password": "..."}.');
@@ -87,7 +83,7 @@ final readonly class AuthController
      */
     #[Route('/logout', name: 'logout', methods: ['POST'])]
     #[OA\Post(summary: 'Sign out: revokes the token and clears its cookie')]
-    #[OA\Response(response: 204, description: 'Signed out (also when the token was already expired or missing).')]
+    #[OA\Response(response: Response::HTTP_NO_CONTENT, description: 'Signed out (also when the token was already expired or missing).')]
     public function logout(): never
     {
         throw new \LogicException('Handled by the "logout" firewall.');
